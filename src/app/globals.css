@@ -95,9 +95,18 @@ input[type='password']::-ms-clear {
     margin-bottom: 8px;
 }
 
-.calendar,
+/* .calendar,
 .calendar__range {
     margin-top: 40px;
+} */
+
+.react-daterange-picker.react-daterange-picker--open.react-daterange-picker--enabled.calendar__range {
+    top: 74%;
+    transform: translateY(-74%);
+
+    right: 74%;
+    transform: translateX(-74%);
+    position: absolute;
 }
 
 .react-calendar {

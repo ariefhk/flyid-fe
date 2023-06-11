@@ -8,6 +8,9 @@ import Input from '@/components/Input';
 import { FiSearch } from 'react-icons/fi';
 import ToggleRotate from '@/components/ToggleRotate';
 
+import ChoosePassengerTypeModal from '@/components/ChoosePassengerModal';
+import ChooseFlightClassModal from '@/components/ChooseFlightClassModal';
+
 // homeSearch start
 import Label from '@/components/Label';
 // import Input from './Input';
@@ -16,6 +19,11 @@ import Label from '@/components/Label';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import { MdFlightTakeoff, MdDateRange, MdAirlineSeatReclineNormal } from 'react-icons/md';
 // homeSearch end
+
+// calendar start
+import CalendarPicker from '@/components/CalendarPicker';
+import CalendarRangePicker from '@/components/CalendarRangePicker';
+// calendar end
 
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -29,12 +37,84 @@ import {
     getAirportStatus,
     flightSlice,
     getAirportError,
+    getFligthClass,
+    getTotalPassenger,
 } from '../store/flight';
+
+// Formatting Dates
+const formatToLocale = (date) => {
+    if (!date) return false;
+
+    const option = {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+    };
+    return new Date(date).toLocaleDateString('id', option);
+};
 
 export default function Home() {
     const dispatch = useDispatch();
-    const { filteredFromAirport, filteredToAirport, setFromAirport, setToAirport, switchFromToAirportPosition } =
-        flightSlice.actions;
+    const {
+        filteredFromAirport,
+        filteredToAirport,
+        setFromAirport,
+        setToAirport,
+        switchFromToAirportPosition,
+        setFlightClass,
+        setTotalPassenger,
+    } = flightSlice.actions;
+
+    // passenger start
+    const [openPassengerModal, setOpenPassengerModal] = useState(false);
+    const handleOpenPassengerModal = () => setOpenPassengerModal(!openPassengerModal);
+    const handleActionPassengerModal = () => {
+        setOpenPassengerModal(!openPassengerModal);
+    };
+    // passenger end
+
+    // flight class start
+    // const flightClass = useSelector(getFligthClass);
+    const [openFlightClassModal, setOpenFlightClassModal] = useState(false);
+    const [pickedFlightClass, setPickedFlightClass] = useState('');
+    const handleOpenFlightClassModal = () => setOpenFlightClassModal(!openFlightClassModal);
+    const handleActionFlightClassModal = (flightClass) => {
+        dispatch(setFlightClass(flightClass));
+        setPickedFlightClass(flightClass);
+        setOpenFlightClassModal(!openFlightClassModal);
+    };
+    // flight class end
+
+    // calendar start
+    const [isToggleCalendar, setIsToggleCalendar] = useState(false);
+    const [openCalendar, setOpenCalendar] = useState(false);
+    const [openCalendarRange, setOpenCalendarRange] = useState(false);
+    const [pickedDate, setPickedDate] = useState(new Date());
+    const [pickedRangeDate, setPickedRangeDate] = useState(new Date());
+    const handleOpenCalendar = () => setOpenCalendar(!openCalendar);
+    const handleOpenCalendarRange = () => setOpenCalendarRange(!openCalendarRange);
+
+    const fly = {
+        derpatures: pickedDate,
+        returns: new Date(pickedRangeDate[1]).getDate() === new Date(pickedRangeDate[0]).getDate() ? '' : pickedRangeDate[1],
+    };
+
+    const handlePickedDate = (date) => {
+        setPickedDate(date);
+        setPickedRangeDate((prev) => (prev === date ? [date] : date));
+        handleOpenCalendar();
+    };
+    const handlePickedRangeDate = (date) => {
+        setPickedRangeDate((prev) => (prev[0] !== pickedDate ? [pickedDate, date] : [pickedRangeDate[0], date]));
+        handleOpenCalendarRange();
+    };
+    const handleCalendarToggleAction = () => {
+        if (pickedRangeDate.length > 0) {
+            setPickedRangeDate([]);
+        }
+        setIsToggleCalendar(!isToggleCalendar);
+    };
+    // calendar end
 
     // for filtered input
     const fromAirports = useSelector(getfilteredFromAirport);
@@ -112,7 +192,7 @@ export default function Home() {
             </div>
 
             {/* home search desktop start */}
-            <div className='container mx-auto mt-[-50px] hidden h-[292px] max-w-screen-lg lg:block'>
+            <div className='container mx-auto mt-[-50px] hidden h-[292px]  max-w-screen-lg  lg:block'>
                 <div className={` relative h-full w-full overflow-hidden rounded-rad-3 bg-white shadow-high`}>
                     <div className='mx-8 my-6'>
                         {/* home search title start */}
@@ -177,10 +257,13 @@ export default function Home() {
                                                 htmlFor={'derpature'}>
                                                 Derpature
                                             </Label>
+
                                             <Input
                                                 id={'derpature'}
-                                                className='border-[1px] border-l-0 border-r-0 border-t-0 border-b-net-2  py-2 font-poppins text-title-3 font-medium'
-                                                value={'1 Maret 2023'}
+                                                readOnly
+                                                value={formatToLocale(fly.derpatures)}
+                                                onClick={handleOpenCalendar}
+                                                className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-2 font-poppins text-title-3 font-medium'
                                             />
                                         </div>
                                         <div>
@@ -190,12 +273,23 @@ export default function Home() {
                                                     htmlFor={'return'}>
                                                     Return
                                                 </Label>
-                                                <ToggleSwitch id={'toggle'} className={'absolute right-[-36px]'} />
+                                                <ToggleSwitch
+                                                    isToggle={isToggleCalendar}
+                                                    handleToggleAction={handleCalendarToggleAction}
+                                                    id={'toggle_calendar'}
+                                                    className={'absolute right-[-36px]'}
+                                                />
                                             </div>
                                             <Input
                                                 id={'return'}
-                                                className='border-[1px] border-l-0 border-r-0 border-t-0 border-b-net-2 py-3  font-poppins text-body-6 font-medium text-pur-5'
-                                                value={'Pilih Tanggal'}
+                                                readOnly
+                                                value={!fly.returns ? 'Pilih Tanggal' : formatToLocale(fly.returns)}
+                                                onClick={handleOpenCalendarRange}
+                                                className={`${!isToggleCalendar ? 'invisible' : 'visible'} 
+                        ${
+                            !fly.returns ? 'text-[14px] font-normal text-pur-5' : 'text-body-6 font-medium text-black'
+                        } cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0 border-b-net-2  py-3 font-poppins  font-medium`}
+                                                // value={'Pilih Tanggal'}
                                             />
                                         </div>
                                     </div>
@@ -264,7 +358,9 @@ export default function Home() {
                                         </Label>
                                         <Input
                                             id={'passenger'}
-                                            className='border-[1px] border-l-0 border-r-0 border-t-0 border-b-net-2  py-2 font-poppins text-title-3 font-medium'
+                                            readOnly
+                                            onClick={handleOpenPassengerModal}
+                                            className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-2 font-poppins text-title-3 font-medium'
                                             value={'2 Penumpang'}
                                         />
                                     </div>
@@ -274,8 +370,11 @@ export default function Home() {
                                         </Label>
                                         <Input
                                             id={'seat'}
-                                            className='border-[1px] border-l-0 border-r-0 border-t-0 border-b-net-2  py-2 font-poppins text-title-3 font-medium'
-                                            value={'Business'}
+                                            readOnly
+                                            onClick={handleOpenFlightClassModal}
+                                            className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-2 font-poppins text-title-3 font-medium'
+                                            value={pickedFlightClass}
+                                            placeholder={'Pilih kelas pesawat'}
                                         />
                                     </div>
                                 </div>
@@ -290,54 +389,61 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* home search desktop end */}
+            {/* ======= Modal and Pop Up Calendar start ====== */}
+            {/* handling open passenger modal start */}
+            <div>
+                {openPassengerModal && (
+                    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-60'>
+                        <ChoosePassengerTypeModal handleOpenPassengerModal={handleOpenPassengerModal} />
+                    </div>
+                )}
+            </div>
+            {/* handling open passenger modal end */}
 
-            {/* <Input value={searchTerm} onChange={handleChange} onFocus={() => setFocus(true)} placeholder={'Pilih Tujuan Anda'} />
+            {/* handling open flight class modal start */}
             <div>
-                {hasFocus && (
-                    <div className='flex flex-col gap-5 m-5'>
-                        {searchResults &&
-                            searchResults.map((data, index) => (
-                                <div
-                                    onClick={() => {
-                                        handleChooseAirport(data.airport_code);
-                                        setSearchTerm(`${data.airport_name} (${data.airport_code})`);
-                                    }}
-                                    key={index}
-                                    className='p-3 text-white w-max rounded-rad-2 bg-pur-3'>
-                                    {data.airport_location} ({data.airport_code})
-                                </div>
-                            ))}
+                {openFlightClassModal && (
+                    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-60'>
+                        <ChooseFlightClassModal
+                            handleActionFlightClassModal={handleActionFlightClassModal}
+                            handleOpenFlightClassModal={handleOpenFlightClassModal}
+                        />
                     </div>
                 )}
             </div>
+
+            {/* handling open flight class modal end */}
+
+            {/* handling open calendar start */}
             <div>
-                <ToggleRotate isToggle={isToggle} handleToggleAction={handleToggleAction} />
-            </div>
-            <Input
-                value={searchTo}
-                onChange={handleChangeTo}
-                onFocus={() => setFocusTo(true)}
-                placeholder={'Pilih Tujuan Anda'}
-            />
-            <div>
-                {hasFocusTo && (
-                    <div className='flex flex-col gap-5 m-5'>
-                        {searchResultsTo &&
-                            searchResultsTo.map((data, index) => (
-                                <div
-                                    onClick={() => {
-                                        handleChooseToAirport(data.airport_code);
-                                        setSearchTo(`${data.airport_name} (${data.airport_code})`);
-                                    }}
-                                    key={index}
-                                    className='p-3 text-white w-max rounded-rad-2 bg-pur-3'>
-                                    {data.airport_location} ({data.airport_code})
-                                </div>
-                            ))}
+                {openCalendar && (
+                    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-60'>
+                        <CalendarPicker
+                            initialDate={pickedDate}
+                            handlePickedDate={handlePickedDate}
+                            open={openCalendar}
+                            handleOpen={handleOpenCalendar}
+                        />
                     </div>
                 )}
-            </div> */}
+            </div>
+
+            <div>
+                {openCalendarRange && (
+                    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-60'>
+                        <div className='relative h-screen w-screen'>
+                            <CalendarRangePicker
+                                initialRangeDate={pickedRangeDate}
+                                handlePickedRangeDate={handlePickedRangeDate}
+                                open={openCalendarRange}
+                                handleOpen={handleOpenCalendarRange}
+                            />
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* ======= Modal and Pop Up Calendar end ====== */}
         </>
     );
 }

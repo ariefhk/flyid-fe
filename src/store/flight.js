@@ -72,6 +72,16 @@ export const flightSlice = createSlice({
             state.to = temp;
             console.log('from:', state.from, 'to: ', state.to);
         },
+
+        // define amount of passenger
+        setTotalPassenger: (state, action) => {
+            state.passenger = action.payload;
+        },
+
+        // define of flight Class
+        setFlightClass: (state, action) => {
+            state.flightClass = action.payload;
+        },
     },
     extraReducers: (builder) => {
         // eslint-disable-next-line no-unused-vars
@@ -96,5 +106,7 @@ export const getfilteredToAirport = (state) => state.flights.filteredToAirport;
 export const getAirportError = (state) => state.flights.error;
 export const getAirportFrom = (state) => state.flights.from;
 export const getAirportTo = (state) => state.flights.to;
+export const getTotalPassenger = (state) => state.flights.passenger;
+export const getFligthClass = (state) => state.flights.flightClass;
 
 export default flightSlice.reducer;
