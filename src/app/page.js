@@ -1,5 +1,7 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import Navbar from '@/components/Navbar';
 import Image from 'next/image';
 import HomeSearch from '@/components/HomeSearch';
@@ -13,9 +15,6 @@ import ChooseFlightClassModal from '@/components/ChooseFlightClassModal';
 
 // homeSearch start
 import Label from '@/components/Label';
-// import Input from './Input';
-// import Button from './Button';
-// import ToggleRotate from './ToggleRotate';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import { MdFlightTakeoff, MdDateRange, MdAirlineSeatReclineNormal } from 'react-icons/md';
 // homeSearch end
@@ -27,19 +26,28 @@ import CalendarRangePicker from '@/components/CalendarRangePicker';
 
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+
+import { getFlightClass, ticketSlice } from '@/store/ticket';
+import { getTotalPassenger } from '../store/passenger';
+
+import { getIsTwoWay, getDerpatureDateTime, getArrivalDateTime, scheduleSlice } from '@/store/schedule';
 import {
-    getAllAirport,
-    getfilteredFromAirport,
-    getfilteredToAirport,
-    getAirportFrom,
-    getAirportTo,
+    airportSlice,
     fetchAirport,
-    getAirportStatus,
-    flightSlice,
-    getAirportError,
-    getFligthClass,
-    getTotalPassenger,
-} from '../store/flight';
+    getAirportFetchStatus,
+    getDisplayFromAirport,
+    getDisplayToAirport,
+    getFilteredFromAirport,
+    getFilteredToAirport,
+} from '@/store/airport';
+
+// dayjs start
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
+// dayjs end
 
 // Formatting Dates
 const formatToLocale = (date) => {
@@ -50,33 +58,45 @@ const formatToLocale = (date) => {
         month: 'long',
         year: 'numeric',
     };
+
     return new Date(date).toLocaleDateString('id', option);
 };
 
 export default function Home() {
+    const router = useRouter();
     const dispatch = useDispatch();
-    const {
-        filteredFromAirport,
-        filteredToAirport,
-        setFromAirport,
-        setToAirport,
-        switchFromToAirportPosition,
-        setFlightClass,
-        setTotalPassenger,
-    } = flightSlice.actions;
 
-    // passenger start
+    //  redux schedule state start
+    const { setArrivalDateTime, setDerpatureDateTime, setIsTwoWay } = scheduleSlice.actions;
+    const derpatureDateTime = useSelector(getDerpatureDateTime);
+    const arrivalDateTime = useSelector(getArrivalDateTime);
+    const isTwoWay = useSelector(getIsTwoWay);
+    const totalPassenger = useSelector(getTotalPassenger);
+    // redux schedule state end
+
+    // redux airport state start
+    const fromAirports = useSelector(getFilteredFromAirport);
+    const toAirports = useSelector(getFilteredToAirport);
+    const from = useSelector(getDisplayFromAirport);
+    const to = useSelector(getDisplayToAirport);
+    const loading = useSelector(getAirportFetchStatus);
+    const { filteredFromAirport, filteredToAirport, setFromAirport, setToAirport, switchFromToAirportPosition } =
+        airportSlice.actions;
+    // redux airport state end
+
+    // redux ticket state start
+    const { setFlightClass } = ticketSlice.actions;
+    // redux ticket state end
+
+    // redux passenger state start
     const [openPassengerModal, setOpenPassengerModal] = useState(false);
     const handleOpenPassengerModal = () => setOpenPassengerModal(!openPassengerModal);
-    const handleActionPassengerModal = () => {
-        setOpenPassengerModal(!openPassengerModal);
-    };
-    // passenger end
+    // redux passenger state end
 
     // flight class start
-    // const flightClass = useSelector(getFligthClass);
+    const flightClass = useSelector(getFlightClass);
     const [openFlightClassModal, setOpenFlightClassModal] = useState(false);
-    const [pickedFlightClass, setPickedFlightClass] = useState('');
+    const [pickedFlightClass, setPickedFlightClass] = useState(flightClass || '');
     const handleOpenFlightClassModal = () => setOpenFlightClassModal(!openFlightClassModal);
     const handleActionFlightClassModal = (flightClass) => {
         dispatch(setFlightClass(flightClass));
@@ -89,54 +109,80 @@ export default function Home() {
     const [isToggleCalendar, setIsToggleCalendar] = useState(false);
     const [openCalendar, setOpenCalendar] = useState(false);
     const [openCalendarRange, setOpenCalendarRange] = useState(false);
-    const [pickedDate, setPickedDate] = useState(new Date());
-    const [pickedRangeDate, setPickedRangeDate] = useState(new Date());
+    const [pickedDate, setPickedDate] = useState((derpatureDateTime && new Date(derpatureDateTime)) || new Date());
+    const [pickedRangeDate, setPickedRangeDate] = useState(
+        (arrivalDateTime && [new Date(derpatureDateTime), new Date(arrivalDateTime)]) || new Date()
+    );
     const handleOpenCalendar = () => setOpenCalendar(!openCalendar);
     const handleOpenCalendarRange = () => setOpenCalendarRange(!openCalendarRange);
 
-    const fly = {
-        derpatures: pickedDate,
-        returns: new Date(pickedRangeDate[1]).getDate() === new Date(pickedRangeDate[0]).getDate() ? '' : pickedRangeDate[1],
-    };
+    useEffect(() => {
+        if (pickedDate) {
+            dispatch(setDerpatureDateTime(dayjs(pickedDate).tz('Asia/Jakarta').format()));
+        }
+    }, [pickedDate, dispatch, setDerpatureDateTime]);
+
+    useEffect(() => {
+        if (pickedRangeDate && Array.isArray(pickedRangeDate)) {
+            dispatch(setArrivalDateTime(dayjs(pickedRangeDate[1]).tz('Asia/Jakarta').format()));
+        }
+    }, [pickedRangeDate, dispatch, setArrivalDateTime]);
 
     const handlePickedDate = (date) => {
         setPickedDate(date);
-        setPickedRangeDate((prev) => (prev === date ? [date] : date));
+        // dispatch(setDerpatureDate(new Date(date).toISOString()));
+        dispatch(setDerpatureDateTime(dayjs(date).tz('Asia/Jakarta').format()));
+        // setPickedRangeDate((prev) => (prev === date ? [date] : date));
+        setPickedRangeDate((prev) => {
+            if (prev === date) {
+                // dispatch(setArrivalDate(String(date)));
+                return [date];
+            } else if (Array.isArray(pickedRangeDate)) {
+                // dispatch(setArrivalDate(String(pickedRangeDate[1])));
+                return [date, pickedRangeDate[1]];
+            } else {
+                // dispatch(setArrivalDate(String(date)));
+                return date;
+            }
+            // return Array.isArray(pickedRangeDate) ? [date, pickedRangeDate[1]] : date;
+        });
         handleOpenCalendar();
     };
     const handlePickedRangeDate = (date) => {
-        setPickedRangeDate((prev) => (prev[0] !== pickedDate ? [pickedDate, date] : [pickedRangeDate[0], date]));
+        // setPickedRangeDate((prev) => (prev[0] !== pickedDate ? [pickedDate, date] : [pickedRangeDate[0], date]));
+        setPickedRangeDate((prev) => {
+            // dispatch(setArrivalDate(String(date)));
+            dispatch(setArrivalDateTime(dayjs(date).tz('Asia/Jakarta').format()));
+
+            if (prev[0] !== pickedDate) {
+                return [pickedDate, date];
+            }
+            return [pickedRangeDate[0], date];
+        });
         handleOpenCalendarRange();
     };
     const handleCalendarToggleAction = () => {
-        if (pickedRangeDate.length > 0) {
-            setPickedRangeDate([]);
-        }
-        setIsToggleCalendar(!isToggleCalendar);
+        // if (pickedRangeDate.length > 0) {
+        //     setPickedRangeDate([]);
+        // }
+        // setIsToggleCalendar(!isToggleCalendar);
+        dispatch(setIsTwoWay(isTwoWay === true ? false : true));
     };
     // calendar end
 
-    // for filtered input
-    const fromAirports = useSelector(getfilteredFromAirport);
-    const toAirports = useSelector(getfilteredToAirport);
-
-    // for selected from/to airport
-    const from = useSelector(getAirportFrom);
-    const to = useSelector(getAirportTo);
-    const loading = useSelector(getAirportStatus);
-    const error = useSelector(getAirportError);
-
-    // handling local state input
-    const [searchFrom, setSearchFrom] = useState('');
-    const [searchTo, setSearchTo] = useState('');
+    // handling local state airport start
+    const [searchFrom, setSearchFrom] = useState(from || '');
+    const [searchTo, setSearchTo] = useState(to || '');
     const [searchFromResults, setSearchFromResults] = useState([]);
     const [searchToResults, setSearchToResults] = useState([]);
+    // handling local state airport end
 
-    // handling focusing input
+    // handling focusing airport input start
     const [focusFromInput, setFocusFromInput] = useState(false);
     const [focusToInput, setFocusToInput] = useState(false);
+    // handling focusing airport input end
 
-    // toggle rotate
+    // toggle rotate for switching airport start
     const [isToggle, setIsToggle] = useState(false);
     const handleToggleAction = () => {
         dispatch(switchFromToAirportPosition());
@@ -144,8 +190,9 @@ export default function Home() {
         setSearchFrom(to);
         setIsToggle(!isToggle);
     };
+    // toggle rotate for switching airport end
 
-    // handling input on change
+    // handling flitering airport input start
     const handleFromInputChange = (event) => {
         setSearchFrom(event.target.value);
         dispatch(filteredFromAirport(event.target.value));
@@ -154,8 +201,9 @@ export default function Home() {
         setSearchTo(event.target.value);
         dispatch(filteredToAirport(event.target.value));
     };
+    // handling flitering airport input end
 
-    // handling choosing one from/to airport
+    // handling choosing one of from/to airport start
     const handleChooseFromAirport = (value) => {
         dispatch(setFromAirport(value));
         setFocusFromInput(false);
@@ -164,8 +212,9 @@ export default function Home() {
         dispatch(setToAirport(value));
         setFocusToInput(false);
     };
+    // handling choosing one of from/to airport end
 
-    // handling effect for executing data
+    // handling effect for executing data start
     useEffect(() => {
         if (loading === 'idle') {
             dispatch(fetchAirport());
@@ -181,6 +230,7 @@ export default function Home() {
         const results = toAirports;
         setSearchToResults(results);
     }, [toAirports]);
+    // handling effect for executing data end
 
     return (
         <>
@@ -261,7 +311,7 @@ export default function Home() {
                                             <Input
                                                 id={'derpature'}
                                                 readOnly
-                                                value={formatToLocale(fly.derpatures)}
+                                                value={formatToLocale(derpatureDateTime)}
                                                 onClick={handleOpenCalendar}
                                                 className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-2 font-poppins text-title-3 font-medium'
                                             />
@@ -274,7 +324,7 @@ export default function Home() {
                                                     Return
                                                 </Label>
                                                 <ToggleSwitch
-                                                    isToggle={isToggleCalendar}
+                                                    isToggle={isTwoWay}
                                                     handleToggleAction={handleCalendarToggleAction}
                                                     id={'toggle_calendar'}
                                                     className={'absolute right-[-36px]'}
@@ -283,11 +333,11 @@ export default function Home() {
                                             <Input
                                                 id={'return'}
                                                 readOnly
-                                                value={!fly.returns ? 'Pilih Tanggal' : formatToLocale(fly.returns)}
+                                                value={!arrivalDateTime ? 'Pilih Tanggal' : formatToLocale(arrivalDateTime)}
                                                 onClick={handleOpenCalendarRange}
-                                                className={`${!isToggleCalendar ? 'invisible' : 'visible'} 
+                                                className={`${!isTwoWay ? 'invisible' : 'visible'} 
                         ${
-                            !fly.returns ? 'text-[14px] font-normal text-pur-5' : 'text-body-6 font-medium text-black'
+                            !arrivalDateTime ? 'text-[14px] font-normal text-pur-5' : 'text-body-6 font-medium text-black'
                         } cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0 border-b-net-2  py-3 font-poppins  font-medium`}
                                                 // value={'Pilih Tanggal'}
                                             />
@@ -361,7 +411,7 @@ export default function Home() {
                                             readOnly
                                             onClick={handleOpenPassengerModal}
                                             className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-2 font-poppins text-title-3 font-medium'
-                                            value={'2 Penumpang'}
+                                            value={`${totalPassenger} penumpang`}
                                         />
                                     </div>
                                     <div className=''>
@@ -383,7 +433,9 @@ export default function Home() {
                         </div>
                         {/* home search menu end */}
                     </div>
-                    <Button className='absolute bottom-0 w-full bg-pur-4 py-3 text-title-2 font-bold text-white hover:bg-pur-3'>
+                    <Button
+                        className='absolute bottom-0 w-full bg-pur-4 py-3 text-title-2 font-bold text-white hover:bg-pur-3'
+                        onClick={() => router.push('/search')}>
                         Cari Penerbangan
                     </Button>
                 </div>

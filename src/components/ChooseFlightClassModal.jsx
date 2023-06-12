@@ -4,10 +4,11 @@ import Card from './Card';
 import { FaCheckCircle } from 'react-icons/fa';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getFligthClass } from '../store/flight';
+// import { getFligthClass } from '../store/flight';
+import { getFlightClass } from '@/store/ticket';
 
 export default function ChooseFlightClassModal({ handleActionFlightClassModal, handleOpenFlightClassModal }) {
-    const flightClassRedux = useSelector(getFligthClass);
+    const flightClassRedux = useSelector(getFlightClass);
     const [chooseFlightClass, setChooseFlightClass] = useState(flightClassRedux || 'Economy');
 
     const handleChosenFlightClass = (flightClass) => setChooseFlightClass(flightClass);

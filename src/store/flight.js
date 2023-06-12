@@ -3,19 +3,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const URL = 'https://raw.githubusercontent.com/ariefhk/experiment-raw-data/main/airports/airports.json';
+const URL = 'https://airplaneapikel1-production.up.railway.app/api/v1/airport';
 
 export const fetchAirport = createAsyncThunk('flights/fetchAirport', async () => {
     try {
         const response = await axios.get(URL);
-
-        return response.data;
+        return response.data.data.airport;
     } catch (error) {
         return error.message;
     }
 });
 
 const initialState = {
+    isArrival: false,
     airports: [],
     filteredFromAirport: [],
     filteredToAirport: [],
@@ -30,7 +30,7 @@ const initialState = {
 };
 
 export const flightSlice = createSlice({
-    name: 'flights',
+    name: 'flight',
     initialState,
     reducers: {
         // For diff input comp
@@ -38,7 +38,13 @@ export const flightSlice = createSlice({
             const searchFromAirport = state.airports.filter((airport) =>
                 airport.airport_location.toLowerCase().includes(action.payload.toLowerCase())
             );
+
+            // const searchFromAirport = state.airports;
+
+            // console.log(searchFromAirport);
             state.filteredFromAirport = searchFromAirport;
+
+            // console.log(state.airports);
         },
 
         // For diff input comp
@@ -82,6 +88,20 @@ export const flightSlice = createSlice({
         setFlightClass: (state, action) => {
             state.flightClass = action.payload;
         },
+
+        //define datePickerCalenda
+        setDerpatureDate: (state, action) => {
+            state.derpatureDate = action.payload;
+        },
+
+        //define datePickerCalenda
+        setArrivalDate: (state, action) => {
+            state.arrivalDate = action.payload;
+        },
+        //define datePickerCalenda
+        setIsArrival: (state, action) => {
+            state.isArrival = action.payload;
+        },
     },
     extraReducers: (builder) => {
         // eslint-disable-next-line no-unused-vars
@@ -99,14 +119,27 @@ export const flightSlice = createSlice({
     },
 });
 
-export const getAllAirport = (state) => state.flights.airports;
-export const getAirportStatus = (state) => state.flights.status;
-export const getfilteredFromAirport = (state) => state.flights.filteredFromAirport;
-export const getfilteredToAirport = (state) => state.flights.filteredToAirport;
-export const getAirportError = (state) => state.flights.error;
-export const getAirportFrom = (state) => state.flights.from;
-export const getAirportTo = (state) => state.flights.to;
-export const getTotalPassenger = (state) => state.flights.passenger;
-export const getFligthClass = (state) => state.flights.flightClass;
+export const getAllAirport = (state) => state.flight.airports;
+export const getAirportStatus = (state) => state.flight.status;
+export const getfilteredFromAirport = (state) => state.flight.filteredFromAirport;
+export const getfilteredToAirport = (state) => state.flight.filteredToAirport;
+export const getAirportError = (state) => state.flight.error;
+export const getAirportFrom = (state) => state.flight.from;
+export const getAirportTo = (state) => state.flight.to;
+export const getTotalPassenger = (state) => state.flight.passenger;
+export const getFligthClass = (state) => state.flight.flightClass;
+export const getDerpatureDate = (state) => state.flight.derpatureDate;
+export const getArrivalDate = (state) => state.flight.arrivalDate;
+export const getIsArrival = (state) => state.flight.isArrival;
+
+// export const getAllAirport = (state) => state.flights.airports;
+// export const getAirportStatus = (state) => state.flights.status;
+// export const getfilteredFromAirport = (state) => state.flights.filteredFromAirport;
+// export const getfilteredToAirport = (state) => state.flights.filteredToAirport;
+// export const getAirportError = (state) => state.flights.error;
+// export const getAirportFrom = (state) => state.flights.from;
+// export const getAirportTo = (state) => state.flights.to;
+// export const getTotalPassenger = (state) => state.flights.passenger;
+// export const getFligthClass = (state) => state.flights.flightClass;
 
 export default flightSlice.reducer;
