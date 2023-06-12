@@ -1,9 +1,15 @@
+import Login from '@/pages/Login';
+import Register from '@/pages/Regsiter'
+import SearchHistory from '@/components/SearchHistory';
 
 
 export default function Home() {
-  return (
-    <main className="flex flex-col items-center justify-between min-h-screen p-24">
-     <h1>This is main yaww :D</h1>
-    </main>
-  )
+    return (
+        <main>
+            <div className='flex h-screen bg-white font-poppins'>
+                {/* <Register /> */}
+                <Login />
+            </div>
+        </main>
+    );
 }
