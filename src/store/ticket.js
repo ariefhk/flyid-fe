@@ -3,7 +3,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = {
-    flightClass: '',
+    flightClass: 'Economy',
 };
 
 export const ticketSlice = createSlice({

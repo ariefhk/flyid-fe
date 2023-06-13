@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const URL = 'https://airplaneapikel1-production.up.railway.app/api/v1/airport';
 
-export const fetchAirport = createAsyncThunk('flights/fetchAirport', async () => {
+export const fetchAirport = createAsyncThunk('flight/fetchAirport', async () => {
     try {
         const response = await axios.get(URL);
         return response.data.data.airport;
@@ -15,39 +15,65 @@ export const fetchAirport = createAsyncThunk('flights/fetchAirport', async () =>
 });
 
 const initialState = {
-    isArrival: false,
+    // airport start
     airports: [],
     filteredFromAirport: [],
     filteredToAirport: [],
-    from: '',
-    to: '',
-    derpatureDate: '',
-    arrivalDate: '',
-    passenger: 0,
-    flightClass: '',
-    status: 'idle', //'idle' | 'loading' | 'succeeded' | 'failed'
-    error: null,
+    displayFromAirport: '',
+    displayToAirport: '',
+    fetchAirportStatus: 'idle', //'idle' | 'loading' | 'succeeded' | 'failed'
+    fetchAirportError: null,
+    fromAirport: '', //for search from flight ticket
+    toAirport: '', //for search to flight ticket
+    // airport end
+
+    // passenger start
+    passengerType: {
+        dewasa: 1,
+        anak: 0,
+        bayi: 0,
+    },
+    totalPassenger: 1,
+    // passenger end
+
+    // flight class start
+    flightClass: 'Economy',
+    // flight class end
+
+    //one way/two way mode start
+    isTwoWay: false,
+    one_way: {
+        from: '',
+        to: '',
+        derpatureDateTime: '',
+        arrivalDateTime: '',
+    },
+    two_way: {
+        from: '',
+        to: '',
+        derpatureDateTime: '',
+        // arrivalDateTime: '',
+    },
+    //one way/two way mode end
+
+    // display ui prototype start
+    displayDerpatureDateTime: '',
+    // display ui prototype end
 };
 
 export const flightSlice = createSlice({
     name: 'flight',
     initialState,
     reducers: {
-        // For diff input comp
+        // airport reducer start
         filteredFromAirport: (state, action) => {
             const searchFromAirport = state.airports.filter((airport) =>
                 airport.airport_location.toLowerCase().includes(action.payload.toLowerCase())
             );
 
-            // const searchFromAirport = state.airports;
-
-            // console.log(searchFromAirport);
             state.filteredFromAirport = searchFromAirport;
-
-            // console.log(state.airports);
         },
 
-        // For diff input comp
         filteredToAirport: (state, action) => {
             const searchToAirport = state.airports.filter((airport) =>
                 airport.airport_location.toLowerCase().includes(action.payload.toLowerCase())
@@ -55,91 +81,140 @@ export const flightSlice = createSlice({
             state.filteredToAirport = searchToAirport;
         },
 
-        // define from airport (one only)
-        setFromAirport: (state, action) => {
-            const from = state.airports.filter((airport) => airport.airport_code === action.payload);
+        setOneWayFrom: (state, action) => {
+            const fromAirport = state.airports.filter((airport) => airport.airport_code === action.payload);
 
-            // console.log('this from ', `${from[0].airport_name} (${from[0].airport_code})`);
-            state.from = `${from[0].airport_location} (${from[0].airport_code})`;
+            if (state.isTwoWay) {
+                state.two_way.to = fromAirport[0].airport_location;
+            }
+
+            state.displayFromAirport = `${fromAirport[0].airport_location} (${fromAirport[0].airport_code})`;
+            state.one_way.from = fromAirport[0].airport_location;
+        },
+        setOneWayTo: (state, action) => {
+            const toAirport = state.airports.filter((airport) => airport.airport_code === action.payload);
+
+            if (state.isTwoWay) {
+                state.two_way.from = toAirport[0].airport_location;
+            }
+
+            state.displayToAirport = `${toAirport[0].airport_location} (${toAirport[0].airport_code})`;
+            state.one_way.to = toAirport[0].airport_location;
+        },
+        setOneWaySwitch: (state) => {
+            const tempDisplay = state.displayFromAirport;
+            state.displayFromAirport = state.displayToAirport;
+            state.displayToAirport = tempDisplay;
+
+            const temp = state.one_way.from;
+            state.one_way.from = state.one_way.to;
+            state.one_way.to = temp;
+
+            if (state.isTwoWay) {
+                const temp = state.two_way.from;
+                state.two_way.from = state.two_way.to;
+                state.two_way.to = temp;
+            }
         },
 
-        // define to airport (one only)
-        setToAirport: (state, action) => {
-            const from = state.airports.filter((airport) => airport.airport_code === action.payload);
+        setIsTwoWay: (state, action) => {
+            if (!action.payload) {
+                state.two_way.from = '';
+                state.two_way.to = '';
+                state.two_way.derpatureDateTime = '';
+                state.isTwoWay = action.payload;
+                return;
+            }
 
-            // console.log('this to ', `${from[0].airport_name} (${from[0].airport_code})`);
-            state.to = `${from[0].airport_location} (${from[0].airport_code})`;
+            state.two_way.from = state.one_way.to;
+            state.two_way.to = state.one_way.from;
+            state.two_way.derpatureDateTime = state.one_way.arrivalDateTime;
+            state.isTwoWay = action.payload;
+        },
+        //define datePickerCalenda
+        setDerpatureDateTime: (state, action) => {
+            state.one_way.derpatureDateTime = action.payload;
+            state.displayDerpatureDateTime = action.payload;
         },
 
-        // switch from/to position
-        switchFromToAirportPosition: (state, action) => {
-            const temp = state.from;
-            state.from = state.to;
-            state.to = temp;
-            console.log('from:', state.from, 'to: ', state.to);
+        //define datePickerCalenda
+        setArrivalDateTime: (state, action) => {
+            if (state.isTwoWay) {
+                state.two_way.derpatureDateTime = action.payload;
+            }
+            state.one_way.arrivalDateTime = action.payload;
         },
-
-        // define amount of passenger
-        setTotalPassenger: (state, action) => {
-            state.passenger = action.payload;
-        },
-
         // define of flight Class
         setFlightClass: (state, action) => {
             state.flightClass = action.payload;
         },
-
-        //define datePickerCalenda
-        setDerpatureDate: (state, action) => {
-            state.derpatureDate = action.payload;
+        addDewasaPassenger: (state) => {
+            state.passengerType.dewasa += 1;
+            state.totalPassenger += 1;
+        },
+        addAnakPassenger: (state) => {
+            state.passengerType.anak += 1;
+            state.totalPassenger += 1;
+        },
+        addBayiPassenger: (state) => {
+            state.passengerType.bayi += 1;
+            state.totalPassenger += 1;
         },
 
-        //define datePickerCalenda
-        setArrivalDate: (state, action) => {
-            state.arrivalDate = action.payload;
+        minusDewasaPassenger: (state) => {
+            if (state.passengerType.dewasa > 1) {
+                state.passengerType.dewasa -= 1;
+                state.totalPassenger -= 1;
+            }
         },
-        //define datePickerCalenda
-        setIsArrival: (state, action) => {
-            state.isArrival = action.payload;
+        minusAnakPassenger: (state) => {
+            if (state.passengerType.anak > 0) {
+                state.passengerType.anak -= 1;
+                state.totalPassenger -= 1;
+            }
+        },
+        minusBayiPassenger: (state) => {
+            if (state.passengerType.bayi > 0) {
+                state.passengerType.bayi -= 1;
+                state.totalPassenger -= 1;
+            }
         },
     },
     extraReducers: (builder) => {
         // eslint-disable-next-line no-unused-vars
         builder.addCase(fetchAirport.pending, (state, action) => {
-            state.status = 'loading';
+            state.fetchAirportStatus = 'loading';
         });
         builder.addCase(fetchAirport.fulfilled, (state, action) => {
-            state.status = 'succeeded';
+            state.fetchAirportStatus = 'succeeded';
             state.airports = [...state.airports, ...action.payload];
         });
         builder.addCase(fetchAirport.rejected, (state, action) => {
-            state.status = 'failed';
-            state.error = action.error.message;
+            state.fetchAirportStatus = 'failed';
+            state.fetchAirportError = action.error.message;
         });
     },
 });
 
 export const getAllAirport = (state) => state.flight.airports;
-export const getAirportStatus = (state) => state.flight.status;
-export const getfilteredFromAirport = (state) => state.flight.filteredFromAirport;
-export const getfilteredToAirport = (state) => state.flight.filteredToAirport;
-export const getAirportError = (state) => state.flight.error;
-export const getAirportFrom = (state) => state.flight.from;
-export const getAirportTo = (state) => state.flight.to;
-export const getTotalPassenger = (state) => state.flight.passenger;
-export const getFligthClass = (state) => state.flight.flightClass;
-export const getDerpatureDate = (state) => state.flight.derpatureDate;
-export const getArrivalDate = (state) => state.flight.arrivalDate;
-export const getIsArrival = (state) => state.flight.isArrival;
-
-// export const getAllAirport = (state) => state.flights.airports;
-// export const getAirportStatus = (state) => state.flights.status;
-// export const getfilteredFromAirport = (state) => state.flights.filteredFromAirport;
-// export const getfilteredToAirport = (state) => state.flights.filteredToAirport;
-// export const getAirportError = (state) => state.flights.error;
-// export const getAirportFrom = (state) => state.flights.from;
-// export const getAirportTo = (state) => state.flights.to;
-// export const getTotalPassenger = (state) => state.flights.passenger;
-// export const getFligthClass = (state) => state.flights.flightClass;
+export const getAirportFetchError = (state) => state.flight.fetchAirportError;
+export const getAirportFetchStatus = (state) => state.flight.fetchAirportStatus;
+export const getFilteredFromAirport = (state) => state.flight.filteredFromAirport;
+export const getFilteredToAirport = (state) => state.flight.filteredToAirport;
+export const getDisplayFromAirport = (state) => state.flight.displayFromAirport;
+export const getDisplayToAirport = (state) => state.flight.displayToAirport;
+export const getLocationFromAirport = (state) => state.flight.fromAirport;
+export const getLocationToAirport = (state) => state.flight.toAirport;
+export const getOneWay = (state) => state.flight.one_way;
+export const getTwoWay = (state) => state.flight.two_way;
+export const getIsTwoWay = (state) => state.flight.isTwoWay;
+export const getDerpatureDateTime = (state) => state.flight.one_way.derpatureDateTime;
+export const getArrivalDateTime = (state) => state.flight.one_way.arrivalDateTime;
+export const getFlightClass = (state) => state.flight.flightClass;
+export const getTotalPassenger = (state) => state.flight.totalPassenger;
+export const getDewasaPassenger = (state) => state.flight.passengerType.dewasa;
+export const getAnakPassenger = (state) => state.flight.passengerType.anak;
+export const getBayiPassenger = (state) => state.flight.passengerType.bayi;
+export const getDisplayDerpatureDatetime = (state) => state.flight.displayDerpatureDateTime;
 
 export default flightSlice.reducer;

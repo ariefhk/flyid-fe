@@ -3,15 +3,20 @@
 import Card from './Card';
 import { FaCheckCircle } from 'react-icons/fa';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
-// import { getFligthClass } from '../store/flight';
-import { getFlightClass } from '@/store/ticket';
+import { useSelector, useDispatch } from 'react-redux';
+import { getFlightClass, flightSlice } from '@/store/flight';
 
-export default function ChooseFlightClassModal({ handleActionFlightClassModal, handleOpenFlightClassModal }) {
+export default function ChooseFlightClassModal({ handleOpenFlightClassModal }) {
+    const dispatch = useDispatch();
     const flightClassRedux = useSelector(getFlightClass);
-    const [chooseFlightClass, setChooseFlightClass] = useState(flightClassRedux || 'Economy');
+    const { setFlightClass } = flightSlice.actions;
 
-    const handleChosenFlightClass = (flightClass) => setChooseFlightClass(flightClass);
+    const [chooseFlightClass, setChooseFlightClass] = useState(flightClassRedux);
+
+    const handleChosenFlightClass = (flightClass) => {
+        setChooseFlightClass(flightClass);
+        dispatch(setFlightClass(flightClass));
+    };
 
     const flightClass = [
         {
@@ -56,7 +61,7 @@ export default function ChooseFlightClassModal({ handleActionFlightClassModal, h
                             ))}
                     </div>
                 </Card.Body>
-                <Card.Footer handleCardAction={() => handleActionFlightClassModal(chooseFlightClass)}>Simpan</Card.Footer>
+                <Card.Footer handleCardAction={() => handleOpenFlightClassModal()}>Simpan</Card.Footer>
             </Card>
         </div>
     );

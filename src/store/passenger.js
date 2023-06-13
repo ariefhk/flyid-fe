@@ -29,7 +29,7 @@ export const passengerSlice = createSlice({
         },
 
         minusDewasaPassenger: (state) => {
-            if (state.passengerType.dewasa > 0) {
+            if (state.passengerType.dewasa > 1) {
                 state.passengerType.dewasa -= 1;
                 state.totalPassenger -= 1;
             }

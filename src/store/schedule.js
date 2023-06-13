@@ -28,6 +28,9 @@ export const scheduleSlice = createSlice({
 
         //define datePickerCalenda
         setIsTwoWay: (state, action) => {
+            if (action.payload === false) {
+                state.arrivalDateTime = '';
+            }
             state.isTwoWay = action.payload;
         },
     },
