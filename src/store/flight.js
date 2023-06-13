@@ -1,9 +1,11 @@
 'use client';
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { convertToDate, convertToTime } from '@/utils/converDateTime';
 import axios from 'axios';
 
 const URL = 'https://airplaneapikel1-production.up.railway.app/api/v1/airport';
+const FLIGHT_URL = 'https://airplaneapikel1-production.up.railway.app/api/v1/flight/searchflight';
 
 export const fetchAirport = createAsyncThunk('flight/fetchAirport', async () => {
     try {
@@ -13,6 +15,25 @@ export const fetchAirport = createAsyncThunk('flight/fetchAirport', async () => 
         return error.message;
     }
 });
+
+export const fetchFlight = createAsyncThunk(
+    'flight/fetchFligth',
+    async ({ from, to, departure_date, departure_time, returnDate }) => {
+        try {
+            const objectTemplate = {
+                from,
+                to,
+                departure_date,
+                departure_time,
+                returnDate,
+            };
+            const response = await axios.post(FLIGHT_URL, objectTemplate);
+            return response.data.data.flight;
+        } catch (error) {
+            return error.message;
+        }
+    }
+);
 
 const initialState = {
     // airport start
@@ -26,6 +47,15 @@ const initialState = {
     fromAirport: '', //for search from flight ticket
     toAirport: '', //for search to flight ticket
     // airport end
+
+    // fligth start
+    flights: {
+        berangkat: [],
+        pulang: [],
+    },
+    fetchFlightStatus: 'idle', //'idle' | 'loading' | 'succeeded' | 'failed'
+    fetchFligthError: null,
+    // fligth end
 
     // passenger start
     passengerType: {
@@ -45,12 +75,18 @@ const initialState = {
     one_way: {
         from: '',
         to: '',
+        derpature_date: '',
+        derpature_time: '',
+        arrival_date: '',
+        arrival_time: '',
         derpatureDateTime: '',
         arrivalDateTime: '',
     },
     two_way: {
         from: '',
         to: '',
+        derpature_date: '',
+        derpature_time: '',
         derpatureDateTime: '',
         // arrivalDateTime: '',
     },
@@ -122,17 +158,23 @@ export const flightSlice = createSlice({
                 state.two_way.from = '';
                 state.two_way.to = '';
                 state.two_way.derpatureDateTime = '';
+                state.two_way.derpature_date = '';
+                state.two_way.derpature_time = '';
                 state.isTwoWay = action.payload;
                 return;
             }
 
             state.two_way.from = state.one_way.to;
             state.two_way.to = state.one_way.from;
+            state.two_way.derpature_date = state.one_way.arrival_date;
+            state.two_way.derpature_time = state.one_way.arrival_time;
             state.two_way.derpatureDateTime = state.one_way.arrivalDateTime;
             state.isTwoWay = action.payload;
         },
         //define datePickerCalenda
         setDerpatureDateTime: (state, action) => {
+            state.one_way.derpature_date = convertToDate(action.payload);
+            state.one_way.derpature_time = convertToTime(action.payload);
             state.one_way.derpatureDateTime = action.payload;
             state.displayDerpatureDateTime = action.payload;
         },
@@ -140,8 +182,12 @@ export const flightSlice = createSlice({
         //define datePickerCalenda
         setArrivalDateTime: (state, action) => {
             if (state.isTwoWay) {
+                state.two_way.derpature_date = convertToDate(action.payload);
+                state.two_way.derpature_time = convertToTime(action.payload);
                 state.two_way.derpatureDateTime = action.payload;
             }
+            state.one_way.arrival_date = convertToDate(action.payload);
+            state.one_way.arrival_time = convertToTime(action.payload);
             state.one_way.arrivalDateTime = action.payload;
         },
         // define of flight Class
@@ -179,10 +225,12 @@ export const flightSlice = createSlice({
                 state.totalPassenger -= 1;
             }
         },
+        setFetchFlightStatus: (state, action) => {
+            state.fetchFlightStatus = action.payload;
+        },
     },
     extraReducers: (builder) => {
-        // eslint-disable-next-line no-unused-vars
-        builder.addCase(fetchAirport.pending, (state, action) => {
+        builder.addCase(fetchAirport.pending, (state) => {
             state.fetchAirportStatus = 'loading';
         });
         builder.addCase(fetchAirport.fulfilled, (state, action) => {
@@ -190,6 +238,21 @@ export const flightSlice = createSlice({
             state.airports = [...state.airports, ...action.payload];
         });
         builder.addCase(fetchAirport.rejected, (state, action) => {
+            state.fetchAirportStatus = 'failed';
+            state.fetchAirportError = action.error.message;
+        });
+
+        builder.addCase(fetchFlight.pending, (state, action) => {
+            state.fetchAirportStatus = 'loading';
+        });
+        builder.addCase(fetchFlight.fulfilled, (state, action) => {
+            state.fetchAirportStatus = 'succeeded';
+            // console.log(action.payload);
+            state.flights.berangkat = action.payload.berangkat;
+            state.flights.pulang = action.payload.pulang;
+            // state.airports = [...state.airports, ...action.payload];
+        });
+        builder.addCase(fetchFlight.rejected, (state, action) => {
             state.fetchAirportStatus = 'failed';
             state.fetchAirportError = action.error.message;
         });
@@ -216,5 +279,7 @@ export const getDewasaPassenger = (state) => state.flight.passengerType.dewasa;
 export const getAnakPassenger = (state) => state.flight.passengerType.anak;
 export const getBayiPassenger = (state) => state.flight.passengerType.bayi;
 export const getDisplayDerpatureDatetime = (state) => state.flight.displayDerpatureDateTime;
+export const getFlights = (state) => state.flight.flights;
+export const getFlightFetchStatus = (state) => state.flight.fetchFlightStatus;
 
 export default flightSlice.reducer;
