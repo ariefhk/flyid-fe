@@ -75,25 +75,25 @@ const initialState = {
     one_way: {
         from: '',
         to: '',
-        derpature_date: '',
-        derpature_time: '',
+        departure_date: '',
+        departure_time: '',
         arrival_date: '',
         arrival_time: '',
-        derpatureDateTime: '',
+        departureDateTime: '',
         arrivalDateTime: '',
     },
     two_way: {
         from: '',
         to: '',
-        derpature_date: '',
-        derpature_time: '',
-        derpatureDateTime: '',
+        departure_date: '',
+        departure_time: '',
+        departureDateTime: '',
         // arrivalDateTime: '',
     },
     //one way/two way mode end
 
     // display ui prototype start
-    displayDerpatureDateTime: '',
+    displayDepartureDateTime: '',
     // display ui prototype end
 };
 
@@ -157,34 +157,34 @@ export const flightSlice = createSlice({
             if (!action.payload) {
                 state.two_way.from = '';
                 state.two_way.to = '';
-                state.two_way.derpatureDateTime = '';
-                state.two_way.derpature_date = '';
-                state.two_way.derpature_time = '';
+                state.two_way.departureDateTime = '';
+                state.two_way.departure_date = '';
+                state.two_way.departure_time = '';
                 state.isTwoWay = action.payload;
                 return;
             }
 
             state.two_way.from = state.one_way.to;
             state.two_way.to = state.one_way.from;
-            state.two_way.derpature_date = state.one_way.arrival_date;
-            state.two_way.derpature_time = state.one_way.arrival_time;
-            state.two_way.derpatureDateTime = state.one_way.arrivalDateTime;
+            state.two_way.departure_date = state.one_way.arrival_date;
+            state.two_way.departure_time = state.one_way.arrival_time;
+            state.two_way.departureDateTime = state.one_way.arrivalDateTime;
             state.isTwoWay = action.payload;
         },
         //define datePickerCalenda
         setDerpatureDateTime: (state, action) => {
-            state.one_way.derpature_date = convertToDate(action.payload);
-            state.one_way.derpature_time = convertToTime(action.payload);
-            state.one_way.derpatureDateTime = action.payload;
-            state.displayDerpatureDateTime = action.payload;
+            state.one_way.departure_date = convertToDate(action.payload);
+            state.one_way.departure_time = convertToTime(action.payload);
+            state.one_way.departureDateTime = action.payload;
+            state.displayDepartureDateTime = action.payload;
         },
 
         //define datePickerCalenda
         setArrivalDateTime: (state, action) => {
             if (state.isTwoWay) {
-                state.two_way.derpature_date = convertToDate(action.payload);
-                state.two_way.derpature_time = convertToTime(action.payload);
-                state.two_way.derpatureDateTime = action.payload;
+                state.two_way.departure_date = convertToDate(action.payload);
+                state.two_way.departure_time = convertToTime(action.payload);
+                state.two_way.departureDateTime = action.payload;
             }
             state.one_way.arrival_date = convertToDate(action.payload);
             state.one_way.arrival_time = convertToTime(action.payload);
@@ -225,8 +225,8 @@ export const flightSlice = createSlice({
                 state.totalPassenger -= 1;
             }
         },
-        setFetchFlightStatus: (state, action) => {
-            state.fetchFlightStatus = action.payload;
+        setFetchFlightStatus: (state) => {
+            state.fetchFlightStatus = 'idle';
         },
     },
     extraReducers: (builder) => {
@@ -271,14 +271,14 @@ export const getLocationToAirport = (state) => state.flight.toAirport;
 export const getOneWay = (state) => state.flight.one_way;
 export const getTwoWay = (state) => state.flight.two_way;
 export const getIsTwoWay = (state) => state.flight.isTwoWay;
-export const getDerpatureDateTime = (state) => state.flight.one_way.derpatureDateTime;
+export const getDerpatureDateTime = (state) => state.flight.one_way.departureDateTime;
 export const getArrivalDateTime = (state) => state.flight.one_way.arrivalDateTime;
 export const getFlightClass = (state) => state.flight.flightClass;
 export const getTotalPassenger = (state) => state.flight.totalPassenger;
 export const getDewasaPassenger = (state) => state.flight.passengerType.dewasa;
 export const getAnakPassenger = (state) => state.flight.passengerType.anak;
 export const getBayiPassenger = (state) => state.flight.passengerType.bayi;
-export const getDisplayDerpatureDatetime = (state) => state.flight.displayDerpatureDateTime;
+export const getDisplayDerpatureDatetime = (state) => state.flight.displayDepartureDateTime;
 export const getFlights = (state) => state.flight.flights;
 export const getFlightFetchStatus = (state) => state.flight.fetchFlightStatus;
 

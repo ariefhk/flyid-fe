@@ -24,11 +24,11 @@ export default function TestApi() {
             }
         };
         fetchFlight({
-            from: 'Yogyakarta',
-            to: 'Bali',
-            departure_date: '2023-06-20',
-            departure_time: '07:00',
-            returnDate: '2023-06-26',
+            from: 'Bali',
+            to: 'Jakarta',
+            departure_date: '2023-09-14',
+            departure_time: '00:00',
+            returnDate: '',
         });
     }, []);
 

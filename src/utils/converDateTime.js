@@ -10,7 +10,7 @@ export const convertToDate = (date) => {
     let year = dayjs(date).get('year');
     let month = dayjs(date).get('month');
     let day = dayjs(date).get('date');
-    return `${year}-${month < 10 ? `0${month}` : month}-${day}`;
+    return `${year}-${month < 10 ? `0${month + 1}` : month + 1}-${day}`;
 };
 
 export const convertToTime = (date) => {

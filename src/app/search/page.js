@@ -1,5 +1,6 @@
 'use client';
 
+import axios from 'axios';
 import { Fragment } from 'react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +18,10 @@ import timezone from 'dayjs/plugin/timezone';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 // dayjs
+
+import { convertToDate, convertToTime } from '@/utils/converDateTime';
+import { formatToLocale } from '@/utils/formatToLocale';
+import { formatRupiah } from '@/utils/formatRupiah';
 
 import { getDateInRange } from '@/utils/getDateInRange';
 import Button from '@/components/Button';
@@ -53,6 +58,11 @@ const extractWord = (words) => {
 export default function SearchFlight() {
     const router = useRouter();
     const dispatch = useDispatch();
+    const [fetchDataStatus, setFetchDataStatus] = useState(true);
+    const [flightData, setFlightData] = useState({
+        berangkat: [],
+        pulang: [],
+    });
 
     // modal filter ticket start
     const [openChooseFilterFlight, setOpenChooseFilterFlight] = useState(false);
@@ -69,7 +79,7 @@ export default function SearchFlight() {
     // detail
     // redux setup
     const oneWay = useSelector(getOneWay);
-    const { from, to, derpature_date, derpature_time } = useSelector(getOneWay);
+    const { from, to, departure_date, departure_time } = useSelector(getOneWay);
     const twoWay = useSelector(getTwoWay);
     const { setDerpatureDateTime, setFetchFlightStatus } = flightSlice.actions;
     const totalPassenger = useSelector(getTotalPassenger);
@@ -95,33 +105,39 @@ export default function SearchFlight() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const myObj = {
-        from: 'Jakarta',
-        to: 'Bali',
-        departure_date: '2023-06-12',
-        departure_time: '07:00',
-        returnDate: '',
-    };
-
-    // flight start
     useEffect(() => {
-        // console.log('test', loadingFetchFligth);
-        if (loadingFetchFligth === 'idle') {
-            dispatch(
-                // fetchFlight({
-                //     from: from,
-                //     to: to,
-                //     departure_date: derpature_date,
-                //     departure_time: derpature_time,
-                //     returnDate: twoWay.derpature_date,
-                // })
-                fetchFlight(myObj)
-            );
+        const URL = 'https://airplaneapikel1-production.up.railway.app/api/v1/flight/searchflight';
+        if (fetchDataStatus) {
+            const fetchFlight = async ({ from, to, departure_date, departure_time, returnDate }) => {
+                try {
+                    const objectTemplate = {
+                        from,
+                        to,
+                        departure_date,
+                        departure_time,
+                        returnDate,
+                    };
+                    const response = await axios.post(URL, objectTemplate);
+
+                    setFlightData({
+                        berangkat: [...response.data.data.flight.berangkat],
+                        pulang: [...response.data.data.flight.pulang],
+                    });
+                } catch (error) {
+                    return error.message;
+                }
+            };
+            fetchFlight({
+                from,
+                to,
+                departure_date,
+                departure_time,
+                returnDate: twoWay.departure_date,
+            });
         }
-        // const date = getDateInRange(displayDerpatureDateTime);
-        // setValues(date);
+        setFetchDataStatus(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, loadingFetchFligth]);
+    }, [fetchDataStatus]);
     // flight end
 
     useEffect(() => {
@@ -136,23 +152,52 @@ export default function SearchFlight() {
     const chooseDate = (value) => {
         setSelectDate(value);
         dispatch(setDerpatureDateTime(dayjs(value).tz('Asia/Jakarta').format()));
-        dispatch(setFetchFlightStatus('idle'));
+        // dispatch(setFetchFlightStatus());
+        setFetchDataStatus(true);
     };
+
+    // model = {
+    //     flight_id:'',
+    //     airline_id: '',
+    //     airport_id: '',
+    // };
+
+    // findOne{whre: airpor_name = input}
+
+    // res.json({
+    //     flight_id: 1,
+    //     airline: 'Super Air Jet', //airline_name
+    //     airline_code: 'JT- 203', //airline_code
+    //     flight_class: 'Economy',
+    //     from: 'Soekarno-Hatta', //airport_name
+    //     from_code: 'CGK', //airport_code from
+    //     to: 'Melbourne International Airport',
+    //     to_code: 'MLB', //airport_code to
+    //     derpature_date: '2023-03-03',
+    //     derpature_time: '07:00',
+    //     arrival_date: '2023-03-03',
+    //     arrival_time: '11:00',
+    //     duration: 4,
+    //     price: 4950000,
+    //     description: 'baggage 20 kg Cabin baggage 20kg In Flight Entertainment',
+    // });
 
     const dataShape = [
         {
-            id: 1,
+            // airline_id: '',
+            flight_id: 1,
             airline: 'Super Air Jet', //airline_name
             airline_code: 'JT- 203', //airline_code
             flight_class: 'Economy',
             from: 'Soekarno-Hatta', //airport_name
-            from_code: 'CGK', //airport_code
+            from_code: 'CGK', //airport_code from
             to: 'Melbourne International Airport',
-            to_code: 'MLB',
+            to_code: 'MLB', //airport_code to
             derpature_date: '2023-03-03',
             derpature_time: '07:00',
             arrival_date: '2023-03-03',
             arrival_time: '11:00',
+            duration: 4,
             price: 4950000,
             description: 'baggage 20 kg Cabin baggage 20kg In Flight Entertainment',
         },
@@ -208,8 +253,28 @@ export default function SearchFlight() {
 
     console.log('====================================');
     // console.log(flights);
-    console.log('one way: ', oneWay);
-    console.log('two way: ', twoWay);
+    console.log('test', flightData);
+    const fixedHour = (hours) => {
+        let arrOfHours = hours.split(':');
+        let arr = [];
+        while (arr.length < 2) {
+            arr.push(arrOfHours[arr.length]);
+        }
+        // let final = arr.join(':');
+        return arr.join(':');
+    };
+    // let data = '08:00:00';
+    // let array = data.split(':');
+    // let arr = [];
+    // while (arr.length < 2) {
+    //     arr.push(array[arr.length]);
+    // }
+    // let final = arr.join(':');
+    // console.log(final);
+    // console.log('Loading', loadingFetchFligth);
+    // console.log('one way: ', oneWay);
+    // console.log('two way: ', twoWay);
+
     console.log('====================================');
 
     return (
@@ -308,10 +373,11 @@ export default function SearchFlight() {
                     {/* left flight end */}
 
                     {/* right fligth start */}
+                    {/* Test */}
                     <div className='col-span-8 font-poppins'>
                         <div className='flex flex-col gap-4'>
-                            {dataShape.length &&
-                                dataShape.map((data, index) => (
+                            {flightData.berangkat.length &&
+                                flightData.berangkat.map((data, index) => (
                                     <div key={index} className='flex flex-col gap-2 rounded-rad-3 p-4 shadow-low'>
                                         {/* list top start */}
                                         <div className='flex items-center justify-between'>
@@ -320,24 +386,23 @@ export default function SearchFlight() {
                                                     <Image src={'./images/flight_badge.svg'} fill alt='' />
                                                 </div>
                                                 <h3 className='text-body-5 font-medium'>
-                                                    {data.airline} - {data.flight_class}
+                                                    {data.airplane.airline_name} - {data.flight_class}
                                                 </h3>
                                             </div>
                                             <div onClick={() => handleIsDetail(data.id)}>
-                                                {isDetail ? (
+                                                {isDetail && chosenDetailFlight === data.id ? (
                                                     <IoIosArrowDropup className='h-[28px] w-[28px] text-net-3' />
                                                 ) : (
                                                     <IoIosArrowDropdown className='h-[28px] w-[28px] text-net-3' />
                                                 )}
                                             </div>
                                         </div>
-                                        {/* list top end */}
-                                        {/* list bottom start */}
+
                                         <div className='flex items-center justify-between'>
                                             <div className='flex items-center gap-4'>
                                                 <div>
-                                                    <p className='text-body-6 font-bold'>{data.derpature_time}</p>
-                                                    <p className='text-body-3 font-medium'>{data.from_code}</p>
+                                                    <p className='text-body-6 font-bold'>{fixedHour(data.departure_time)}</p>
+                                                    <p className='text-body-3 font-medium'>{data.airport.airport_code}</p>
                                                 </div>
                                                 <div className='flex flex-col items-center justify-center'>
                                                     <p className='text-body-4 text-net-3'>4h 0m</p>
@@ -347,40 +412,42 @@ export default function SearchFlight() {
                                                     <p className='text-body-4 text-net-3'>Direct</p>
                                                 </div>
                                                 <div>
-                                                    <p className='text-body-6 font-bold'>{data.arrival_time}</p>
-                                                    <p className='text-body-3 font-medium'>{data.to_code}</p>
+                                                    <p className='text-body-6 font-bold'>{fixedHour(data.arrival_time)}</p>
+                                                    <p className='text-body-3 font-medium'>{data.to}</p>
                                                 </div>
                                             </div>
                                             <div className='flex flex-col gap-[6px] text-title-2'>
-                                                <p className='font-bold text-pur-4'>IDR {data.price}</p>
+                                                <p className='font-bold text-pur-4'>IDR {formatRupiah(data.price)}</p>
                                                 <Button className='rounded-rad-3 bg-pur-4 py-1 font-medium text-white'>
                                                     Pilih
                                                 </Button>
                                             </div>
                                         </div>
-                                        {/* list bottom end */}
 
                                         {isDetail && chosenDetailFlight === data.id && (
                                             <div className='mt-5 border-[1px] border-b-0 border-l-0 border-r-0 border-t-net-3'>
                                                 <h1 className='mb-1 mt-[22px] text-body-6 font-bold text-pur-5'>
                                                     Detail Penerbangan
                                                 </h1>
-                                                {/* detail flight from start */}
+
                                                 <div className='flex justify-between'>
                                                     <div>
-                                                        <h2 className='text-title-2 font-bold'>{data.derpature_time}</h2>
-                                                        <p className='text-body-6 font-normal'>{data.derpature_date}</p>
+                                                        <h2 className='text-title-2 font-bold'>
+                                                            {fixedHour(data.departure_time)}
+                                                        </h2>
+                                                        <p className='text-body-6 font-normal'>
+                                                            {formatToLocale(data.departure_date)}
+                                                        </p>
                                                         <p className='text-body-6 font-normal'>{data.from}</p>
                                                     </div>
                                                     <div>
                                                         <h3 className='font-bold text-pur-3'>Keberangkaran</h3>
                                                     </div>
                                                 </div>
-                                                {/* divided start */}
+
                                                 <div className='mb-2 mt-4 flex justify-center'>
                                                     <div className='w-1/2 border-[1px] border-t-net-2'></div>
                                                 </div>
-                                                {/* divided end */}
 
                                                 <div className='flex items-center gap-4'>
                                                     <div className='relative h-[24px] w-[24px]'>
@@ -389,7 +456,7 @@ export default function SearchFlight() {
                                                     <div className='flex flex-col gap-4'>
                                                         <div>
                                                             <h1 className='text-body-6 font-bold'>
-                                                                {data.airline} - {data.flight_class}
+                                                                {data.airplane.airline_name} - {data.flight_class}
                                                             </h1>
                                                             <h2 className='text-body-5 font-bold'>{data.airline_code}</h2>
                                                         </div>
@@ -401,30 +468,141 @@ export default function SearchFlight() {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {/* divided start */}
+
                                                 <div className='mb-2 mt-4 flex justify-center'>
                                                     <div className='w-1/2 border-[1px] border-t-net-2'></div>
                                                 </div>
-                                                {/* divided end */}
-                                                {/* detail flight from start */}
+
                                                 <div className='flex justify-between'>
                                                     <div>
-                                                        <h2 className='text-title-2 font-bold'>{data.arrival_time}</h2>
-                                                        <p className='text-body-6 font-normal'>{data.arrival_date}</p>
+                                                        <h2 className='text-title-2 font-bold'>{fixedHour(data.arrival_time)}</h2>
+                                                        <p className='text-body-6 font-normal'>
+                                                            {formatToLocale(data.arrival_date)}
+                                                        </p>
                                                         <p className='text-body-6 font-normal'>{data.to}</p>
                                                     </div>
                                                     <div>
                                                         <h3 className='font-bold text-pur-3'>Kedatangan</h3>
                                                     </div>
                                                 </div>
-                                                {/* divided start */}
-                                                {/* detail flight from end */}
                                             </div>
                                         )}
                                     </div>
                                 ))}
                         </div>
                     </div>
+                    {/* Test */}
+
+                    {/* <div className='col-span-8 font-poppins'>
+                        <div className='flex flex-col gap-4'>
+                            {dataShape.length &&
+                                dataShape.map((data, index) => (
+                                    <div key={index} className='flex flex-col gap-2 p-4 rounded-rad-3 shadow-low'>
+                                        <div className='flex items-center justify-between'>
+                                            <div className='flex items-center gap-2'>
+                                                <div className='relative h-[24px] w-[24px] '>
+                                                    <Image src={'./images/flight_badge.svg'} fill alt='' />
+                                                </div>
+                                                <h3 className='font-medium text-body-5'>
+                                                    {data.airline} - {data.flight_class}
+                                                </h3>
+                                            </div>
+                                            <div onClick={() => handleIsDetail(data.id)}>
+                                                {isDetail ? (
+                                                    <IoIosArrowDropup className='h-[28px] w-[28px] text-net-3' />
+                                                ) : (
+                                                    <IoIosArrowDropdown className='h-[28px] w-[28px] text-net-3' />
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div className='flex items-center justify-between'>
+                                            <div className='flex items-center gap-4'>
+                                                <div>
+                                                    <p className='font-bold text-body-6'>{data.derpature_time}</p>
+                                                    <p className='font-medium text-body-3'>{data.from_code}</p>
+                                                </div>
+                                                <div className='flex flex-col items-center justify-center'>
+                                                    <p className='text-body-4 text-net-3'>4h 0m</p>
+                                                    <div className='relative h-[8px] w-[233px]'>
+                                                        <Image alt='' src={'./images/arrow.svg'} fill />
+                                                    </div>
+                                                    <p className='text-body-4 text-net-3'>Direct</p>
+                                                </div>
+                                                <div>
+                                                    <p className='font-bold text-body-6'>{data.arrival_time}</p>
+                                                    <p className='font-medium text-body-3'>{data.to_code}</p>
+                                                </div>
+                                            </div>
+                                            <div className='flex flex-col gap-[6px] text-title-2'>
+                                                <p className='font-bold text-pur-4'>IDR {data.price}</p>
+                                                <Button className='py-1 font-medium text-white rounded-rad-3 bg-pur-4'>
+                                                    Pilih
+                                                </Button>
+                                            </div>
+                                        </div>
+
+                                        {isDetail && chosenDetailFlight === data.id && (
+                                            <div className='mt-5 border-[1px] border-b-0 border-l-0 border-r-0 border-t-net-3'>
+                                                <h1 className='mb-1 mt-[22px] text-body-6 font-bold text-pur-5'>
+                                                    Detail Penerbangan
+                                                </h1>
+
+                                                <div className='flex justify-between'>
+                                                    <div>
+                                                        <h2 className='font-bold text-title-2'>{data.derpature_time}</h2>
+                                                        <p className='font-normal text-body-6'>{data.derpature_date}</p>
+                                                        <p className='font-normal text-body-6'>{data.from}</p>
+                                                    </div>
+                                                    <div>
+                                                        <h3 className='font-bold text-pur-3'>Keberangkaran</h3>
+                                                    </div>
+                                                </div>
+
+                                                <div className='flex justify-center mt-4 mb-2'>
+                                                    <div className='w-1/2 border-[1px] border-t-net-2'></div>
+                                                </div>
+
+                                                <div className='flex items-center gap-4'>
+                                                    <div className='relative h-[24px] w-[24px]'>
+                                                        <Image src={'./images/flight_badge.svg'} fill alt='' />
+                                                    </div>
+                                                    <div className='flex flex-col gap-4'>
+                                                        <div>
+                                                            <h1 className='font-bold text-body-6'>
+                                                                {data.airline} - {data.flight_class}
+                                                            </h1>
+                                                            <h2 className='font-bold text-body-5'>{data.airline_code}</h2>
+                                                        </div>
+                                                        <div>
+                                                            <h3 className='font-bold text-body-5'>Informasi :</h3>
+                                                            <p className='font-normal text-body-5'>
+                                                                {extractWord(data.description)}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className='flex justify-center mt-4 mb-2'>
+                                                    <div className='w-1/2 border-[1px] border-t-net-2'></div>
+                                                </div>
+
+                                                <div className='flex justify-between'>
+                                                    <div>
+                                                        <h2 className='font-bold text-title-2'>{data.arrival_time}</h2>
+                                                        <p className='font-normal text-body-6'>{data.arrival_date}</p>
+                                                        <p className='font-normal text-body-6'>{data.to}</p>
+                                                    </div>
+                                                    <div>
+                                                        <h3 className='font-bold text-pur-3'>Kedatangan</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                        </div>
+                    </div> */}
                     {/* right fligth end */}
                 </div>
                 {/* one way  end & list flight*/}
@@ -450,7 +628,8 @@ export default function SearchFlight() {
                                 router.refresh();
                                 setIsSearchAgain(!isSearchAgain);
                                 handleOpenHomeSearch();
-                                dispatch(setFetchFlightStatus('idle'));
+                                dispatch(setFetchFlightStatus());
+                                setFetchDataStatus(true);
                             }}
                         />
                     </div>

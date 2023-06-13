@@ -50,6 +50,7 @@ import { FiX } from 'react-icons/fi';
 export default function HomeSearch({ className, buttonAction, handleActionHomeSearch }) {
     // redux setup
     const dispatch = useDispatch();
+
     // redux setup
 
     // redux flight setup
@@ -267,12 +268,12 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                                         <div className=''>
                                             <Label
                                                 className='font-poppins text-title-2 font-medium text-net-3'
-                                                htmlFor={'derpature'}>
-                                                Derpature
+                                                htmlFor={'departure'}>
+                                                Departure
                                             </Label>
 
                                             <Input
-                                                id={'derpature'}
+                                                id={'departure'}
                                                 readOnly
                                                 value={formatToLocale(derpatureDateTime)}
                                                 onClick={handleOpenCalendar}
