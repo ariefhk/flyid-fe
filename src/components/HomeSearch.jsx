@@ -204,7 +204,7 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
             <div className='container  mx-auto mt-[-50px] hidden  h-[292px]  max-w-screen-lg lg:block'>
                 <div className={` relative h-full w-full overflow-hidden rounded-rad-3 bg-white shadow-high`}>
                     {/* <FiX className='absolute right-0 mr-3 mt-2 h-[28px] w-[28px]' onClick={() => handleOpenHomeSearch()} /> */}
-                    {buttonAction || example}
+                    {buttonAction || null}
                     <div className='mx-8 my-6'>
                         {/* home search title start */}
                         <h1 className='font-poppins text-head-1 font-bold'>

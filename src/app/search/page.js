@@ -3,78 +3,144 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FiArrowLeft, FiChevronRight, FiBox, FiHeart, FiDollarSign } from 'react-icons/fi';
 import { FiX } from 'react-icons/fi';
+import { RiArrowUpDownLine } from 'react-icons/ri';
+import { IoIosArrowDropdown, IoIosArrowDropup } from 'react-icons/io';
 
+// dayjs
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
+// dayjs
+
+import { getDateInRange } from '@/utils/getDateInRange';
+import Button from '@/components/Button';
 import Navbar from '@/components/Navbar';
 import HomeSearch from '@/components/HomeSearch';
-import { getOneWay, getFlightClass, getTotalPassenger } from '@/store/flight';
-
-const getDateInRange = () => {
-    // const d1 = new Date('2023-05-28');
-    const d1 = new Date();
-    d1.setHours(0, 0, 0, 0);
-    const d2 = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate() + 7);
-
-    return new Promise((resolve, reject) => {
-        // const date = new Date(startDate.getTime());
-        const date = new Date(d1.getTime());
-        let angka = 1;
-        const dates = [];
-
-        while (date <= d2) {
-            dates.push({
-                id: angka + dates.length,
-                date: new Date(date),
-                active: false,
-            });
-
-            date.setDate(date.getDate() + 1);
-        }
-
-        resolve(dates);
-    });
-};
+import { getOneWay, getFlightClass, getTotalPassenger, getDisplayDerpatureDatetime, flightSlice } from '@/store/flight';
 
 export default function SearchFlight() {
     const router = useRouter();
+    const dispatch = useDispatch();
     // redux setup
     const { from, to, derpatureDateTime, arrivalDateTime } = useSelector(getOneWay);
+    const { setDerpatureDateTime } = flightSlice.actions;
     const totalPassenger = useSelector(getTotalPassenger);
     const flighClass = useSelector(getFlightClass);
+    const displayDerpatureDateTime = useSelector(getDisplayDerpatureDatetime);
     // redux setup
 
     // open homesearch
     const [openHomeSearch, setOpenHomeSearch] = useState(false);
     const handleOpenHomeSearch = () => setOpenHomeSearch(!openHomeSearch);
+    const [isSearchAgain, setIsSearchAgain] = useState(false);
     // open homesearch
 
     const [values, setValues] = useState([]);
-    const [selectDate, setSelectDate] = useState(0);
-    const arr = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }];
+    const [selectDate, setSelectDate] = useState(new Date(displayDerpatureDateTime) || '');
+
     useEffect(() => {
-        async function rangeOfDates() {
-            const date = await getDateInRange();
-            setValues(date);
-        }
-        rangeOfDates();
+        const date = getDateInRange(displayDerpatureDateTime);
+        setValues(date);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const modifyDate = (value) => {
-        // rangeOfDates = rangeOfDates.map((val) => (val.id === value.id ? (val.active = true) : val));
-        let finValue = values.find((test) => test.active === true);
-
-        if (finValue) {
-            const rangeNew = values.map((val) => (val.id === finValue.id ? { ...val, active: false } : val));
-            setValues(rangeNew);
+    useEffect(() => {
+        if (isSearchAgain) {
+            const date = getDateInRange(displayDerpatureDateTime);
+            setValues(date);
+            setSelectDate(new Date(displayDerpatureDateTime));
+            setIsSearchAgain(false);
         }
+    }, [isSearchAgain, displayDerpatureDateTime]);
 
-        const range = values.map((val) => (val.id === value.id ? { ...val, active: true } : val));
-
+    const chooseDate = (value) => {
         setSelectDate(value);
+        dispatch(setDerpatureDateTime(dayjs(value).tz('Asia/Jakarta').format()));
     };
 
-    console.log(selectDate);
+    console.log('====================================');
+    // const testDate = new Date(displayDerpatureDateTime);
+    // const testDate2 = new Date(testDate.getTime());
+    // const testDate3 = new Date(testDate2);
+    // console.log(testDate3);
+    // console.log('H1: ', selectDate);
+    // if (values.length) {
+    //     console.log('H2:', new Date(values[0].date).getDate() === new Date(selectDate).getDate());
+    // }
+    // console.log(new Date(values[0].date) === new Date(selectDate));
+    // console.log(values);
+    console.log('====================================');
+
+    const dataShape = [
+        {
+            id: 1,
+            airline: 'Super Air Jet', //airline_name
+            airline_code: 'JT- 203', //airline_code
+            flight_class: 'Economy',
+            from: 'Soekarno-Hatta', //airport_name
+            from_code: 'CGK', //airport_code
+            to: 'Melbourne International Airport',
+            to_code: 'MLB',
+            derpature_date: '2023-03-03',
+            derpature_time: '07:00',
+            arrival_date: '2023-03-03',
+            arrival_time: '11:00',
+            price: 4950000,
+            description: 'baggage 20 kg Cabin baggage 20 kg In Flight Entertainment',
+        },
+        {
+            id: 2,
+            airline: 'Super Air Jet',
+            airline_code: 'JT- 203',
+            flight_class: 'Economy',
+            from: 'Soekarno-Hatta',
+            from_code: 'CGK',
+            to: 'Melbourne International Airport',
+            to_code: 'MLB',
+            derpature_date: '2023-03-03',
+            derpature_time: '08:00',
+            arrival_date: '2023-03-03',
+            arrival_time: '12:00',
+            price: 5950000,
+            description: 'baggage 20 kg Cabin baggage 20 kg In Flight Entertainment',
+        },
+        {
+            id: 3,
+            airline: 'Super Air Jet',
+            airline_code: 'JT- 203',
+            flight_class: 'Economy',
+            from: 'Soekarno-Hatta',
+            from_code: 'CGK',
+            to: 'Melbourne International Airport',
+            to_code: 'MLB',
+            derpature_date: '2023-03-03',
+            derpature_time: '13:15',
+            arrival_date: '2023-03-03',
+            arrival_time: '17:15',
+            price: 7225000,
+            description: 'baggage 20 kg Cabin baggage 20 kg In Flight Entertainment',
+        },
+        {
+            id: 4,
+            airline: 'Super Air Jet',
+            airline_code: 'JT- 203',
+            flight_class: 'Economy',
+            from: 'Soekarno-Hatta',
+            from_code: 'CGK',
+            to: 'Melbourne International Airport',
+            to_code: 'MLB',
+            derpature_date: '2023-03-03',
+            derpature_time: '20:15',
+            arrival_date: '2023-03-03',
+            arrival_time: '23:30',
+            price: 8010000,
+            description: 'baggage 20 kg Cabin baggage 20 kg In Flight Entertainment',
+        },
+    ];
 
     return (
         <>
@@ -99,17 +165,21 @@ export default function SearchFlight() {
                 <div className='col-span-12 grid grid-cols-8 divide-x-2'>
                     {values.length ? (
                         values.map((val, index) => (
-                            <div key={index} className='col-span-1 cursor-pointer  px-2' onClick={() => modifyDate(val.date)}>
+                            <div key={index} className='col-span-1 cursor-pointer  px-2' onClick={() => chooseDate(val.date)}>
                                 <div
                                     className={`${
-                                        val.date === selectDate ? 'bg-[#A06ECE] text-white' : 'text-[#151515]'
+                                        new Date(val.date).getDate() === new Date(selectDate).getDate()
+                                            ? 'bg-[#A06ECE] text-white'
+                                            : 'text-[#151515]'
                                     } flex flex-col items-center justify-center rounded-[8px] px-[22px] py-[4px] font-poppins`}>
                                     <h3 className='text-[14px] font-bold'>
                                         {val.date.toLocaleDateString('id-ID', { weekday: 'long' })}
                                     </h3>
                                     <p
                                         className={`${
-                                            val.date === selectDate ? 'text-white' : 'text-[#8A8A8A]'
+                                            new Date(val.date).getDate() === new Date(selectDate).getDate()
+                                                ? 'text-white'
+                                                : 'text-[#8A8A8A]'
                                         } text-[12px] font-normal`}>
                                         {val.date.toLocaleDateString()}
                                     </p>
@@ -124,15 +194,45 @@ export default function SearchFlight() {
 
                 {/* one way start  & list flight*/}
                 <div className='col-span-12  mt-[40px] grid grid-cols-12 gap-10'>
-                    <div className='col-span-4  bg-green-200'>
-                        <h1 className='font-poppins text-title-3 font-bold'>Your Flight</h1>
-                        <div></div>
+                    <div className='col-span-12 flex justify-end'>
+                        <Button className='flex items-center gap-2 rounded-rad-4 border border-pur-4 px-3 py-2 font-poppins text-body-3  font-medium text-pur-4'>
+                            <RiArrowUpDownLine /> Termurah
+                        </Button>
                     </div>
-                    <div className='col-span-8 bg-red-200'>
-                        <div>
-                            <h1>Test</h1>
+                    {/* left flight start */}
+                    <div className='col-span-4'>
+                        <h1 className='font-poppins text-title-3 font-bold'>Your Flight</h1>
+                        <div className=' rounded-rad-4  px-6 py-6 font-poppins shadow-low'>
+                            <h3 className='mb-[24px]'>Filter</h3>
+                            <div className='flex flex-col gap-1'>
+                                <div className='flex items-center justify-between border border-b-[1px] border-l-0 border-r-0 border-t-0 border-net-2 py-2'>
+                                    <p className='flex items-center gap-3'>
+                                        <FiBox /> Transit
+                                    </p>
+                                    <FiChevronRight />
+                                </div>
+                                <div className='flex items-center justify-between border border-b-[1px] border-l-0 border-r-0 border-t-0 border-net-2 py-2'>
+                                    <p className='flex items-center gap-3'>
+                                        <FiHeart /> Fasilitas
+                                    </p>
+                                    <FiChevronRight />
+                                </div>
+                                <div className='flex items-center justify-between border border-b-[1px] border-l-0 border-r-0 border-t-0 border-net-2 py-2'>
+                                    <p className='flex items-center gap-3'>
+                                        <FiDollarSign /> Harga
+                                    </p>
+                                    <FiChevronRight />
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    {/* left flight end */}
+
+                    {/* right fligth start */}
+                    <div className='col-span-8 bg-red-200'>
+                        <div>{dataShape.length && dataShape.map((data, index) => <div key={index}></div>)}</div>
+                    </div>
+                    {/* right fligth end */}
                 </div>
                 {/* one way  end & list flight*/}
             </div>
@@ -147,11 +247,15 @@ export default function SearchFlight() {
                             buttonAction={
                                 <FiX
                                     className='absolute right-0 mr-3 mt-2 h-[28px] w-[28px]'
-                                    onClick={() => handleOpenHomeSearch()}
+                                    onClick={() => {
+                                        handleOpenHomeSearch();
+                                        setIsSearchAgain(!isSearchAgain);
+                                    }}
                                 />
                             }
                             handleActionHomeSearch={() => {
                                 router.refresh();
+                                setIsSearchAgain(!isSearchAgain);
                                 handleOpenHomeSearch();
                             }}
                         />
