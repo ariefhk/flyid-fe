@@ -3,13 +3,10 @@
 export default function AskAccountButton({ prefix, suffix, onClick }) {
     return (
         <div className='flex justify-center'>
-            <p className='font-poppins text-body-c font-normal'>
+            <p className='font-poppins text-body-6 font-normal'>
                 {prefix}
-<<<<<<< HEAD
-                <span onClick={onClick} className='ml-2 cursor-pointer font-bold  text-purple-4 hover:text-purple-2'>
-=======
-                <span onClick={onClick} className='ml-2 cursor-pointer font-semibold  text-purple-4 hover:text-purple-2'>
->>>>>>> tiyas-OTP
+
+                <span onClick={onClick} className='ml-2 cursor-pointer font-bold  text-pur-4 hover:text-pur-2'>
                     {suffix}
                 </span>
             </p>

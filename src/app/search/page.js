@@ -47,7 +47,7 @@ const extractWord = (words) => {
         .join('\n');
     const lines = text.split(/\n/);
 
-    console.log('ini', text);
+    // console.log('ini', text);
     const withBreaks = lines.flatMap((line, index) =>
         index > 0 ? [<br key={`br-${index}`} />, <Fragment key={index}>{line}</Fragment>] : [line]
     );
@@ -106,6 +106,7 @@ export default function SearchFlight() {
     }, []);
 
     useEffect(() => {
+        const SEARCH_URL = 'https://kel1airplaneapi-production.up.railway.app/api/v1/flight/searchflight';
         const URL = 'https://airplaneapikel1-production.up.railway.app/api/v1/flight/searchflight';
         if (fetchDataStatus) {
             const fetchFlight = async ({ from, to, departure_date, departure_time, returnDate }) => {
@@ -117,7 +118,7 @@ export default function SearchFlight() {
                         departure_time,
                         returnDate,
                     };
-                    const response = await axios.post(URL, objectTemplate);
+                    const response = await axios.post(SEARCH_URL, objectTemplate);
 
                     setFlightData({
                         berangkat: [...response.data.data.flight.berangkat],
@@ -386,7 +387,7 @@ export default function SearchFlight() {
                                                     <Image src={'./images/flight_badge.svg'} fill alt='' />
                                                 </div>
                                                 <h3 className='text-body-5 font-medium'>
-                                                    {data.airplane.airline_name} - {data.flight_class}
+                                                    {data.airline} - {data.flight_class}
                                                 </h3>
                                             </div>
                                             <div onClick={() => handleIsDetail(data.id)}>
@@ -402,7 +403,7 @@ export default function SearchFlight() {
                                             <div className='flex items-center gap-4'>
                                                 <div>
                                                     <p className='text-body-6 font-bold'>{fixedHour(data.departure_time)}</p>
-                                                    <p className='text-body-3 font-medium'>{data.airport.airport_code}</p>
+                                                    <p className='text-body-3 font-medium'>{data.airport_from_code}</p>
                                                 </div>
                                                 <div className='flex flex-col items-center justify-center'>
                                                     <p className='text-body-4 text-net-3'>4h 0m</p>
@@ -413,7 +414,7 @@ export default function SearchFlight() {
                                                 </div>
                                                 <div>
                                                     <p className='text-body-6 font-bold'>{fixedHour(data.arrival_time)}</p>
-                                                    <p className='text-body-3 font-medium'>{data.to}</p>
+                                                    <p className='text-body-3 font-medium'>{data.airport_to_code}</p>
                                                 </div>
                                             </div>
                                             <div className='flex flex-col gap-[6px] text-title-2'>
@@ -438,7 +439,7 @@ export default function SearchFlight() {
                                                         <p className='text-body-6 font-normal'>
                                                             {formatToLocale(data.departure_date)}
                                                         </p>
-                                                        <p className='text-body-6 font-normal'>{data.from}</p>
+                                                        <p className='text-body-6 font-normal'>{data.airport_from}</p>
                                                     </div>
                                                     <div>
                                                         <h3 className='font-bold text-pur-3'>Keberangkaran</h3>
@@ -456,9 +457,9 @@ export default function SearchFlight() {
                                                     <div className='flex flex-col gap-4'>
                                                         <div>
                                                             <h1 className='text-body-6 font-bold'>
-                                                                {data.airplane.airline_name} - {data.flight_class}
+                                                                {data.airline} - {data.flight_class}
                                                             </h1>
-                                                            <h2 className='text-body-5 font-bold'>{data.airline_code}</h2>
+                                                            <h2 className='text-body-5 font-bold'>{data.airlane_code}</h2>
                                                         </div>
                                                         <div>
                                                             <h3 className='text-body-5 font-bold'>Informasi :</h3>
@@ -479,7 +480,7 @@ export default function SearchFlight() {
                                                         <p className='text-body-6 font-normal'>
                                                             {formatToLocale(data.arrival_date)}
                                                         </p>
-                                                        <p className='text-body-6 font-normal'>{data.to}</p>
+                                                        <p className='text-body-6 font-normal'>{data.airport_to}</p>
                                                     </div>
                                                     <div>
                                                         <h3 className='font-bold text-pur-3'>Kedatangan</h3>

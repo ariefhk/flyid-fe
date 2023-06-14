@@ -13,11 +13,10 @@ export default function Home() {
             <Navbar className={'hidden lg:block'} />
             <div className=' mt-8 hidden h-[232px] grid-cols-12  lg:grid'>
                 <div className='relative col-span-12 '>
-                    <Image src={'./images/banner.svg'} alt='' fill={true} quality={100} />
+                    <Image src={'./images/banner.svg'} alt='' fill={true} quality={100} priority />
                 </div>
             </div>
             <HomeSearch className={'h-[298px] w-[968px]'} handleActionHomeSearch={() => router.push('/search')} />
         </>
-
     );
 }
