@@ -8,17 +8,58 @@ import AskAccountButton from '@/components/AskAccountButton';
 import Button from '@/components/Button';
 import AlertBottom from '@/components/AlertBottom';
 import { useState } from 'react';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
+    const router = useRouter();
     const [visibleAlert, setVisibleAlert] = useState(false);
-    const handleVisibleAlert = () => setVisibleAlert(!visibleAlert);
+    const [alertText, setAlertText] = useState('');
+    const handleVisibleAlert = (text) => {
+        setAlertText(text);
+        setVisibleAlert(!visibleAlert);
+    };
+
+    const [loginData, setLoginData] = useState({
+        email: '',
+        password: '',
+    });
+
+    const handleLoginData = (event) => {
+        setLoginData({ ...loginData, [event.target.name]: event.target.value });
+    };
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        signIn('credentials', {
+            email: loginData.email,
+            password: loginData.password,
+            redirect: false,
+        }).then((res) => {
+            if (res.error) {
+                handleVisibleAlert(res.error);
+            }
+            if (!res.error) {
+                router.replace('/');
+            }
+        });
+    };
 
     return (
         <section className='h-screen  bg-white'>
             <div className='grid h-full w-full grid-cols-12'>
                 <div className='col-span-6'>
                     <div className='relative h-full'>
-                        <Image src={`/images/Ulang_Sandi.jpg`} alt='' fill={true} style={{ objectFit: 'cover' }} quality={100} />
+                        <Image
+                            src={`/images/Ulang_Sandi.jpg`}
+                            alt=''
+                            fill
+                            style={{ objectFit: 'cover' }}
+                            quality={100}
+                            priority
+                            // className='opacity-0 transition-opacity duration-[1s]'
+                            // onLoadingComplete={(image) => image.classList.remove('opacity-0')}
+                        />
                     </div>
                 </div>
                 <div className='relative col-span-6'>
@@ -26,14 +67,20 @@ export default function Login() {
                         visibleAlert={visibleAlert}
                         handleVisibleAlert={handleVisibleAlert}
                         className='bg-alert-3'
-                        text={'Tautan invalid atau kadaluarsa'}
+                        text={alertText}
                     />
                     <div className='padding-py-px flex h-full items-center justify-self-end ps-20'>
-                        <div className='flex w-[452px] flex-col gap-5 '>
+                        <form onSubmit={handleLogin} className='flex w-[452px] flex-col gap-5 '>
                             <h1 className='text-heading-2 mb-2 font-poppins text-2xl font-bold'>Masuk</h1>
                             <div className='flex flex-col'>
                                 <Label htmlFor='email'>Email/No Telepon</Label>
-                                <Input id='email' placeholder='Contoh: johndoe@gmail.com' />
+                                <Input
+                                    id='email'
+                                    placeholder='Contoh: johndoe@gmail.com'
+                                    value={loginData.email}
+                                    name={'email'}
+                                    onChange={handleLoginData}
+                                />
                             </div>
                             <div className='flex flex-col'>
                                 <Label htmlFor='password' className='mb-1 flex justify-between text-body-3'>
@@ -42,15 +89,21 @@ export default function Login() {
                                         Lupa Kata Sandi
                                     </span>
                                 </Label>
-                                <PasswordInput id='password' placeholder='Masukkan password' />
+                                <PasswordInput
+                                    id='password'
+                                    placeholder='Masukkan password'
+                                    value={loginData.password}
+                                    name={'password'}
+                                    onChange={handleLoginData}
+                                />
                             </div>
-                            <Button onClick={() => handleVisibleAlert()}>Masuk</Button>
+                            <Button type={'submit'}>Masuk</Button>
                             <AskAccountButton
                                 prefix={'Belum punya akun?'}
                                 suffix={'Daftar Disini'}
                                 onClick={() => console.log('Ini diganti Fungsi')}
                             />
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>

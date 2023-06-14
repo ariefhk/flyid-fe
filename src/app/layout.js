@@ -12,6 +12,7 @@ import './globals.css';
 import { Poppins, Inter } from 'next/font/google';
 
 import { Providers } from '@/components/Providers';
+import { SessionProviders } from '@/components/SessionProviders';
 
 const poppins = Poppins({
     subsets: ['latin'],
@@ -34,7 +35,9 @@ export default function RootLayout({ children }) {
     return (
         <html lang='en'>
             <body className={`${poppins.variable} ${inter.variable}`}>
-                <Providers>{children}</Providers>
+                <SessionProviders>
+                    <Providers>{children}</Providers>
+                </SessionProviders>
             </body>
         </html>
     );
