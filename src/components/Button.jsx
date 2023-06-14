@@ -1,11 +1,7 @@
 'use client';
 
 export default function Button({
-<<<<<<< HEAD
-    className = 'rounded-rad-4 bg-purple-4 px-6 py-[14px] text-body-c font-medium text-white hover:bg-purple-2',
-=======
-    className = 'rounded-rad-4 bg-purple-600 px-6 py-[14px] w-full text-body-c font-medium text-white hover:bg-purple-2',
->>>>>>> tiyas-OTP
+    className = 'rounded-rad-4 bg-pur-4 px-6 py-[14px] text-body-6 font-medium text-white hover:bg-pur-2',
     text,
     children,
     ...rest
