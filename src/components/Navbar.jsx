@@ -1,10 +1,9 @@
 'use client';
 
 import SearchBar from './SearchBar';
-import { FiLogIn } from 'react-icons/fi';
+
 import SignInButton from './SignInButton';
 import Image from 'next/image';
-import Button from './Button';
 
 export default function Navbar({ className }) {
     return (
@@ -15,10 +14,6 @@ export default function Navbar({ className }) {
                     <SearchBar />
                 </div>
 
-                {/* <Button className='flex items-center justify-center gap-3 rounded-rad-3 bg-pur-4 px-4 py-[14px] text-white'>
-                    <FiLogIn />
-                    Masuk
-                </Button> */}
                 <SignInButton />
             </div>
         </div>

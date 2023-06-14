@@ -1,4 +1,6 @@
 'use client';
+
+import { useState } from 'react';
 import Input from '@/components/Input';
 import Label from '@/components/Label';
 import Image from 'next/image';
@@ -6,7 +8,6 @@ import PasswordInput from '@/components/PasswordInput';
 import AskAccountButton from '@/components/AskAccountButton';
 import Button from '@/components/Button';
 import AlertBottom from '@/components/AlertBottom';
-import { useState } from 'react';
 
 export default function Register() {
     const [visibleAlert, setVisibleAlert] = useState(false);

@@ -43,11 +43,21 @@ const handler = NextAuth({
                 // // return user;
                 // throw new Error(user.message);
                 try {
-                    const res = await axios.post('https://airplaneapikel1-production.up.railway.app/api/v1/user/login', {
-                        email: credentials.email,
-                        password: credentials.password,
-                    });
-                    return res.data;
+                    const res = await axios.post(
+                        'https://airplaneapikel1-production.up.railway.app/api/v1/user/login',
+                        {
+                            email: credentials.email,
+                            password: credentials.password,
+                        },
+                        {
+                            headers: {
+                                accept: '*/*',
+                                'Content-Type': 'application/json',
+                            },
+                        }
+                    );
+                    // console.log('hehe', res.data);
+                    return res.data.data;
                 } catch (error) {
                     throw new Error(error.response.data.message);
                 }

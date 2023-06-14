@@ -59,7 +59,7 @@ const initialState = {
 
     // passenger start
     passengerType: {
-        dewasa: 1,
+        dewasa: 1, //
         anak: 0,
         bayi: 0,
     },

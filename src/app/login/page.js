@@ -8,7 +8,7 @@ import AskAccountButton from '@/components/AskAccountButton';
 import Button from '@/components/Button';
 import AlertBottom from '@/components/AlertBottom';
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 export default function Login() {
@@ -40,6 +40,7 @@ export default function Login() {
                 handleVisibleAlert(res.error);
             }
             if (!res.error) {
+                router.refresh();
                 router.replace('/');
             }
         });

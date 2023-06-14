@@ -157,100 +157,74 @@ export default function SearchFlight() {
         setFetchDataStatus(true);
     };
 
-    // model = {
-    //     flight_id:'',
-    //     airline_id: '',
-    //     airport_id: '',
-    // };
-
-    // findOne{whre: airpor_name = input}
-
-    // res.json({
-    //     flight_id: 1,
-    //     airline: 'Super Air Jet', //airline_name
-    //     airline_code: 'JT- 203', //airline_code
-    //     flight_class: 'Economy',
-    //     from: 'Soekarno-Hatta', //airport_name
-    //     from_code: 'CGK', //airport_code from
-    //     to: 'Melbourne International Airport',
-    //     to_code: 'MLB', //airport_code to
-    //     derpature_date: '2023-03-03',
-    //     derpature_time: '07:00',
-    //     arrival_date: '2023-03-03',
-    //     arrival_time: '11:00',
-    //     duration: 4,
-    //     price: 4950000,
-    //     description: 'baggage 20 kg Cabin baggage 20kg In Flight Entertainment',
-    // });
-
-    const dataShape = [
-        {
-            // airline_id: '',
-            flight_id: 1,
-            airline: 'Super Air Jet', //airline_name
-            airline_code: 'JT- 203', //airline_code
-            flight_class: 'Economy',
-            from: 'Soekarno-Hatta', //airport_name
-            from_code: 'CGK', //airport_code from
-            to: 'Melbourne International Airport',
-            to_code: 'MLB', //airport_code to
-            derpature_date: '2023-03-03',
-            derpature_time: '07:00',
-            arrival_date: '2023-03-03',
-            arrival_time: '11:00',
-            duration: 4,
-            price: 4950000,
-            description: 'baggage 20 kg Cabin baggage 20kg In Flight Entertainment',
-        },
-        {
-            id: 2,
-            airline: 'Super Air Jet',
-            airline_code: 'JT- 203',
-            flight_class: 'Economy',
-            from: 'Soekarno-Hatta',
-            from_code: 'CGK',
-            to: 'Melbourne International Airport',
-            to_code: 'MLB',
-            derpature_date: '2023-03-03',
-            derpature_time: '08:00',
-            arrival_date: '2023-03-03',
-            arrival_time: '12:00',
-            price: 5950000,
-            description: 'baggage 20 kg Cabin baggage 20 kg In Flight Entertainment',
-        },
-        {
-            id: 3,
-            airline: 'Super Air Jet',
-            airline_code: 'JT- 203',
-            flight_class: 'Economy',
-            from: 'Soekarno-Hatta',
-            from_code: 'CGK',
-            to: 'Melbourne International Airport',
-            to_code: 'MLB',
-            derpature_date: '2023-03-03',
-            derpature_time: '13:15',
-            arrival_date: '2023-03-03',
-            arrival_time: '17:15',
-            price: 7225000,
-            description: 'baggage 20 kg Cabin baggage 20 kg In Flight Entertainment',
-        },
-        {
-            id: 4,
-            airline: 'Super Air Jet',
-            airline_code: 'JT- 203',
-            flight_class: 'Economy',
-            from: 'Soekarno-Hatta',
-            from_code: 'CGK',
-            to: 'Melbourne International Airport',
-            to_code: 'MLB',
-            derpature_date: '2023-03-03',
-            derpature_time: '20:15',
-            arrival_date: '2023-03-03',
-            arrival_time: '23:30',
-            price: 8010000,
-            description: 'baggage 20 kg Cabin baggage 20 kg In Flight Entertainment',
-        },
-    ];
+    // const dataShape = [
+    //     {
+    //         // airline_id: '',
+    //         flight_id: 1,
+    //         airline: 'Super Air Jet', //airline_name
+    //         airline_code: 'JT- 203', //airline_code
+    //         flight_class: 'Economy',
+    //         from: 'Soekarno-Hatta', //airport_name
+    //         from_code: 'CGK', //airport_code from
+    //         to: 'Melbourne International Airport',
+    //         to_code: 'MLB', //airport_code to
+    //         derpature_date: '2023-03-03',
+    //         derpature_time: '07:00',
+    //         arrival_date: '2023-03-03',
+    //         arrival_time: '11:00',
+    //         duration: 4,
+    //         price: 4950000,
+    //         description: 'baggage 20 kg Cabin baggage 20kg In Flight Entertainment',
+    //     },
+    //     {
+    //         id: 2,
+    //         airline: 'Super Air Jet',
+    //         airline_code: 'JT- 203',
+    //         flight_class: 'Economy',
+    //         from: 'Soekarno-Hatta',
+    //         from_code: 'CGK',
+    //         to: 'Melbourne International Airport',
+    //         to_code: 'MLB',
+    //         derpature_date: '2023-03-03',
+    //         derpature_time: '08:00',
+    //         arrival_date: '2023-03-03',
+    //         arrival_time: '12:00',
+    //         price: 5950000,
+    //         description: 'baggage 20 kg Cabin baggage 20 kg In Flight Entertainment',
+    //     },
+    //     {
+    //         id: 3,
+    //         airline: 'Super Air Jet',
+    //         airline_code: 'JT- 203',
+    //         flight_class: 'Economy',
+    //         from: 'Soekarno-Hatta',
+    //         from_code: 'CGK',
+    //         to: 'Melbourne International Airport',
+    //         to_code: 'MLB',
+    //         derpature_date: '2023-03-03',
+    //         derpature_time: '13:15',
+    //         arrival_date: '2023-03-03',
+    //         arrival_time: '17:15',
+    //         price: 7225000,
+    //         description: 'baggage 20 kg Cabin baggage 20 kg In Flight Entertainment',
+    //     },
+    //     {
+    //         id: 4,
+    //         airline: 'Super Air Jet',
+    //         airline_code: 'JT- 203',
+    //         flight_class: 'Economy',
+    //         from: 'Soekarno-Hatta',
+    //         from_code: 'CGK',
+    //         to: 'Melbourne International Airport',
+    //         to_code: 'MLB',
+    //         derpature_date: '2023-03-03',
+    //         derpature_time: '20:15',
+    //         arrival_date: '2023-03-03',
+    //         arrival_time: '23:30',
+    //         price: 8010000,
+    //         description: 'baggage 20 kg Cabin baggage 20 kg In Flight Entertainment',
+    //     },
+    // ];
 
     console.log('====================================');
     // console.log(flights);
@@ -285,7 +259,7 @@ export default function SearchFlight() {
                 {/* search flight menu start */}
                 <h1 className='col-span-12 mb-[24px] mt-[47px] font-poppins text-head-1 font-bold'>Pilih Penerbangan</h1>
                 <div className='col-span-9 flex items-center gap-4 rounded-rad-3 bg-pur-3 font-poppins text-title-2 font-medium text-white'>
-                    <FiArrowLeft className='ml-[21px] h-6 w-6' onClick={() => router.back()} />
+                    <FiArrowLeft className='ml-[21px] h-6 w-6 cursor-pointer' onClick={() => router.back()} />
                     <p>
                         {from} {' > '} {to} - {totalPassenger} Penumpang - {flighClass}
                     </p>
@@ -406,7 +380,7 @@ export default function SearchFlight() {
                                                     <p className='text-body-3 font-medium'>{data.airport_from_code}</p>
                                                 </div>
                                                 <div className='flex flex-col items-center justify-center'>
-                                                    <p className='text-body-4 text-net-3'>4h 0m</p>
+                                                    <p className='text-body-4 text-net-3'>{data.duration}h</p>
                                                     <div className='relative h-[8px] w-[233px]'>
                                                         <Image alt='' src={'./images/arrow.svg'} fill />
                                                     </div>
@@ -651,3 +625,5 @@ export default function SearchFlight() {
         </>
     );
 }
+
+SearchFlight.auth = true;
