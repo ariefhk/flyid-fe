@@ -1,12 +1,13 @@
 'use client';
 
+import AkunLogin from '@/pages/AkunLogin';
+
 export default function Home() {
     return (
-        
-           <main className="flex flex-col items-center justify-between min-h-screen p-24">
-     <h1>This is main yaww :D</h1>
-    </main>
-       
+        <main>
+            <div className='flex h-screen bg-white'>
+                <AkunLogin />
+            </div>
+        </main>
     );
 }
-
