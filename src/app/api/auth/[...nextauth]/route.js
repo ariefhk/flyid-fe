@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth';
 import axios from 'axios';
 import CredentialsProvider from 'next-auth/providers/credentials';
-// const NextAuthURL = process.env.NEXTAUTH_URL;
+
 const handler = NextAuth({
     providers: [
         CredentialsProvider({
@@ -22,29 +22,9 @@ const handler = NextAuth({
                 // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
                 // You can also use the `req` object to obtain additional parameters
                 // (i.e., the request IP address)
-                // const res = await fetch('https://airplaneapikel1-production.up.railway.app/api/v1/user/login', {
-                //     method: 'POST',
-                //     body: JSON.stringify({
-                //         email: credentials.email,
-                //         password: credentials.password,
-                //     }),
-                //     headers: { 'Content-Type': 'application/json' },
-                // });
-                // const user = await res.json();
-
-                // console.log('this data', user);
-
-                // // If no error and we have user data, return it
-                // if (res.ok && user) {
-                //     return user;
-                // }
-                // // Return null if user data could not be retrieved
-                // // return null;
-                // // return user;
-                // throw new Error(user.message);
                 try {
                     const res = await axios.post(
-                        'https://airplaneapikel1-production.up.railway.app/api/v1/user/login',
+                        'https://kel1airplaneapi-production.up.railway.app/api/v1/user/login',
                         {
                             email: credentials.email,
                             password: credentials.password,
@@ -56,7 +36,6 @@ const handler = NextAuth({
                             },
                         }
                     );
-                    // console.log('hehe', res.data);
                     return res.data.data;
                 } catch (error) {
                     throw new Error(error.response.data.message);
@@ -79,7 +58,6 @@ const handler = NextAuth({
     secret: process.env.NEXTAUTH_SECRET,
     pages: {
         signIn: '/login',
-        // error: '/',
     },
 });
 

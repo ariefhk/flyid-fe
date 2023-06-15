@@ -23,7 +23,7 @@ export default function Akun() {
         email: '',
     });
 
-    console.log(selectedMenu);
+    // console.log(selectedMenu);
 
     const option = [
         {

@@ -1,11 +1,3 @@
-// dayjs start
-// import dayjs from 'dayjs';
-// import utc from 'dayjs/plugin/utc';
-// import timezone from 'dayjs/plugin/timezone';
-// dayjs.extend(utc);
-// dayjs.extend(timezone);
-// dayjs end
-
 import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import './globals.css';
@@ -33,8 +25,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
     return (
-        <html lang='en' suppressHydrationWarning={true}>
-            <body className={`${poppins.variable} ${inter.variable}`}>
+        <html lang='en'>
+            <body className={`${poppins.variable} ${inter.variable}`} suppressHydrationWarning={true}>
                 <SessionProviders>
                     <Providers>{children}</Providers>
                 </SessionProviders>

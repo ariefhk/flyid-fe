@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Input from '@/components/Input';
 import Label from '@/components/Label';
 import Image from 'next/image';
@@ -14,7 +14,6 @@ import axios from 'axios';
 export default function Register() {
     const router = useRouter();
     const [visibleAlert, setVisibleAlert] = useState(false);
-    const [registerStatus, setRegisterStatus] = useState('idle');
     const [alertText, setAlertText] = useState('');
     const [alertType, setAlertType] = useState('');
     const handleVisibleAlert = (text, alertType) => {
@@ -22,14 +21,6 @@ export default function Register() {
         setAlertType(alertType);
         setVisibleAlert(!visibleAlert);
     };
-
-    useEffect(() => {
-        if (registerStatus === 'success') {
-            // alert('Success Register, Your being redirected');
-            router.push('/otp');
-        }
-        setRegisterStatus('idle');
-    }, [registerStatus, router]);
 
     const [regisData, setRegisData] = useState({
         name: '',
@@ -51,44 +42,46 @@ export default function Register() {
                 phone,
                 password,
             });
-            console.log(res);
+
             handleVisibleAlert(res.data.message, 'success');
+            // console.log(res.data);
             return res.data;
         } catch (error) {
-            // console.log(error);
             const text = error.response.data.message;
-            // return error.response.data.message;
-
             handleVisibleAlert(text, 'failed');
-            // return error.response.data.message;
         }
     };
 
     const handleRegis = async (e) => {
         e.preventDefault();
         try {
-            if (regisData.name && regisData.email && regisData.password && regisData.phone) {
-                const templateObj = {
-                    name: regisData.name,
-                    email: regisData.email,
-                    phone: regisData.phone,
-                    password: regisData.password,
-                };
-                const test = await registerUser(templateObj);
-                console.log(regisData);
-                // console.log('hehehe', test);
-                if (test.status === 'Success') {
-                    setRegisterStatus('success');
-                }
+            if (!regisData.name || !regisData.email || !regisData.password || !regisData.phone) {
+                handleVisibleAlert('Field harus diisi semua!', 'failed');
+                return;
+            }
+            const templateObj = {
+                name: regisData.name,
+                email: regisData.email,
+                phone: regisData.phone,
+                password: regisData.password,
+            };
+            const res = await registerUser(templateObj);
+
+            if (res.status === 'Success') {
+                let id = res.data.user.id;
+                let emails = res.data.user.email;
+                // emails: res.data.user.email,
+
+                router.push(`otp/${id}/${emails}`);
             }
         } catch (error) {
-            // handleVisibleAlert(error.message, 'failed');
+            console.log(error.message);
         }
     };
 
     return (
-        <section className='w-full h-screen bg-white'>
-            <div className='grid w-full h-full grid-cols-12'>
+        <section className='h-screen w-full bg-white'>
+            <div className='grid h-full w-full grid-cols-12'>
                 <div className='col-span-6'>
                     <div className='relative h-full'>
                         <Image src={`/images/Ulang_Sandi.jpg`} alt='' fill={true} style={{ objectFit: 'cover' }} quality={100} />
@@ -98,13 +91,12 @@ export default function Register() {
                     <AlertBottom
                         visibleAlert={visibleAlert}
                         handleVisibleAlert={handleVisibleAlert}
-                        // className='bg-alert-3'
                         text={alertText}
                         type={alertType}
                     />
-                    <div className='flex items-center h-full padding-py-px justify-self-end ps-20'>
+                    <div className='padding-py-px flex h-full items-center justify-self-end ps-20'>
                         <form className='flex w-[452px] flex-col gap-5 ' onSubmit={handleRegis}>
-                            <h1 className='mb-2 text-2xl font-bold text-heading-2 font-poppins '>Daftar</h1>
+                            <h1 className='text-heading-2 mb-2 font-poppins text-2xl font-bold '>Daftar</h1>
                             <div className='flex flex-col'>
                                 <Label htmlFor='name'>Nama </Label>
                                 <Input
@@ -136,7 +128,7 @@ export default function Register() {
                                 />
                             </div>
                             <div className='flex flex-col'>
-                                <Label htmlFor='password' className='flex justify-between mb-1 text-body-4'>
+                                <Label htmlFor='password' className='mb-1 flex justify-between text-body-4'>
                                     Passwords
                                 </Label>
                                 <PasswordInput
