@@ -15,8 +15,10 @@ export default function Login() {
     const router = useRouter();
     const [visibleAlert, setVisibleAlert] = useState(false);
     const [alertText, setAlertText] = useState('');
-    const handleVisibleAlert = (text) => {
+    const [alertType, setAlertType] = useState('');
+    const handleVisibleAlert = (text, alertType) => {
         setAlertText(text);
+        setAlertType(alertType);
         setVisibleAlert(!visibleAlert);
     };
 
@@ -37,7 +39,7 @@ export default function Login() {
             redirect: false,
         }).then((res) => {
             if (res.error) {
-                handleVisibleAlert(res.error);
+                handleVisibleAlert(res.error, 'failed');
             }
             if (!res.error) {
                 router.refresh();
@@ -67,8 +69,9 @@ export default function Login() {
                     <AlertBottom
                         visibleAlert={visibleAlert}
                         handleVisibleAlert={handleVisibleAlert}
-                        className='bg-alert-3'
+                        // className='bg-alert-3'
                         text={alertText}
+                        type={alertType}
                     />
                     <div className='padding-py-px flex h-full items-center justify-self-end ps-20'>
                         <form onSubmit={handleLogin} className='flex w-[452px] flex-col gap-5 '>
@@ -102,7 +105,7 @@ export default function Login() {
                             <AskAccountButton
                                 prefix={'Belum punya akun?'}
                                 suffix={'Daftar Disini'}
-                                onClick={() => console.log('Ini diganti Fungsi')}
+                                onClick={() => router.push('/register')}
                             />
                         </form>
                     </div>

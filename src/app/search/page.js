@@ -255,11 +255,13 @@ export default function SearchFlight() {
     return (
         <>
             <Navbar className={'hidden lg:block'} />
-            <div className='container mx-auto grid max-w-screen-lg grid-cols-12 gap-3'>
+            <div className='container mx-auto grid max-w-screen-lg  grid-cols-12 gap-3'>
                 {/* search flight menu start */}
                 <h1 className='col-span-12 mb-[24px] mt-[47px] font-poppins text-head-1 font-bold'>Pilih Penerbangan</h1>
-                <div className='col-span-9 flex items-center gap-4 rounded-rad-3 bg-pur-3 font-poppins text-title-2 font-medium text-white'>
-                    <FiArrowLeft className='ml-[21px] h-6 w-6 cursor-pointer' onClick={() => router.back()} />
+                <div
+                    className='col-span-9 flex cursor-pointer items-center gap-4 rounded-rad-3 bg-pur-3 font-poppins text-title-2 font-medium text-white'
+                    onClick={() => router.back()}>
+                    <FiArrowLeft className='ml-[21px] h-6 w-6 ' />
                     <p>
                         {from} {' > '} {to} - {totalPassenger} Penumpang - {flighClass}
                     </p>

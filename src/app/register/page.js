@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Input from '@/components/Input';
 import Label from '@/components/Label';
 import Image from 'next/image';
@@ -8,10 +8,83 @@ import PasswordInput from '@/components/PasswordInput';
 import AskAccountButton from '@/components/AskAccountButton';
 import Button from '@/components/Button';
 import AlertBottom from '@/components/AlertBottom';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 export default function Register() {
+    const router = useRouter();
     const [visibleAlert, setVisibleAlert] = useState(false);
-    const handleVisibleAlert = () => setVisibleAlert(!visibleAlert);
+    const [registerStatus, setRegisterStatus] = useState('idle');
+    const [alertText, setAlertText] = useState('');
+    const [alertType, setAlertType] = useState('');
+    const handleVisibleAlert = (text, alertType) => {
+        setAlertText(text);
+        setAlertType(alertType);
+        setVisibleAlert(!visibleAlert);
+    };
+
+    useEffect(() => {
+        if (registerStatus === 'success') {
+            alert('Success Register, Your being redirected');
+            router.push('/otp');
+        }
+        setRegisterStatus('idle');
+    }, [registerStatus, router]);
+
+    const [regisData, setRegisData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        password: '',
+    });
+
+    const handleRegisData = (event) => {
+        setRegisData({ ...regisData, [event.target.name]: event.target.value });
+    };
+
+    const registerUser = async ({ name, email, phone, password }) => {
+        try {
+            const URL = 'https://kel1airplaneapi-production.up.railway.app/api/v1/user/register';
+            const res = await axios.post(URL, {
+                name,
+                email,
+                phone,
+                password,
+            });
+            console.log(res);
+            handleVisibleAlert(res.data.message, 'success');
+            return res.data;
+        } catch (error) {
+            // console.log(error);
+            const text = error.response.data.message;
+            // return error.response.data.message;
+
+            handleVisibleAlert(text, 'failed');
+            // return error.response.data.message;
+        }
+    };
+
+    const handleRegis = async (e) => {
+        e.preventDefault();
+        try {
+            if (regisData.name && regisData.email && regisData.password && regisData.phone) {
+                const templateObj = {
+                    name: regisData.name,
+                    email: regisData.email,
+                    phone: regisData.phone,
+                    password: regisData.password,
+                };
+                const test = await registerUser(templateObj);
+                console.log(regisData);
+                // console.log('hehehe', test);
+                if (test.status === 'Success') {
+                    setRegisterStatus('success');
+                }
+            }
+        } catch (error) {
+            // handleVisibleAlert(error.message, 'failed');
+        }
+    };
 
     return (
         <section className='h-screen w-full bg-white'>
@@ -25,37 +98,62 @@ export default function Register() {
                     <AlertBottom
                         visibleAlert={visibleAlert}
                         handleVisibleAlert={handleVisibleAlert}
-                        className='bg-alert-3'
-                        text={'Tautan invalid atau kadaluarsa'}
+                        // className='bg-alert-3'
+                        text={alertText}
+                        type={alertType}
                     />
                     <div className='padding-py-px flex h-full items-center justify-self-end ps-20'>
-                        <div className='flex w-[452px] flex-col gap-5 '>
+                        <form className='flex w-[452px] flex-col gap-5 ' onSubmit={handleRegis}>
                             <h1 className='text-heading-2 mb-2 font-poppins text-2xl font-bold '>Daftar</h1>
                             <div className='flex flex-col'>
                                 <Label htmlFor='name'>Nama </Label>
-                                <Input id='name' placeholder='Nama Lengkap' />
+                                <Input
+                                    id='name'
+                                    placeholder='Nama Lengkap'
+                                    name='name'
+                                    value={regisData.name}
+                                    onChange={handleRegisData}
+                                />
                             </div>
                             <div className='flex flex-col'>
                                 <Label htmlFor='email'>Email</Label>
-                                <Input id='email' placeholder='Contoh: Johndee@gmail.com' />
+                                <Input
+                                    id='email'
+                                    name='email'
+                                    placeholder='Contoh: Johndee@gmail.com'
+                                    value={regisData.email}
+                                    onChange={handleRegisData}
+                                />
                             </div>
                             <div className='flex flex-col'>
-                                <Label htmlFor='no_tlp'>No Telepon</Label>
-                                <Input id='no_tlp' placeholder='+62' />
+                                <Label htmlFor='phone'>No Telepon</Label>
+                                <Input
+                                    id='phone'
+                                    placeholder='+62'
+                                    name='phone'
+                                    value={regisData.phone}
+                                    onChange={handleRegisData}
+                                />
                             </div>
                             <div className='flex flex-col'>
                                 <Label htmlFor='password' className='mb-1 flex justify-between text-body-4'>
                                     Passwords
                                 </Label>
-                                <PasswordInput id='password' placeholder='Buat Password' />
+                                <PasswordInput
+                                    id='password'
+                                    name='password'
+                                    placeholder='Buat Password'
+                                    value={regisData.password}
+                                    onChange={handleRegisData}
+                                />
                             </div>
-                            <Button onClick={() => handleVisibleAlert()}>Daftar</Button>
+                            <Button type='submit'>Daftar</Button>
                             <AskAccountButton
                                 prefix={'Sudah Punya Akun?'}
                                 suffix={'Masuk Disini'}
-                                onClick={() => console.log('Ini diganti Fungsi')}
+                                onClick={() => router.push('/login')}
                             />
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
