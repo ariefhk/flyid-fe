@@ -1,5 +1,5 @@
 'use client';
 
 export default function ResetPassword() {
-    return <div>Hehe</div>;
+    return <div>CHECK YOUR EMAIL</div>;
 }

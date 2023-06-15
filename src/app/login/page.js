@@ -10,6 +10,7 @@ import AlertBottom from '@/components/AlertBottom';
 import { useState } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 export default function Login() {
     const router = useRouter();
@@ -29,6 +30,23 @@ export default function Login() {
 
     const handleLoginData = (event) => {
         setLoginData({ ...loginData, [event.target.name]: event.target.value });
+    };
+
+    const forgetPassword = async () => {
+        try {
+            const URL = 'https://kel1airplaneapi-production.up.railway.app/api/v1/user/resetPassword';
+            const email = {
+                email: loginData.email,
+            };
+            const res = axios.post(URL, email);
+            console.log(res);
+            // handleVisibleAlert('Tautan Berhasil dikirim!', 'success');
+            router.push('/reset-password');
+            return res;
+        } catch (error) {
+            const text = error.response.data.message;
+            handleVisibleAlert(text, 'failed');
+        }
     };
 
     const handleLogin = async (e) => {
@@ -93,7 +111,7 @@ export default function Login() {
                                     </Label>
                                     <span
                                         className='cursor-pointer text-body-6 font-medium text-pur-4 hover:text-pur-2'
-                                        onClick={() => router.push('/reset-password')}>
+                                        onClick={() => forgetPassword()}>
                                         Lupa Kata Sandi
                                     </span>
                                 </div>

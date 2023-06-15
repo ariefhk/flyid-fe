@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import AlertBottom from '@/components/AlertBottom';
 import Label from '@/components/Label';
@@ -13,6 +13,7 @@ import axios from 'axios';
 
 export default function ResepPasswordIdOtp() {
     const params = useParams();
+    const router = useRouter();
     const [visibleAlert, setVisibleAlert] = useState(false);
     const [alertText, setAlertText] = useState('');
     const [alertType, setAlertType] = useState('');
@@ -46,8 +47,8 @@ export default function ResepPasswordIdOtp() {
             // if (res.data) {
             // }
             // console.log(res);
-            // handleVisibleAlert(res.data.message, 'success');
-            // return res.data;
+            handleVisibleAlert(res.data.message, 'success');
+            return res.data;
         } catch (error) {
             // console.log(error);
             const text = error.response.data.message;
@@ -76,7 +77,9 @@ export default function ResepPasswordIdOtp() {
             };
 
             const res = await resetPassword(templateObj);
-            console.log('hehe', res);
+            if (res.status === 'Success') {
+                router.push('/login');
+            }
         } catch (error) {}
     };
 
