@@ -49,7 +49,7 @@ export default function Login() {
     };
 
     return (
-        <section className='h-screen  bg-white'>
+        <section className='h-screen bg-white'>
             <div className='grid h-full w-full grid-cols-12'>
                 <div className='col-span-6'>
                     <div className='relative h-full'>
@@ -87,12 +87,17 @@ export default function Login() {
                                 />
                             </div>
                             <div className='flex flex-col'>
-                                <Label htmlFor='password' className='mb-1 flex justify-between text-body-3'>
-                                    Password{' '}
-                                    <span className='cursor-pointer text-body-6 font-medium text-pur-4 hover:text-pur-2'>
+                                <div className='mb-1 flex justify-between font-poppins'>
+                                    <Label htmlFor='password' className=' text-body-3'>
+                                        Password{' '}
+                                    </Label>
+                                    <span
+                                        className='cursor-pointer text-body-6 font-medium text-pur-4 hover:text-pur-2'
+                                        onClick={() => router.push('/reset-password')}>
                                         Lupa Kata Sandi
                                     </span>
-                                </Label>
+                                </div>
+
                                 <PasswordInput
                                     id='password'
                                     placeholder='Masukkan password'

@@ -25,7 +25,7 @@ export default function Register() {
 
     useEffect(() => {
         if (registerStatus === 'success') {
-            alert('Success Register, Your being redirected');
+            // alert('Success Register, Your being redirected');
             router.push('/otp');
         }
         setRegisterStatus('idle');
@@ -87,8 +87,8 @@ export default function Register() {
     };
 
     return (
-        <section className='h-screen w-full bg-white'>
-            <div className='grid h-full w-full grid-cols-12'>
+        <section className='w-full h-screen bg-white'>
+            <div className='grid w-full h-full grid-cols-12'>
                 <div className='col-span-6'>
                     <div className='relative h-full'>
                         <Image src={`/images/Ulang_Sandi.jpg`} alt='' fill={true} style={{ objectFit: 'cover' }} quality={100} />
@@ -102,9 +102,9 @@ export default function Register() {
                         text={alertText}
                         type={alertType}
                     />
-                    <div className='padding-py-px flex h-full items-center justify-self-end ps-20'>
+                    <div className='flex items-center h-full padding-py-px justify-self-end ps-20'>
                         <form className='flex w-[452px] flex-col gap-5 ' onSubmit={handleRegis}>
-                            <h1 className='text-heading-2 mb-2 font-poppins text-2xl font-bold '>Daftar</h1>
+                            <h1 className='mb-2 text-2xl font-bold text-heading-2 font-poppins '>Daftar</h1>
                             <div className='flex flex-col'>
                                 <Label htmlFor='name'>Nama </Label>
                                 <Input
@@ -136,7 +136,7 @@ export default function Register() {
                                 />
                             </div>
                             <div className='flex flex-col'>
-                                <Label htmlFor='password' className='mb-1 flex justify-between text-body-4'>
+                                <Label htmlFor='password' className='flex justify-between mb-1 text-body-4'>
                                     Passwords
                                 </Label>
                                 <PasswordInput
