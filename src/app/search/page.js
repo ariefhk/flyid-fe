@@ -59,10 +59,7 @@ export default function SearchFlight() {
     const router = useRouter();
     const dispatch = useDispatch();
     const [fetchDataStatus, setFetchDataStatus] = useState(true);
-    const [flightData, setFlightData] = useState({
-        berangkat: [],
-        pulang: [],
-    });
+    const [flightData, setFlightData] = useState([]);
 
     // modal filter ticket start
     const [openChooseFilterFlight, setOpenChooseFilterFlight] = useState(false);
@@ -100,7 +97,7 @@ export default function SearchFlight() {
     const [selectDate, setSelectDate] = useState(new Date(displayDerpatureDateTime) || '');
 
     useEffect(() => {
-        const date = getDateInRange(displayDerpatureDateTime);
+        const date = getDateInRange(displayDerpatureDateTime || new Date());
         setValues(date);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -119,11 +116,8 @@ export default function SearchFlight() {
                         returnDate,
                     };
                     const response = await axios.post(SEARCH_URL, objectTemplate);
-
-                    setFlightData({
-                        berangkat: [...response.data.data.flight.berangkat],
-                        pulang: [...response.data.data.flight.pulang],
-                    });
+                    console.log(response.data.data.flight);
+                    setFlightData(response.data.data.flight);
                 } catch (error) {
                     return error.message;
                 }
@@ -157,104 +151,9 @@ export default function SearchFlight() {
         setFetchDataStatus(true);
     };
 
-    // model = {
-    //     flight_id:'',
-    //     airline_id: '',
-    //     airport_id: '',
-    // };
-
-    // findOne{whre: airpor_name = input}
-
-    // res.json({
-    //     flight_id: 1,
-    //     airline: 'Super Air Jet', //airline_name
-    //     airline_code: 'JT- 203', //airline_code
-    //     flight_class: 'Economy',
-    //     from: 'Soekarno-Hatta', //airport_name
-    //     from_code: 'CGK', //airport_code from
-    //     to: 'Melbourne International Airport',
-    //     to_code: 'MLB', //airport_code to
-    //     derpature_date: '2023-03-03',
-    //     derpature_time: '07:00',
-    //     arrival_date: '2023-03-03',
-    //     arrival_time: '11:00',
-    //     duration: 4,
-    //     price: 4950000,
-    //     description: 'baggage 20 kg Cabin baggage 20kg In Flight Entertainment',
-    // });
-
-    const dataShape = [
-        {
-            // airline_id: '',
-            flight_id: 1,
-            airline: 'Super Air Jet', //airline_name
-            airline_code: 'JT- 203', //airline_code
-            flight_class: 'Economy',
-            from: 'Soekarno-Hatta', //airport_name
-            from_code: 'CGK', //airport_code from
-            to: 'Melbourne International Airport',
-            to_code: 'MLB', //airport_code to
-            derpature_date: '2023-03-03',
-            derpature_time: '07:00',
-            arrival_date: '2023-03-03',
-            arrival_time: '11:00',
-            duration: 4,
-            price: 4950000,
-            description: 'baggage 20 kg Cabin baggage 20kg In Flight Entertainment',
-        },
-        {
-            id: 2,
-            airline: 'Super Air Jet',
-            airline_code: 'JT- 203',
-            flight_class: 'Economy',
-            from: 'Soekarno-Hatta',
-            from_code: 'CGK',
-            to: 'Melbourne International Airport',
-            to_code: 'MLB',
-            derpature_date: '2023-03-03',
-            derpature_time: '08:00',
-            arrival_date: '2023-03-03',
-            arrival_time: '12:00',
-            price: 5950000,
-            description: 'baggage 20 kg Cabin baggage 20 kg In Flight Entertainment',
-        },
-        {
-            id: 3,
-            airline: 'Super Air Jet',
-            airline_code: 'JT- 203',
-            flight_class: 'Economy',
-            from: 'Soekarno-Hatta',
-            from_code: 'CGK',
-            to: 'Melbourne International Airport',
-            to_code: 'MLB',
-            derpature_date: '2023-03-03',
-            derpature_time: '13:15',
-            arrival_date: '2023-03-03',
-            arrival_time: '17:15',
-            price: 7225000,
-            description: 'baggage 20 kg Cabin baggage 20 kg In Flight Entertainment',
-        },
-        {
-            id: 4,
-            airline: 'Super Air Jet',
-            airline_code: 'JT- 203',
-            flight_class: 'Economy',
-            from: 'Soekarno-Hatta',
-            from_code: 'CGK',
-            to: 'Melbourne International Airport',
-            to_code: 'MLB',
-            derpature_date: '2023-03-03',
-            derpature_time: '20:15',
-            arrival_date: '2023-03-03',
-            arrival_time: '23:30',
-            price: 8010000,
-            description: 'baggage 20 kg Cabin baggage 20 kg In Flight Entertainment',
-        },
-    ];
-
     console.log('====================================');
     // console.log(flights);
-    console.log('test', flightData);
+    console.log('test', flightData.berangkat);
     const fixedHour = (hours) => {
         let arrOfHours = hours.split(':');
         let arr = [];
@@ -264,41 +163,34 @@ export default function SearchFlight() {
         // let final = arr.join(':');
         return arr.join(':');
     };
-    // let data = '08:00:00';
-    // let array = data.split(':');
-    // let arr = [];
-    // while (arr.length < 2) {
-    //     arr.push(array[arr.length]);
-    // }
-    // let final = arr.join(':');
-    // console.log(final);
-    // console.log('Loading', loadingFetchFligth);
-    // console.log('one way: ', oneWay);
-    // console.log('two way: ', twoWay);
 
     console.log('====================================');
 
     return (
         <>
             <Navbar className={'hidden lg:block'} />
-            <div className='container mx-auto grid max-w-screen-lg grid-cols-12 gap-3'>
+            <div className='container mx-auto grid max-w-screen-lg grid-cols-12 '>
                 {/* search flight menu start */}
                 <h1 className='col-span-12 mb-[24px] mt-[47px] font-poppins text-head-1 font-bold'>Pilih Penerbangan</h1>
-                <div className='col-span-9 flex items-center gap-4 rounded-rad-3 bg-pur-3 font-poppins text-title-2 font-medium text-white'>
-                    <FiArrowLeft className='ml-[21px] h-6 w-6' onClick={() => router.back()} />
-                    <p>
-                        {from} {' > '} {to} - {totalPassenger} Penumpang - {flighClass}
-                    </p>
-                </div>
-                <div
-                    className=' col-span-3 cursor-pointer rounded-rad-3 bg-alert-1 py-[13px] text-center font-poppins text-title-2 font-bold text-white'
-                    onClick={() => handleOpenHomeSearch()}>
-                    <p>Ubah Pencarian</p>
+                <div className='frid col-span-12 grid grid-cols-12 gap-4'>
+                    <div
+                        className='col-span-9 flex cursor-pointer items-center gap-4 rounded-rad-3 bg-pur-3 font-poppins text-title-2 font-medium text-white'
+                        onClick={() => router.back()}>
+                        <FiArrowLeft className='ml-[21px] h-6 w-6 ' />
+                        <p>
+                            {from} {' > '} {to} - {totalPassenger} Penumpang - {flighClass}
+                        </p>
+                    </div>
+                    <div
+                        className=' col-span-3 cursor-pointer rounded-rad-3 bg-alert-1 py-[13px] text-center font-poppins text-title-2 font-bold text-white'
+                        onClick={() => handleOpenHomeSearch()}>
+                        <p>Ubah Pencarian</p>
+                    </div>
                 </div>
                 {/* search flight menu end */}
 
                 {/* day of week start */}
-                <div className='col-span-12 grid grid-cols-8 divide-x-2'>
+                <div className='col-span-12 mt-[27px] grid grid-cols-8 divide-x-2'>
                     {values.length ? (
                         values.map((val, index) => (
                             <div key={index} className='col-span-1 cursor-pointer px-2' onClick={() => chooseDate(val.date)}>
@@ -339,13 +231,6 @@ export default function SearchFlight() {
                     </div>
                     {/* left flight start */}
                     <div className='col-span-4'>
-                        {/* <h1 className='font-bold font-poppins text-title-3'>Your Flight</h1>
-
-                        <div className='px-6 py-3 my-4 rounded-rad-3 shadow-low'>
-                            <h1 className='font-bold text-title-2'>One Way</h1>
-                            <div></div>
-                        </div> */}
-                        {/* left filter start */}
                         <div className='rounded-rad-4 px-6 py-6 font-poppins shadow-low'>
                             <h3 className='mb-[24px]'>Filter</h3>
                             <div className='flex flex-col gap-1'>
@@ -376,10 +261,10 @@ export default function SearchFlight() {
                     {/* right fligth start */}
                     {/* Test */}
                     <div className='col-span-8 font-poppins'>
-                        <div className='flex flex-col gap-4'>
-                            {flightData.berangkat.length &&
-                                flightData.berangkat.map((data, index) => (
-                                    <div key={index} className='flex flex-col gap-2 rounded-rad-3 p-4 shadow-low'>
+                        <div className='grid grid-cols-12 gap-4'>
+                            {flightData.length ? (
+                                flightData.map((data, index) => (
+                                    <div key={index} className='col-span-12 flex flex-col gap-2 rounded-rad-3 p-4 shadow-low'>
                                         {/* list top start */}
                                         <div className='flex items-center justify-between'>
                                             <div className='flex items-center gap-2'>
@@ -406,7 +291,7 @@ export default function SearchFlight() {
                                                     <p className='text-body-3 font-medium'>{data.airport_from_code}</p>
                                                 </div>
                                                 <div className='flex flex-col items-center justify-center'>
-                                                    <p className='text-body-4 text-net-3'>4h 0m</p>
+                                                    <p className='text-body-4 text-net-3'>{data.duration}h</p>
                                                     <div className='relative h-[8px] w-[233px]'>
                                                         <Image alt='' src={'./images/arrow.svg'} fill />
                                                     </div>
@@ -489,121 +374,16 @@ export default function SearchFlight() {
                                             </div>
                                         )}
                                     </div>
-                                ))}
+                                ))
+                            ) : (
+                                <div className='col-span-12 flex items-center justify-center gap-4 p-4'>
+                                    <Image alt='' src={'/images/not_found_flight.svg'} height={210} width={210} />
+                                </div>
+                            )}
                         </div>
                     </div>
                     {/* Test */}
 
-                    {/* <div className='col-span-8 font-poppins'>
-                        <div className='flex flex-col gap-4'>
-                            {dataShape.length &&
-                                dataShape.map((data, index) => (
-                                    <div key={index} className='flex flex-col gap-2 p-4 rounded-rad-3 shadow-low'>
-                                        <div className='flex items-center justify-between'>
-                                            <div className='flex items-center gap-2'>
-                                                <div className='relative h-[24px] w-[24px] '>
-                                                    <Image src={'./images/flight_badge.svg'} fill alt='' />
-                                                </div>
-                                                <h3 className='font-medium text-body-5'>
-                                                    {data.airline} - {data.flight_class}
-                                                </h3>
-                                            </div>
-                                            <div onClick={() => handleIsDetail(data.id)}>
-                                                {isDetail ? (
-                                                    <IoIosArrowDropup className='h-[28px] w-[28px] text-net-3' />
-                                                ) : (
-                                                    <IoIosArrowDropdown className='h-[28px] w-[28px] text-net-3' />
-                                                )}
-                                            </div>
-                                        </div>
-
-                                        <div className='flex items-center justify-between'>
-                                            <div className='flex items-center gap-4'>
-                                                <div>
-                                                    <p className='font-bold text-body-6'>{data.derpature_time}</p>
-                                                    <p className='font-medium text-body-3'>{data.from_code}</p>
-                                                </div>
-                                                <div className='flex flex-col items-center justify-center'>
-                                                    <p className='text-body-4 text-net-3'>4h 0m</p>
-                                                    <div className='relative h-[8px] w-[233px]'>
-                                                        <Image alt='' src={'./images/arrow.svg'} fill />
-                                                    </div>
-                                                    <p className='text-body-4 text-net-3'>Direct</p>
-                                                </div>
-                                                <div>
-                                                    <p className='font-bold text-body-6'>{data.arrival_time}</p>
-                                                    <p className='font-medium text-body-3'>{data.to_code}</p>
-                                                </div>
-                                            </div>
-                                            <div className='flex flex-col gap-[6px] text-title-2'>
-                                                <p className='font-bold text-pur-4'>IDR {data.price}</p>
-                                                <Button className='py-1 font-medium text-white rounded-rad-3 bg-pur-4'>
-                                                    Pilih
-                                                </Button>
-                                            </div>
-                                        </div>
-
-                                        {isDetail && chosenDetailFlight === data.id && (
-                                            <div className='mt-5 border-[1px] border-b-0 border-l-0 border-r-0 border-t-net-3'>
-                                                <h1 className='mb-1 mt-[22px] text-body-6 font-bold text-pur-5'>
-                                                    Detail Penerbangan
-                                                </h1>
-
-                                                <div className='flex justify-between'>
-                                                    <div>
-                                                        <h2 className='font-bold text-title-2'>{data.derpature_time}</h2>
-                                                        <p className='font-normal text-body-6'>{data.derpature_date}</p>
-                                                        <p className='font-normal text-body-6'>{data.from}</p>
-                                                    </div>
-                                                    <div>
-                                                        <h3 className='font-bold text-pur-3'>Keberangkaran</h3>
-                                                    </div>
-                                                </div>
-
-                                                <div className='flex justify-center mt-4 mb-2'>
-                                                    <div className='w-1/2 border-[1px] border-t-net-2'></div>
-                                                </div>
-
-                                                <div className='flex items-center gap-4'>
-                                                    <div className='relative h-[24px] w-[24px]'>
-                                                        <Image src={'./images/flight_badge.svg'} fill alt='' />
-                                                    </div>
-                                                    <div className='flex flex-col gap-4'>
-                                                        <div>
-                                                            <h1 className='font-bold text-body-6'>
-                                                                {data.airline} - {data.flight_class}
-                                                            </h1>
-                                                            <h2 className='font-bold text-body-5'>{data.airline_code}</h2>
-                                                        </div>
-                                                        <div>
-                                                            <h3 className='font-bold text-body-5'>Informasi :</h3>
-                                                            <p className='font-normal text-body-5'>
-                                                                {extractWord(data.description)}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className='flex justify-center mt-4 mb-2'>
-                                                    <div className='w-1/2 border-[1px] border-t-net-2'></div>
-                                                </div>
-
-                                                <div className='flex justify-between'>
-                                                    <div>
-                                                        <h2 className='font-bold text-title-2'>{data.arrival_time}</h2>
-                                                        <p className='font-normal text-body-6'>{data.arrival_date}</p>
-                                                        <p className='font-normal text-body-6'>{data.to}</p>
-                                                    </div>
-                                                    <div>
-                                                        <h3 className='font-bold text-pur-3'>Kedatangan</h3>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                        </div>
-                    </div> */}
                     {/* right fligth end */}
                 </div>
                 {/* one way  end & list flight*/}
@@ -613,7 +393,7 @@ export default function SearchFlight() {
             {/* homeSearch  start */}
             <div>
                 {openHomeSearch && (
-                    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-60'>
+                    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 '>
                         <HomeSearch
                             className={'h-[298px] w-[968px]'}
                             buttonAction={
