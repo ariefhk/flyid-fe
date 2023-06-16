@@ -14,8 +14,11 @@ export default function SignInButton() {
     if (status === 'authenticated') {
         return (
             <div className='flex items-center justify-center gap-6'>
-                <FiList className='h-[24px] w-[24px] cursor-pointer hover:text-pur-4' />
-                <FiBell className='h-[24px] w-[24px] cursor-pointer hover:text-pur-4' />
+                <FiList className='h-[24px] w-[24px] cursor-pointer hover:text-pur-4' onClick={() => router.push('/history')} />
+                <FiBell
+                    className='h-[24px] w-[24px] cursor-pointer hover:text-pur-4'
+                    onClick={() => router.push('/notifikasi')}
+                />
                 <FiUser className='h-[24px] w-[24px] cursor-pointer hover:text-pur-4' onClick={() => router.push('/akun')} />
             </div>
         );

@@ -157,7 +157,9 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
     const [focusFromInput, setFocusFromInput] = useState(false);
     const [focusToInput, setFocusToInput] = useState(false);
     const [chosenFromAirport, setChosenFromAirport] = useState(fromAirportDisplay || '');
+    const handleChosenFromAirport = (chosenFromAirport) => setChosenFromAirport(chosenFromAirport);
     const [chosenToAirport, setChosenToAirport] = useState(toAirportDisplay || '');
+    const handleChosenToAirport = (chosenFromAirport) => setChosenToAirport(chosenFromAirport);
     // handling focusing airport input end
 
     // toggle rotate for switching airport start
@@ -192,12 +194,12 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
     };
     // handling choosing one of from/to airport end
 
-    const example = () => (
-        <FiX
-            className='absolute right-0 mr-3 mt-2 hidden h-[28px] w-[28px]'
-            onClick={() => console.log('This is from example homepage button Action')}
-        />
-    );
+    // const example = () => (
+    //     <FiX
+    //         className='absolute right-0 mr-3 mt-2 hidden h-[28px] w-[28px]'
+    //         onClick={() => console.log('This is from example homepage button Action')}
+    //     />
+    // );
 
     return (
         <>
@@ -239,7 +241,7 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                                                         <div
                                                             onClick={() => {
                                                                 handleChooseFromAirport(data.airport_code);
-                                                                setChosenFromAirport(
+                                                                handleChosenFromAirport(
                                                                     `${data.airport_location} (${data.airport_code})`
                                                                 );
                                                             }}
@@ -342,7 +344,7 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                                                         <div
                                                             onClick={() => {
                                                                 handleChooseToAirport(data.airport_code);
-                                                                setChosenToAirport(
+                                                                handleChosenToAirport(
                                                                     `${data.airport_location} (${data.airport_code})`
                                                                 );
                                                             }}
