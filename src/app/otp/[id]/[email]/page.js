@@ -57,7 +57,7 @@ export default function OTPIdEmail() {
                 OTPinput,
             });
             console.log(res);
-
+            router.push('/login');
             return res.data;
         } catch (error) {
             // console.log(error);
@@ -90,7 +90,7 @@ export default function OTPIdEmail() {
             // setFinalOtp(realOtp);
             const test = await verificationAccount(realOtp);
             console.log('hehehe', test);
-            router.push('/login');
+
             // console.log(realOtp);
             setOtpCode({
                 otp1: '',
