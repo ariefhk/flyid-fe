@@ -38,12 +38,12 @@ export default function Login() {
             const email = {
                 email: loginData.email,
             };
-            const res = axios.post(URL, email);
-            console.log(res);
-            // handleVisibleAlert('Tautan Berhasil dikirim!', 'success');
+            const res = await axios.post(URL, email);
+
             router.push('/reset-password');
             return res;
         } catch (error) {
+            // console.log(error.message);
             const text = error.response.data.message;
             handleVisibleAlert(text, 'failed');
         }

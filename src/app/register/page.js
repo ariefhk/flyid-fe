@@ -42,7 +42,6 @@ export default function Register() {
                 phone,
                 password,
             });
-
             handleVisibleAlert(res.data.message, 'success');
             // console.log(res.data);
             return res.data;
