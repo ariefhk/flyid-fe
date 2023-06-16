@@ -104,9 +104,9 @@ export default function SearchFlight() {
 
     useEffect(() => {
         const SEARCH_URL = 'https://kel1airplaneapi-production.up.railway.app/api/v1/flight/searchflight';
-        const URL = 'https://airplaneapikel1-production.up.railway.app/api/v1/flight/searchflight';
+        // const URL = 'https://airplaneapikel1-production.up.railway.app/api/v1/flight/searchflight';
         if (fetchDataStatus) {
-            const fetchFlight = async ({ from, to, departure_date, departure_time, returnDate }) => {
+            const fetchFlight = async ({ from, to, departure_date, departure_time, returnDate, flight_class }) => {
                 try {
                     const objectTemplate = {
                         from,
@@ -114,11 +114,14 @@ export default function SearchFlight() {
                         departure_date,
                         departure_time,
                         returnDate,
+                        flight_class,
                     };
                     const response = await axios.post(SEARCH_URL, objectTemplate);
+                    console.log('HEHEHE', flighClass);
                     console.log(response.data.data.flight);
                     setFlightData(response.data.data.flight);
                 } catch (error) {
+                    console.log('hehee', error);
                     return error.message;
                 }
             };
@@ -128,6 +131,7 @@ export default function SearchFlight() {
                 departure_date,
                 departure_time,
                 returnDate: twoWay.departure_date,
+                flight_class: flighClass,
             });
         }
         setFetchDataStatus(false);
