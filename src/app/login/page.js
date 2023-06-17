@@ -69,7 +69,7 @@ export default function Login() {
     return (
         <section className='h-screen bg-white'>
             <div className='grid h-full w-full grid-cols-12'>
-                <div className='col-span-6'>
+                <div className='relative hidden lg:col-span-6 lg:block'>
                     <div className='relative h-full'>
                         <Image
                             src={`/images/Ulang_Sandi.jpg`}
@@ -78,61 +78,56 @@ export default function Login() {
                             style={{ objectFit: 'cover' }}
                             quality={100}
                             priority
-                            // className='opacity-0 transition-opacity duration-[1s]'
-                            // onLoadingComplete={(image) => image.classList.remove('opacity-0')}
                         />
                     </div>
                 </div>
-                <div className='relative col-span-6'>
-                    <AlertBottom
-                        visibleAlert={visibleAlert}
-                        handleVisibleAlert={handleVisibleAlert}
-                        // className='bg-alert-3'
-                        text={alertText}
-                        type={alertType}
-                    />
-                    <div className='padding-py-px flex h-full items-center justify-self-end ps-20'>
-                        <form onSubmit={handleLogin} className='flex w-[452px] flex-col gap-5 '>
-                            <h1 className='text-heading-2 mb-2 font-poppins text-2xl font-bold'>Masuk</h1>
-                            <div className='flex flex-col'>
-                                <Label htmlFor='email'>Email/No Telepon</Label>
-                                <Input
-                                    id='email'
-                                    placeholder='Contoh: johndoe@gmail.com'
-                                    value={loginData.email}
-                                    name={'email'}
-                                    onChange={handleLoginData}
-                                />
-                            </div>
-                            <div className='flex flex-col'>
-                                <div className='mb-1 flex justify-between font-poppins'>
-                                    <Label htmlFor='password' className=' text-body-3'>
-                                        Password{' '}
-                                    </Label>
-                                    <span
-                                        className='cursor-pointer text-body-6 font-medium text-pur-4 hover:text-pur-2'
-                                        onClick={() => forgetPassword()}>
-                                        Lupa Kata Sandi
-                                    </span>
-                                </div>
-
-                                <PasswordInput
-                                    id='password'
-                                    placeholder='Masukkan password'
-                                    value={loginData.password}
-                                    name={'password'}
-                                    onChange={handleLoginData}
-                                />
-                            </div>
-                            <Button type={'submit'}>Masuk</Button>
-                            <AskAccountButton
-                                prefix={'Belum punya akun?'}
-                                suffix={'Daftar Disini'}
-                                onClick={() => router.push('/register')}
+                <div className='col-span-12 flex flex-col justify-around  px-[26px] lg:col-span-6 lg:items-center lg:justify-center lg:px-0 '>
+                    <form onSubmit={handleLogin} className='flex w-full flex-col gap-5  lg:w-[452px]'>
+                        <h1 className='text-heading-2 mb-2 font-poppins text-2xl font-bold'>Masuk</h1>
+                        <div className='flex flex-col'>
+                            <Label htmlFor='email'>Email/No Telepon</Label>
+                            <Input
+                                id='email'
+                                placeholder='Contoh: johndoe@gmail.com'
+                                value={loginData.email}
+                                name={'email'}
+                                onChange={handleLoginData}
                             />
-                        </form>
-                    </div>
+                        </div>
+                        <div className='flex flex-col'>
+                            <div className='mb-1 flex justify-between font-poppins'>
+                                <Label htmlFor='password' className=' text-body-3'>
+                                    Password{' '}
+                                </Label>
+                                <span
+                                    className='cursor-pointer text-body-6 font-medium text-pur-4 hover:text-pur-2'
+                                    onClick={() => forgetPassword()}>
+                                    Lupa Kata Sandi
+                                </span>
+                            </div>
+
+                            <PasswordInput
+                                id='password'
+                                placeholder='Masukkan password'
+                                value={loginData.password}
+                                name={'password'}
+                                onChange={handleLoginData}
+                            />
+                        </div>
+                        <Button type={'submit'}>Masuk</Button>
+                        <AskAccountButton
+                            prefix={'Belum punya akun?'}
+                            suffix={'Daftar Disini'}
+                            onClick={() => router.push('/register')}
+                        />
+                    </form>
                 </div>
+                <AlertBottom
+                    visibleAlert={visibleAlert}
+                    handleVisibleAlert={handleVisibleAlert}
+                    text={alertText}
+                    type={alertType}
+                />
             </div>
         </section>
     );

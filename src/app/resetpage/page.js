@@ -22,7 +22,7 @@ export default function ResepPassword() {
         if (tokenParams) {
             setToken(tokenParams);
         }
-    }, []);
+    }, [tokenParams]);
     // const token = tokenParams.split('');
     // console.log('tokenn: ', tokenParams);
     const router = useRouter();
@@ -106,7 +106,8 @@ export default function ResepPassword() {
     return (
         <section className='h-screen bg-white'>
             <div className='grid h-full w-full grid-cols-12'>
-                <div className='col-span-6'>
+                {/* left side start*/}
+                <div className='col-span-6 hidden lg:col-span-6 lg:block'>
                     <div className='relative h-full'>
                         <Image
                             src={`/images/Ulang_Sandi.jpg`}
@@ -118,46 +119,48 @@ export default function ResepPassword() {
                         />
                     </div>
                 </div>
-                <div className='relative col-span-6'>
-                    <AlertBottom
-                        visibleAlert={visibleAlert}
-                        handleVisibleAlert={handleVisibleAlert}
-                        text={alertText}
-                        type={alertType}
-                    />
-                    <div className='padding-py-px flex h-full items-center justify-self-end ps-20'>
-                        <form onSubmit={handleResetPassword} className='flex w-[452px] flex-col gap-5 '>
-                            <h1 className='text-heading-2 mb-2 font-poppins text-2xl font-bold'>Reset Password</h1>
-                            <div className='flex flex-col'>
-                                <Label htmlFor='new_password' className='mb-1 flex justify-between text-body-4'>
-                                    Masukan Password Baru
-                                </Label>
-                                <PasswordInput
-                                    id='new_password'
-                                    name='new_password'
-                                    placeholder='Masukan password baru...'
-                                    value={resetPasswordData.new_password}
-                                    onChange={handleResetPasswordData}
-                                />
-                            </div>
-                            <div className='flex flex-col'>
-                                <Label htmlFor='rep_password' className='mb-1 flex justify-between text-body-4'>
-                                    Ulangi Password Baru
-                                </Label>
-                                <PasswordInput
-                                    id='rep_password'
-                                    name='rep_password'
-                                    placeholder='Ulangi password...'
-                                    value={resetPasswordData.rep_password}
-                                    onChange={handleResetPasswordData}
-                                />
-                            </div>
+                {/* left side end*/}
 
-                            <Button type={'submit'}>Simpan</Button>
-                        </form>
-                    </div>
+                {/* rigth side  start*/}
+                <div className='col-span-12 flex flex-col justify-around  px-[26px] lg:col-span-6 lg:items-center lg:justify-center lg:px-0 '>
+                    <form onSubmit={handleResetPassword} className='flex w-full flex-col gap-5  lg:w-[452px]'>
+                        <h1 className='text-heading-2 mb-2 font-poppins text-2xl font-bold'>Reset Password</h1>
+                        <div className='flex flex-col'>
+                            <Label htmlFor='new_password' className='mb-1 flex justify-between text-body-4'>
+                                Masukan Password Baru
+                            </Label>
+                            <PasswordInput
+                                id='new_password'
+                                name='new_password'
+                                placeholder='Masukan password baru...'
+                                value={resetPasswordData.new_password}
+                                onChange={handleResetPasswordData}
+                            />
+                        </div>
+                        <div className='flex flex-col'>
+                            <Label htmlFor='rep_password' className='mb-1 flex justify-between text-body-4'>
+                                Ulangi Password Baru
+                            </Label>
+                            <PasswordInput
+                                id='rep_password'
+                                name='rep_password'
+                                placeholder='Ulangi password...'
+                                value={resetPasswordData.rep_password}
+                                onChange={handleResetPasswordData}
+                            />
+                        </div>
+
+                        <Button type={'submit'}>Simpan</Button>
+                    </form>
                 </div>
+                <AlertBottom
+                    visibleAlert={visibleAlert}
+                    handleVisibleAlert={handleVisibleAlert}
+                    text={alertText}
+                    type={alertType}
+                />
             </div>
+            {/* rigth side  end*/}
         </section>
     );
 }
