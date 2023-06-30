@@ -14,6 +14,9 @@ export const ticketSlice = createSlice({
         setFlightClass: (state, action) => {
             state.flightClass = action.payload;
         },
+        setFlightTwoClass: (state, action) => {
+            state.flightClass = action.payload;
+        },
     },
 });
 
