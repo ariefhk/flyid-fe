@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 
 export default function AlertBottom({ visibleAlert, handleVisibleAlert, className, text, type = 'success' }) {
-    // const [visibleAlert, setVisibleAlert] = useState(true);
 
     const alertType = {
         success: 'bg-alert-1',
@@ -22,7 +21,7 @@ export default function AlertBottom({ visibleAlert, handleVisibleAlert, classNam
         <>
             {visibleAlert && (
                 <div
-                    className={`${className} ${alertType[type]}  absolute bottom-14 left-[50%] w-max translate-x-[-50%] rounded-rad-3 px-6 py-4 text-center font-poppins text-body-6 font-medium text-white`}>
+                    className={`${className} ${alertType[type]}  absolute bottom-12 left-[50%] w-max translate-x-[-50%] rounded-rad-3 px-6 py-4 text-center font-poppins text-body-6 font-medium text-white`}>
                     {text}
                 </div>
             )}
