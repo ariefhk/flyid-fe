@@ -23,6 +23,7 @@ import {
     getChoosedFlight2,
     getPassengerForm,
     flightSlice,
+    getIsTwoWay,
 } from '@/store/flight';
 
 // Component
@@ -35,12 +36,13 @@ import CalendarPicker from '@/components/CalendarPicker';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import AlertTop from '@/components/AlertTop';
 import styles from '../../style/SeatSelect.module.css';
+import Seat from '@/components/Seat';
 
 //Utils
 import { formatToLocale } from '@/utils/formatToLocale';
 import { convertToDate } from '@/utils/converDateTime';
 import { formatRupiah } from '@/utils/formatRupiah';
-import { flightSeat } from '@/utils/flightSeat';
+import { flightSeat, flightSeatDepart, flightSeatReturn } from '@/utils/flightSeat';
 import { fixedHour } from '@/utils/fixedHour';
 import { extractWord } from '@/utils/extractWord';
 import { reformatDate } from '@/utils/reformatDate';
@@ -63,6 +65,7 @@ export default function Order() {
     const flightIDs = useSelector(getFlightDetailId); // Get Flight IDs
     const passengerType = useSelector(getPassengerTypeTotal); // Get passenger type total
     const passengerForm = useSelector(getPassengerForm); // generated form based passenger type total
+    const isTwoWay = useSelector(getIsTwoWay);
 
     //state
     const [isSuccessForm, setIsSuccessForm] = useState(false);
@@ -90,7 +93,8 @@ export default function Order() {
     });
     const [openCalendar, setOpenCalendar] = useState(false);
     const [pickedDate, setPickedDate] = useState(new Date());
-    const [seat, setSeat] = useState([]);
+    const [seatDepart, setSeatDepart] = useState([]);
+    const [seatReturn, setSeatReturn] = useState([]);
     const [fetchDataUser, setFetchDataUser] = useState(true);
     const [userData, setUserData] = useState({
         name: '',
@@ -100,8 +104,16 @@ export default function Order() {
 
     /*=== function === */
     const handleFormStatus = () => {
-        if (seat.length !== elements.length) {
-            handleVisibleAlert('Mohon untuk memilih kursi sesuai penumpang', 'failed');
+        if (seatDepart.length !== elements.length && isTwoWay) {
+            handleVisibleAlert('Mohon untuk memilih kursi sesuai jumlah penumpang', 'failed');
+            return;
+        }
+        if (seatReturn.length !== elements.length && isTwoWay) {
+            handleVisibleAlert('Mohon untuk memilih kursi sesuai jumlah penumpang', 'failed');
+            return;
+        }
+        if (seatDepart.length !== elements.length) {
+            handleVisibleAlert('Mohon untuk memilih kursi sesuai jumlah penumpang', 'failed');
             return;
         }
 
@@ -166,7 +178,8 @@ export default function Order() {
                 nik: element.fields.find((test) => test.field_category === `ktp_paspor`).field_value,
                 issued_country: element.fields.find((test) => test.field_category === `negara_penerbit`).field_value,
                 expired: convertToDate(new Date(element.fields.find((test) => test.field_category === `expired`).field_value)),
-                seat: seat[idx].code,
+                seatDeparture: seatDepart[idx].code,
+                seatReturn: isTwoWay ? seatReturn[idx].code : '',
             };
         });
 
@@ -180,9 +193,21 @@ export default function Order() {
         setFormData(templateObj);
     };
 
+    console.log('====================================');
+    console.log('FORM DATA', formData);
+    console.log('====================================');
+
     const handleMobileFormStatus = () => {
-        if (seat.length !== elements.length) {
-            handleVisibleAlert('Mohon untuk memilih kursi sesuai penumpang', 'failed');
+        if (seatDepart.length !== elements.length && isTwoWay) {
+            handleVisibleAlert('Mohon untuk memilih kursi sesuai jumlah penumpang', 'failed');
+            return;
+        }
+        if (seatReturn.length !== elements.length && isTwoWay) {
+            handleVisibleAlert('Mohon untuk memilih kursi sesuai jumlah penumpang', 'failed');
+            return;
+        }
+        if (seatDepart.length !== elements.length) {
+            handleVisibleAlert('Mohon untuk memilih kursi sesuai jumlah penumpang', 'failed');
             return;
         }
 
@@ -247,7 +272,8 @@ export default function Order() {
                 nik: element.fields.find((test) => test.field_category === `ktp_paspor`).field_value,
                 issued_country: element.fields.find((test) => test.field_category === `negara_penerbit`).field_value,
                 expired: convertToDate(new Date(element.fields.find((test) => test.field_category === `expired`).field_value)),
-                seat: seat[idx].code,
+                seatDeparture: seatDepart[idx].code,
+                seatReturn: isTwoWay ? seatReturn[idx].code : '',
             };
         });
 
@@ -276,15 +302,26 @@ export default function Order() {
 
     const handleToggleUser = () => setToggleUser(!toggleUser);
 
-    const handleSeat = (value) => {
-        if (seat.length === elements.length) {
-            setSeat([]);
+    // Handling Seat
+    const handleSeatDepart = (value) => {
+        if (seatDepart.length === elements.length) {
+            setSeatDepart([]);
             return;
         }
 
-        const newArr = seat.filter((data) => data !== value);
-        setSeat((prev) => (prev.find((data) => data === value) ? [...newArr] : [...seat, value]));
+        const newSeatDepartDatas = seatDepart.filter((data) => data !== value);
+        setSeatDepart((prev) => (prev.find((data) => data === value) ? [...newSeatDepartDatas] : [...seatDepart, value]));
     };
+    const handleSeatReturn = (value) => {
+        if (seatReturn.length === elements.length) {
+            setSeatReturn([]);
+            return;
+        }
+
+        const newSeatReturnDatas = seatReturn.filter((data) => data !== value);
+        setSeatReturn((prev) => (prev.find((data) => data === value) ? [...newSeatReturnDatas] : [...seatReturn, value]));
+    };
+    // Handling Seat
 
     const handleOpenCalendar = (field_id = null, form_id = null) => {
         setDateId({
@@ -517,7 +554,7 @@ export default function Order() {
                                                             {formElement.field_type === 'text' && (
                                                                 <div className='flex flex-col gap-1'>
                                                                     <Label
-                                                                        className=' text-body-6 font-bold text-pur-5'
+                                                                        className='text-body-6 font-bold text-pur-5'
                                                                         htmlFor={formElement.field_id}>
                                                                         {formElement.field_label}
                                                                     </Label>
@@ -598,245 +635,32 @@ export default function Order() {
                         </div>
                         {/* FORM */}
 
-                        {/* SEAT */}
-                        <div>
-                            <div className={styles.container}>
-                                <div className={styles.header}>
-                                    <div className='my-4 flex items-center justify-between'>
-                                        <h1 className='text-head-1 font-bold'>Pilih Kursi</h1>
-                                        {/* <div>
-                                            <div>
-                                                <div className='bg-[#d0d0d0} h-[36px] w-[36px]'>A1</div>
-                                                <p>Available</p>
-                                            </div>
-                                            <div>
-                                                <div className='bg-[#73CA5C} h-[36px] w-[36px]'>A1</div>
-                                                <p>Unavailable</p>
-                                            </div>
-                                            <div className='flex flex-col'>
-                                                <div className='bg-[#002714} flex flex h-[36px] w-[36px] items-center justify-center text-white'>
-                                                    A1
-                                                </div>
-                                                <p>Choosed</p>
-                                            </div>
-                                        </div> */}
-                                    </div>
-                                    <div className={styles.choose__seat__header}>
-                                        <h1>{detailFlight?.berangkat?.flight_class} - 37 Seats Available</h1>
-                                    </div>
-                                </div>
-                                <div className={styles.choose__seat__body}>
-                                    <div className={styles.choose__seat__body__header}>
-                                        {/* Grouping for A  B  C */}
-                                        <div style={{ display: 'flex', gap: '12px' }}>
-                                            {/* A */}
-                                            <div>
-                                                <h1 className={styles.choose__seat__title__code}>A</h1>
-                                                {flightSeat &&
-                                                    flightSeat.map((seats, index) => (
-                                                        <div key={index} className={styles.choose__seat__btn__box}>
-                                                            {seats.type === 'A' &&
-                                                                seats.seat.map((data, index) => (
-                                                                    <div key={index}>
-                                                                        <button
-                                                                            disabled={!data.available}
-                                                                            onClick={() => handleSeat(data)}
-                                                                            style={{
-                                                                                background: !data.available
-                                                                                    ? '#d0d0d0'
-                                                                                    : seat.find((d) => d.code === data.code)
-                                                                                    ? '#002714'
-                                                                                    : '#73CA5C',
-                                                                            }}
-                                                                            className={styles.choose__seat__btn}>
-                                                                            {seat.find((d) => d.code === data.code)
-                                                                                ? `P${seat.indexOf(data) + 1}`
-                                                                                : data.code}
-                                                                        </button>
-                                                                    </div>
-                                                                ))}
-                                                        </div>
-                                                    ))}
-                                            </div>
+                        {/* SEAT_FORM */}
 
-                                            {/* B */}
-                                            <div>
-                                                <h1 className={styles.choose__seat__title__code}>B</h1>
-                                                {flightSeat &&
-                                                    flightSeat.map((seats, index) => (
-                                                        <div key={index} className={styles.choose__seat__btn__box}>
-                                                            {seats.type === 'B' &&
-                                                                seats.seat.map((data, index) => (
-                                                                    <div key={index}>
-                                                                        <button
-                                                                            disabled={!data.available}
-                                                                            onClick={() => handleSeat(data)}
-                                                                            style={{
-                                                                                background: !data.available
-                                                                                    ? '#d0d0d0'
-                                                                                    : seat.find((d) => d.code === data.code)
-                                                                                    ? '#002714'
-                                                                                    : '#73CA5C',
-                                                                            }}
-                                                                            className={styles.choose__seat__btn}>
-                                                                            {seat.find((d) => d.code === data.code)
-                                                                                ? `P${seat.indexOf(data) + 1}`
-                                                                                : data.code}
-                                                                        </button>
-                                                                    </div>
-                                                                ))}
-                                                        </div>
-                                                    ))}
-                                            </div>
-                                            {/* C */}
-                                            <div>
-                                                <h1 className={styles.choose__seat__title__code}>C</h1>
-                                                {flightSeat &&
-                                                    flightSeat.map((seats, index) => (
-                                                        <div key={index} className={styles.choose__seat__btn__box}>
-                                                            {seats.type === 'C' &&
-                                                                seats.seat.map((data, index) => (
-                                                                    <div key={index}>
-                                                                        <button
-                                                                            disabled={!data.available}
-                                                                            onClick={() => handleSeat(data)}
-                                                                            style={{
-                                                                                background: !data.available
-                                                                                    ? '#d0d0d0'
-                                                                                    : seat.find((d) => d.code === data.code)
-                                                                                    ? '#002714'
-                                                                                    : '#73CA5C',
-                                                                            }}
-                                                                            className={styles.choose__seat__btn}>
-                                                                            {seat.find((d) => d.code === data.code)
-                                                                                ? `P${seat.indexOf(data) + 1}`
-                                                                                : data.code}
-                                                                        </button>
-                                                                    </div>
-                                                                ))}
-                                                        </div>
-                                                    ))}
-                                            </div>
-                                        </div>
-                                        {/* Divider */}
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                            }}>
-                                            <h1 style={{ visibility: 'hidden' }} className={styles.choose__seat__title__code}>
-                                                .
-                                            </h1>
-                                            {flightSeat && (
-                                                <div className={styles.choose__seat__divider__box}>
-                                                    {Array.from({ length: 12 }, (_, i) => {
-                                                        return (
-                                                            <div key={i}>
-                                                                <div className={styles.choose__divider__btn}>
-                                                                    <p>{i + 1}</p>
-                                                                </div>
-                                                            </div>
-                                                        );
-                                                    })}
-                                                </div>
-                                            )}
-                                        </div>
-                                        {/* Grouping for D  E  F */}
-                                        <div style={{ display: 'flex', gap: '12px' }}>
-                                            {/* D */}
-                                            <div>
-                                                <h1 className={styles.choose__seat__title__code}>D</h1>
-                                                {flightSeat &&
-                                                    flightSeat.map((seats, index) => (
-                                                        <div key={index} className={styles.choose__seat__btn__box}>
-                                                            {seats.type === 'D' &&
-                                                                seats.seat.map((data, index) => (
-                                                                    <div key={index}>
-                                                                        <button
-                                                                            disabled={!data.available}
-                                                                            onClick={() => handleSeat(data)}
-                                                                            style={{
-                                                                                background: !data.available
-                                                                                    ? '#d0d0d0'
-                                                                                    : seat.find((d) => d.code === data.code)
-                                                                                    ? '#002714'
-                                                                                    : '#73CA5C',
-                                                                            }}
-                                                                            className={styles.choose__seat__btn}>
-                                                                            {seat.find((d) => d.code === data.code)
-                                                                                ? `P${seat.indexOf(data) + 1}`
-                                                                                : data.code}
-                                                                        </button>
-                                                                    </div>
-                                                                ))}
-                                                        </div>
-                                                    ))}
-                                            </div>
-                                            {/* E */}
-                                            <div>
-                                                <h1 className={styles.choose__seat__title__code}>E</h1>
-                                                {flightSeat &&
-                                                    flightSeat.map((seats, index) => (
-                                                        <div key={index} className={styles.choose__seat__btn__box}>
-                                                            {seats.type === 'E' &&
-                                                                seats.seat.map((data, index) => (
-                                                                    <div key={index}>
-                                                                        <button
-                                                                            disabled={!data.available}
-                                                                            onClick={() => handleSeat(data)}
-                                                                            style={{
-                                                                                background: !data.available
-                                                                                    ? '#d0d0d0'
-                                                                                    : seat.find((d) => d.code === data.code)
-                                                                                    ? '#002714'
-                                                                                    : '#73CA5C',
-                                                                            }}
-                                                                            className={styles.choose__seat__btn}>
-                                                                            {seat.find((d) => d.code === data.code)
-                                                                                ? `P${seat.indexOf(data) + 1}`
-                                                                                : data.code}
-                                                                        </button>
-                                                                    </div>
-                                                                ))}
-                                                        </div>
-                                                    ))}
-                                            </div>
-                                            {/* F */}
-                                            <div>
-                                                <h1 className={styles.choose__seat__title__code}>F</h1>
-                                                {flightSeat &&
-                                                    flightSeat.map((seats, index) => (
-                                                        <div key={index} className={styles.choose__seat__btn__box}>
-                                                            {seats.type === 'F' &&
-                                                                seats.seat.map((data, index) => (
-                                                                    <div key={index}>
-                                                                        <button
-                                                                            disabled={!data.available}
-                                                                            onClick={() => handleSeat(data)}
-                                                                            style={{
-                                                                                background: !data.available
-                                                                                    ? '#d0d0d0'
-                                                                                    : seat.find((d) => d.code === data.code)
-                                                                                    ? '#002714'
-                                                                                    : '#73CA5C',
-                                                                            }}
-                                                                            className={styles.choose__seat__btn}>
-                                                                            {seat.find((d) => d.code === data.code)
-                                                                                ? `P${seat.indexOf(data) + 1}`
-                                                                                : data.code}
-                                                                        </button>
-                                                                    </div>
-                                                                ))}
-                                                        </div>
-                                                    ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <Seat
+                            flightSeat={flightSeatDepart}
+                            handleSeat={handleSeatDepart}
+                            seat={seatDepart}
+                            type={isTwoWay ? 'Kepergian' : ''}
+                            flight_class={detailFlight?.berangkat?.flight_class}
+                            flight_airline={detailFlight?.berangkat?.Airline?.airline_name}
+                            flight_from={detailFlight?.berangkat?.from}
+                            flight_to={detailFlight?.berangkat?.to}
+                        />
+
+                        {isTwoWay && (
+                            <Seat
+                                flightSeat={flightSeatReturn}
+                                handleSeat={handleSeatReturn}
+                                seat={seatReturn}
+                                type={isTwoWay && 'Kepulangan'}
+                                flight_class={detailFlight?.pulang?.flight_class}
+                                flight_airline={detailFlight?.pulang?.Airline?.airline_name}
+                                flight_from={detailFlight?.pulang?.from}
+                                flight_to={detailFlight?.pulang?.to}
+                            />
+                        )}
+
                         {/* SEAT */}
                         <Button
                             onClick={() => handleFormStatus()}
@@ -988,7 +812,7 @@ export default function Order() {
                                     )}
                                 </div>
                             )}
-                            {detailFlight?.pulang?.departure_date && <div className='  w-full border'></div>}
+                            {detailFlight?.pulang?.departure_date && <div className='w-full border '></div>}
                             {detailFlight?.pulang?.departure_date && (
                                 <div className='flex flex-col gap-1'>
                                     {detailFlight?.pulang?.departure_date && (
@@ -1084,13 +908,13 @@ export default function Order() {
                 </div>
                 <div className='mt-[64px]'>
                     {/* INPUT USER */}
-                    <div className=' mx-4 rounded-t-rad-2 border border-pur-3 '>
-                        {/* <h1 className='text-head-1 font-bold'>Data Diri Pemesan</h1> */}
+                    <div className='mx-4 rounded-t-rad-2 border border-pur-3'>
+                        {/* <h1 className='font-bold text-head-1'>Data Diri Pemesan</h1> */}
                         <div className='rounded-t-rad-2 bg-pur-5 px-4 py-2 text-white'>
                             <h2 className='text-title-2'>Data Diri Pemesan</h2>
                         </div>
-                        <div className='flex  flex-col gap-4 p-4'>
-                            <div className=' flex flex-col gap-1'>
+                        <div className='flex flex-col gap-4 p-4'>
+                            <div className='flex flex-col gap-1 '>
                                 <Label className='text-body-6 font-bold text-pur-5'>Nama Lengkap</Label>
                                 <Input
                                     readOnly
@@ -1151,7 +975,7 @@ export default function Order() {
                                                     {formElement.field_type === 'text' && (
                                                         <div className='flex flex-col gap-1'>
                                                             <Label
-                                                                className=' text-body-6 font-bold text-pur-5'
+                                                                className='text-body-6 font-bold text-pur-5'
                                                                 htmlFor={formElement.field_id}>
                                                                 {formElement.field_label}
                                                             </Label>
@@ -1220,233 +1044,8 @@ export default function Order() {
                         })}
                 </div>
 
-                <div className='mx-4 mt-[32px] rounded-t-rad-2 border border-pur-3 font-poppins'>
-                    <div className='rounded-t-rad-2 bg-pur-5 px-4 py-2 text-white'>
-                        <h2 className='text-title-2'>Economy - 64 Seats Available</h2>
-                    </div>
-                    <div className=' p-4'>
-                        <div className='flex items-center gap-2'>
-                            {/* Grouping for A  B  C */}
-                            <div className='flex gap-3'>
-                                {/* A */}
-                                <div>
-                                    <h1 className='flex items-center px-[13px] py-[8px] text-body-6 font-medium text-[#8a8a8a]'>
-                                        A
-                                    </h1>
-                                    {flightSeat &&
-                                        flightSeat.map((seats, index) => (
-                                            <div key={index} className='flex flex-col gap-[10px]'>
-                                                {seats.type === 'A' &&
-                                                    seats.seat.map((data, index) => (
-                                                        <div key={index}>
-                                                            <button
-                                                                disabled={!data.available}
-                                                                onClick={() => handleSeat(data)}
-                                                                style={{
-                                                                    background: !data.available
-                                                                        ? '#d0d0d0'
-                                                                        : seat.find((d) => d.code === data.code)
-                                                                        ? '#002714'
-                                                                        : '#73CA5C',
-                                                                }}
-                                                                className='flex h-[36px] w-[36px] items-center justify-center rounded-[6px] border-none bg-[#d0d0d0] text-white'>
-                                                                {seat.find((d) => d.code === data.code)
-                                                                    ? `P${seat.indexOf(data) + 1}`
-                                                                    : data.code}
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                            </div>
-                                        ))}
-                                </div>
-
-                                {/* B */}
-                                <div>
-                                    <h1 className='flex items-center px-[13px] py-[8px] text-body-6 font-medium text-[#8a8a8a]'>
-                                        B
-                                    </h1>
-                                    {flightSeat &&
-                                        flightSeat.map((seats, index) => (
-                                            <div key={index} className='flex flex-col gap-[10px]'>
-                                                {seats.type === 'B' &&
-                                                    seats.seat.map((data, index) => (
-                                                        <div key={index}>
-                                                            <button
-                                                                disabled={!data.available}
-                                                                onClick={() => handleSeat(data)}
-                                                                style={{
-                                                                    background: !data.available
-                                                                        ? '#d0d0d0'
-                                                                        : seat.find((d) => d.code === data.code)
-                                                                        ? '#002714'
-                                                                        : '#73CA5C',
-                                                                }}
-                                                                className='flex h-[36px] w-[36px] items-center justify-center rounded-[6px] border-none bg-[#d0d0d0] text-white'>
-                                                                {seat.find((d) => d.code === data.code)
-                                                                    ? `P${seat.indexOf(data) + 1}`
-                                                                    : data.code}
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                            </div>
-                                        ))}
-                                </div>
-                                {/* C */}
-                                <div>
-                                    <h1 className='flex items-center px-[13px] py-[8px] text-body-6 font-medium text-[#8a8a8a]'>
-                                        C
-                                    </h1>
-                                    {flightSeat &&
-                                        flightSeat.map((seats, index) => (
-                                            <div key={index} className='flex flex-col gap-[10px]'>
-                                                {seats.type === 'C' &&
-                                                    seats.seat.map((data, index) => (
-                                                        <div key={index}>
-                                                            <button
-                                                                disabled={!data.available}
-                                                                onClick={() => handleSeat(data)}
-                                                                style={{
-                                                                    background: !data.available
-                                                                        ? '#d0d0d0'
-                                                                        : seat.find((d) => d.code === data.code)
-                                                                        ? '#002714'
-                                                                        : '#73CA5C',
-                                                                }}
-                                                                className='flex h-[36px] w-[36px] items-center justify-center rounded-[6px] border-none bg-[#d0d0d0] text-white'>
-                                                                {seat.find((d) => d.code === data.code)
-                                                                    ? `P${seat.indexOf(data) + 1}`
-                                                                    : data.code}
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                            </div>
-                                        ))}
-                                </div>
-                            </div>
-                            {/* Divider */}
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}>
-                                <h1 style={{ visibility: 'hidden' }} className={styles.choose__seat__title__code}>
-                                    .
-                                </h1>
-                                {flightSeat && (
-                                    <div className={styles.choose__seat__divider__box}>
-                                        {Array.from({ length: 12 }, (_, i) => {
-                                            return (
-                                                <div key={i}>
-                                                    <div className={styles.choose__divider__btn}>
-                                                        <p>{i + 1}</p>
-                                                    </div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                )}
-                            </div>
-                            {/* Grouping for D  E  F */}
-                            <div className='flex gap-3'>
-                                {/* D */}
-                                <div>
-                                    <h1 className='flex items-center px-[13px] py-[8px] text-body-6 font-medium text-[#8a8a8a]'>
-                                        D
-                                    </h1>
-                                    {flightSeat &&
-                                        flightSeat.map((seats, index) => (
-                                            <div key={index} className='flex flex-col gap-[10px]'>
-                                                {seats.type === 'D' &&
-                                                    seats.seat.map((data, index) => (
-                                                        <div key={index}>
-                                                            <button
-                                                                disabled={!data.available}
-                                                                onClick={() => handleSeat(data)}
-                                                                style={{
-                                                                    background: !data.available
-                                                                        ? '#d0d0d0'
-                                                                        : seat.find((d) => d.code === data.code)
-                                                                        ? '#002714'
-                                                                        : '#73CA5C',
-                                                                }}
-                                                                className='flex h-[36px] w-[36px] items-center justify-center rounded-[6px] border-none bg-[#d0d0d0] text-white'>
-                                                                {seat.find((d) => d.code === data.code)
-                                                                    ? `P${seat.indexOf(data) + 1}`
-                                                                    : data.code}
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                            </div>
-                                        ))}
-                                </div>
-                                {/* E */}
-                                <div>
-                                    <h1 className='flex items-center px-[13px] py-[8px] text-body-6 font-medium text-[#8a8a8a]'>
-                                        E
-                                    </h1>
-                                    {flightSeat &&
-                                        flightSeat.map((seats, index) => (
-                                            <div key={index} className='flex flex-col gap-[10px]'>
-                                                {seats.type === 'E' &&
-                                                    seats.seat.map((data, index) => (
-                                                        <div key={index}>
-                                                            <button
-                                                                disabled={!data.available}
-                                                                onClick={() => handleSeat(data)}
-                                                                style={{
-                                                                    background: !data.available
-                                                                        ? '#d0d0d0'
-                                                                        : seat.find((d) => d.code === data.code)
-                                                                        ? '#002714'
-                                                                        : '#73CA5C',
-                                                                }}
-                                                                className='flex h-[36px] w-[36px] items-center justify-center rounded-[6px] border-none bg-[#d0d0d0] text-white'>
-                                                                {seat.find((d) => d.code === data.code)
-                                                                    ? `P${seat.indexOf(data) + 1}`
-                                                                    : data.code}
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                            </div>
-                                        ))}
-                                </div>
-                                {/* F */}
-                                <div>
-                                    <h1 className='flex items-center px-[13px] py-[8px] text-body-6 font-medium text-[#8a8a8a]'>
-                                        F
-                                    </h1>
-                                    {flightSeat &&
-                                        flightSeat.map((seats, index) => (
-                                            <div key={index} className='flex flex-col gap-[10px]'>
-                                                {seats.type === 'F' &&
-                                                    seats.seat.map((data, index) => (
-                                                        <div key={index}>
-                                                            <button
-                                                                disabled={!data.available}
-                                                                onClick={() => handleSeat(data)}
-                                                                style={{
-                                                                    background: !data.available
-                                                                        ? '#d0d0d0'
-                                                                        : seat.find((d) => d.code === data.code)
-                                                                        ? '#002714'
-                                                                        : '#73CA5C',
-                                                                }}
-                                                                className='flex h-[36px] w-[36px] items-center justify-center rounded-[6px] border-none bg-[#d0d0d0] text-white'>
-                                                                {seat.find((d) => d.code === data.code)
-                                                                    ? `P${seat.indexOf(data) + 1}`
-                                                                    : data.code}
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                            </div>
-                                        ))}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {/* SEAT DISINI */}
+                {/* SEAT DISINI */}
                 <div className='invisible h-[110px] '></div>
 
                 <div className='fixed inset-x-0 bottom-0  flex  h-[100px] flex-col items-center justify-center gap-3  bg-white  px-5 shadow-low'>
@@ -1622,7 +1221,7 @@ export default function Order() {
                             <div className='fixed inset-x-0 bottom-0  flex  h-[100px] flex-col items-center justify-center gap-3  bg-white  px-5 shadow-low'>
                                 <Button
                                     onClick={() => handleSubmit()}
-                                    className='my-1 w-full rounded-rad-3 bg-alert-3 py-2  text-white'>
+                                    className='my-1 w-full rounded-rad-3 bg-alert-3 py-2 text-white'>
                                     Lanjut Bayar
                                 </Button>
                             </div>

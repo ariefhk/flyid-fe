@@ -3,6 +3,10 @@
 //core
 import { useRouter } from 'next/navigation';
 
+//third parties
+import { useSession } from 'next-auth/react';
+import axios from 'axios';
+
 //component
 import Navbar from '@/components/Navbar';
 import Label from '@/components/Label';
@@ -12,6 +16,33 @@ import Image from 'next/image';
 
 export default function PaymentSuccess() {
     const router = useRouter();
+
+    //nextauth
+    const { data: session, status } = useSession();
+    let token = session?.user?.token;
+
+    const handleSendTicket = async () => {
+        if (token) {
+            try {
+                const URL = 'https://kel1airplaneapi-production.up.railway.app/api/v1/transaction/printticket';
+                const res = await axios.post(
+                    URL,
+                    {
+                        transaction_id: '2',
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                console.log('PESANN', res);
+            } catch (error) {
+                console.log('ERROR SEND EMAIL TICKET', error);
+            }
+        }
+    };
 
     return (
         <div className='overflow-x-hidden'>
@@ -39,7 +70,7 @@ export default function PaymentSuccess() {
                             <h3 className='text-body-6'>Transaksi Pembayaran Tiket success</h3>
                         </div>
                         <div className='flex w-full flex-col gap-3'>
-                            <Button onClick={() => router.replace('/')} className='rounded-rad-3 bg-pur-5 py-3 text-white'>
+                            <Button onClick={() => handleSendTicket()} className='rounded-rad-3 bg-pur-5 py-3 text-white'>
                                 Terbitkan Tiket
                             </Button>
                             <Button className='rounded-rad-3 bg-pur-2 py-3 text-white'>Cari Penerbangan Lain</Button>
