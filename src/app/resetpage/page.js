@@ -70,7 +70,7 @@ export default function ResepPassword() {
             );
 
             handleVisibleAlert(res.data.message, 'success');
-            // return res.data;
+            return res.data;
         } catch (error) {
             const text = error.response.data.message;
             handleVisibleAlert(text, 'failed');

@@ -381,7 +381,45 @@ export default function Home() {
                         />
                     </div>
                 </div>
-                <div className=' mb-[100px] mt-[-100px] h-screen bg-white'></div>
+                <div className='  mt-[-100px] h-max bg-white font-poppins'>
+                    <div className='col-span-12 grid grid-cols-12 px-4 pt-[130px]'>
+                        <h1 className='col-span-12 mb-4 text-title-2 font-bold'>Destinasi Favorit</h1>
+                    </div>
+                    <div className='col-span-12 mx-4 mt-2 grid grid-cols-12 gap-5'>
+                        {destinationDataShape &&
+                            destinationDataShape.map((destination, index) => {
+                                return (
+                                    <div key={index} className='col-span-12 rounded-rad-2 p-1 shadow-low'>
+                                        <div className='relative  h-[140px] w-full'>
+                                            <Image
+                                                alt=''
+                                                src={destination.imgUrl}
+                                                fill
+                                                style={{ objectFit: 'cover' }}
+                                                className='z-0'
+                                            />
+                                        </div>
+                                        <div className='flex flex-col gap-1'>
+                                            <div className='flex items-center gap-2'>
+                                                <h1 className='text-title-1 font-medium'>{destination.from}</h1>
+                                                <p>{'->'}</p>
+                                                <h1 className='text-title-1 font-medium'>{destination.to}</h1>
+                                            </div>
+                                            <p className='text-body-6 font-bold text-pur-3'>AirAsia</p>
+                                            <p className='ttext-body-4 font-medium'>20 - 30 Maret 2023</p>
+                                            <p className='text-body-6 text-black'>
+                                                Mulai dari <span className='font-bold text-alert-3'>IDR 950.000</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                    </div>
+                </div>
+
+                <div className='invisible h-[100px]'>
+                    <h1>Test</h1>
+                </div>
                 <BottomNavbar />
             </div>
             {/* ==== MOBILE MODE ==== */}

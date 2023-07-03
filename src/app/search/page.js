@@ -232,7 +232,7 @@ export default function SearchFlight() {
             return (
                 <div className='hidden overflow-x-hidden lg:block'>
                     <Navbar className={'hidden lg:block'} />
-                    <div className='hidden w-screen border border-b-net-2 pb-4 lg:block'>
+                    <div className='mt-[80px] hidden w-screen border border-b-net-2 pb-4 lg:block'>
                         <div className='container mx-auto grid max-w-screen-lg grid-cols-12 '>
                             {/* search flight menu start */}
                             <h1 className='col-span-12 mb-[24px] mt-[47px] font-poppins text-head-1 font-bold'>
