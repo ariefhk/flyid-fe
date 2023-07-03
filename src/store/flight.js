@@ -99,6 +99,11 @@ const initialState = {
         anak: 0,
         bayi: 0,
     },
+    filterTicket: {
+        id: 1,
+        type: 'Termurah',
+        query: 'tolower',
+    },
     totalPassenger: 1,
 
     homeSearch: {
@@ -124,6 +129,7 @@ const initialState = {
 
     choosedFlight: {
         flight_1: {
+            departure_datetime: '',
             is_data: false,
             is_choose: false,
             flight_id: '',
@@ -141,6 +147,7 @@ const initialState = {
             duration: 0,
         },
         flight_2: {
+            departure_datetime: '',
             is_data: false,
             is_choose: false,
             flight_id: '',
@@ -258,6 +265,9 @@ export const flightSlice = createSlice({
         },
 
         setOneWaySwitch: (state) => {
+            // if (state.isTwoWay) {
+            //     return;
+            // }
             if (state.isTwoWay) {
                 state.choosedFlight.flight_1.is_choose = false;
                 state.choosedFlight.flight_1.flight_id = '';
@@ -296,8 +306,9 @@ export const flightSlice = createSlice({
                 state.searchPage.from = state.homeSearch.from;
                 state.searchPage.to = state.homeSearch.to;
                 state.searchPage.search_date = state.homeSearch.departure_dateTime;
-                state.searchPage.isSearchAgain = true;
-                state.fetchFlightStatusTwo = 'idle';
+                state.searchPage.search_date_return = state.homeSearch.return_dateTime;
+                // state.searchPage.isSearchAgain = true;
+                // state.fetchFlightStatusTwo = 'idle';
                 // state.fetchFlightStatusNew = true;
                 return;
             }
@@ -317,6 +328,7 @@ export const flightSlice = createSlice({
         // SWITCHING TO TWAY
         setIsTwoWay: (state, action) => {
             if (action.payload === false && state.choosedFlight.flight_1.is_choose && state.choosedFlight.flight_2.is_choose) {
+                state.flightDetailId = [];
                 state.choosedFlight.flight_1.is_choose = false;
                 state.choosedFlight.flight_1.flight_id = '';
                 state.choosedFlight.flight_1.airline = '';
@@ -353,7 +365,7 @@ export const flightSlice = createSlice({
                 state.searchPage.to = state.homeSearch.to;
                 state.homeSearch.return_dateTime = '';
                 state.homeSearch.flight_type = 'One Trip';
-                // state.flight_title = 'Keberangkatan';
+                state.flight_title = 'Keberangkatan';
                 // state.searchPage.isSearchAgain = true;
                 // state.fetchFlightStatusTwo = 'idle';
                 state.isTwoWay = action.payload;
@@ -362,6 +374,7 @@ export const flightSlice = createSlice({
 
             if (action.payload === false && state.choosedFlight.flight_1.is_choose) {
                 state.choosedFlight.flight_1.is_choose = false;
+                state.flightDetailId = [];
                 state.choosedFlight.flight_1.flight_id = '';
                 state.choosedFlight.flight_1.airline = '';
                 state.choosedFlight.flight_1.from = '';
@@ -397,7 +410,7 @@ export const flightSlice = createSlice({
                 state.searchPage.to = state.homeSearch.to;
                 state.homeSearch.return_dateTime = '';
                 state.homeSearch.flight_type = 'One Trip';
-                // state.flight_title = 'Keberangkatan';
+                state.flight_title = 'Keberangkatan';
                 // state.searchPage.isSearchAgain = true;
                 // state.fetchFlightStatusTwo = 'idle';
                 state.isTwoWay = action.payload;
@@ -819,9 +832,7 @@ export const flightSlice = createSlice({
             state.choosedFlight.flight_1.duration = action.payload.duration;
             state.choosedFlight.flight_1.is_choose = true;
         },
-        // setFetchFlightStatus: (state, action) => {
-        //     state.fetchFlightStatus = action.payload;
-        // },
+
         setResetChoosedFlight: (state) => {
             if (state.choosedFlight.flight_1.is_choose && state.choosedFlight.flight_2.is_choose && state.isTwoWay) {
                 state.flight_title = 'Keberangkatan';
@@ -980,16 +991,13 @@ export const flightSlice = createSlice({
         setHomePageSearchDeparture: (state, action) => {
             state.homeSearch.departure_dateTime = action.payload;
             state.searchPage.search_date = action.payload;
-            // if (!state.searchPage.departure_date || !state.searchPage.departure_time) {
-            //     state.searchPage.departure_date = convertToDate(action.payload);
-            //     state.searchPage.departure_time = convertToTime(action.payload);
-            // }
         },
 
         setHomePageSearchReturn: (state, action) => {
             state.homeSearch.return_dateTime = action.payload;
             if (state.isTwoWay) {
                 state.searchPage.search_date_return = action.payload;
+                state.choosedFlight.flight_2.departure_datetime = action.payload;
             }
         },
 
@@ -1024,6 +1032,12 @@ export const flightSlice = createSlice({
                 state.searchPage.search_date = action.payload;
                 return;
             }
+
+            if (action.payload !== state.homeSearch.return_dateTime && state.isTwoWay && state.choosedFlight.flight_1.is_choose) {
+                state.homeSearch.return_dateTime = action.payload;
+                state.searchPage.search_date = action.payload;
+                return;
+            }
             // two way : while we choosing second flight
             // if (action.payload !== state.homeSearch.return_dateTime && state.isTwoWay && state.choosedFlight.flight_1.is_choose) {
             //     if (new Date(action.payload) < new Date(state.homeSearch.departure_dateTime)) {
@@ -1047,7 +1061,35 @@ export const flightSlice = createSlice({
         },
         // setResetAll: (state) => {},
         setIsReadyToOrder: (state, action) => {
-            if (!action.payload && state.isTwoWay) {
+            if (!action.payload && state.isTwoWay && state.choosedFlight.flight_1.is_choose) {
+                state.fetchDetailFlight = 'sans';
+                state.flight_title = 'Kepulangan';
+                state.flightDetailId = [state.flightDetailId[0]];
+                state.choosedFlight.flight_2.is_choose = false;
+                // state.choosedFlight.flight_2.flight_id = '';
+                state.choosedFlight.flight_2.airline = '';
+                state.choosedFlight.flight_2.from = '';
+                state.choosedFlight.flight_2.from_airport_name = '';
+                state.choosedFlight.flight_2.from_airport_code = '';
+                state.choosedFlight.flight_2.to = '';
+                state.choosedFlight.flight_2.to_airport_name = '';
+                state.choosedFlight.flight_2.to_airport_code = '';
+                state.choosedFlight.flight_2.departure_date = '';
+                state.choosedFlight.flight_2.departure_time = '';
+                state.choosedFlight.flight_2.arrival_date = '';
+                state.choosedFlight.flight_2.arrival_time = '';
+                state.choosedFlight.flight_2.duration = '';
+
+                state.searchPage.from = state.homeSearch.to;
+                state.searchPage.to = state.homeSearch.from;
+                state.searchPage.search_date = state.homeSearch.return_dateTime;
+                state.searchPage.search_date_return = '';
+                // state.searchPage.isSearchAgain = true;
+                state.fetchFlightStatusTwo = 'idle';
+                state.isReadyToOrder = action.payload;
+                return;
+            }
+            if (!action.payload && state.isTwoWay && !state.choosedFlight.flight_1.is_choose) {
                 state.fetchDetailFlight = 'sans';
                 state.flightDetailId = [];
                 state.flight_title = 'Keberangkatan';
@@ -1090,7 +1132,7 @@ export const flightSlice = createSlice({
                 state.isReadyToOrder = action.payload;
                 return;
             }
-            if (!action.payload) {
+            if (!action.payload && !state.isTwoWay) {
                 state.fetchDetailFlight = 'sans';
                 state.flightDetailId = [];
                 state.flight_title = 'Keberangkatan';
@@ -1144,6 +1186,10 @@ export const flightSlice = createSlice({
         setStatusNotif: (state, action) => {
             state.statusNotif = action.payload;
         },
+
+        setFilterTicket: (state, action) => {
+            state.filterTicket = action.payload;
+        },
     },
 
     extraReducers: (builder) => {
@@ -1181,6 +1227,7 @@ export const flightSlice = createSlice({
 });
 
 export const getStatusNotif = (state) => state.flight.statusNotif;
+export const getFilterTicket = (state) => state.flight.filterTicket;
 
 // export const getFetchFlightStatusNew = (state) => state.flight.fetchFlightStatusNew;
 export const getPassengerForm = (state) => state.flight.passengerForm; //detail flight status

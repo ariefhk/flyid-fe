@@ -1,6 +1,6 @@
 'use client';
 
-import SearchBar from './SearchBar';
+// import SearchBar from './SearchBar';
 import { useRouter } from 'next/navigation';
 import SignInButton from './SignInButton';
 import Image from 'next/image';
@@ -9,18 +9,17 @@ export default function Navbar({ className, isCredential = true, isSearchMode = 
     const router = useRouter();
 
     return (
-        <div className={`${className} w-screen shadow-low`}>
-            <div className=' container mx-auto flex max-w-screen-xl justify-between  py-[18px]'>
-                <div className='flex items-center gap-9'>
+        <div className={`${className} fixed top-0 z-20 w-screen bg-white shadow-low`}>
+            <div className=' container mx-auto flex max-w-screen-xl items-center  justify-between py-2'>
+                <div>
                     <Image
                         src={'/new_images/logo.svg'}
-                        width={98}
-                        height={53}
+                        width={150}
+                        height={150}
                         alt=''
                         onClick={() => router.push('/')}
                         className='cursor-pointer'
                     />
-                    {/* {isSearchMode && <SearchBar />} */}
                 </div>
 
                 {isCredential && <SignInButton />}
