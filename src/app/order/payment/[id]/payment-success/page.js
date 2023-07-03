@@ -88,7 +88,7 @@ export default function PaymentSuccess() {
             <div className='mt-[108px] hidden w-screen border-b border-b-net-2 pb-[74px] pt-[47px] lg:block'>
                 <div className='mx-auto hidden max-w-screen-lg grid-cols-12 font-poppins lg:grid'>
                     <div className='col-span-12 flex gap-3 text-head-1 font-bold'>
-                        <h1 className=' text-black'>Isi Data Diri</h1>
+                        <h1 className='text-black '>Isi Data Diri</h1>
                         <p>{'>'}</p>
                         <h1 className='text-black'>Bayar</h1>
                         <p>{'>'}</p>
@@ -120,6 +120,28 @@ export default function PaymentSuccess() {
                     </div>
                 </div>
             </div>
+
+            {/* MOBILE */}
+            <div className='font-poppins lg:hidden'>
+                <div className='flex h-screen items-center justify-center '>
+                    <div className='flex flex-col items-center justify-center text-center'>
+                        <Image alt='' src={'/new_images/empty_list.svg'} width={200} height={200} />
+                        <h1 className='mt-2 text-body-6 font-bold text-pur-5'>Selamat!</h1>
+                        <h3 className='text-body-6'>Transaksi Pembayaran Tiket success</h3>
+                    </div>
+                </div>
+
+                <div className='invisible h-[110px]'></div>
+
+                <div className='fixed inset-x-0 bottom-0  flex  h-[100px] flex-col items-center justify-center gap-3  bg-white  px-5 shadow-low'>
+                    <Button
+                        onClick={() => handleSendTicket()}
+                        className='my-1 w-full rounded-rad-3 bg-pur-4 py-2 text-white hover:bg-pur-3'>
+                        Terbitkan Tiket
+                    </Button>
+                </div>
+            </div>
+            {/* MOBILE */}
 
             <AlertTop
                 visibleAlert={visibleAlert}

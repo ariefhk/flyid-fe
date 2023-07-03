@@ -29,19 +29,19 @@ export default function Seat({
                         <div className='flex h-[36px] w-[36px] items-center justify-center rounded-[6px]  bg-pur-3 text-white'>
                             <p>A1</p>
                         </div>
-                        <p className='text-body-6'>Terpilih </p>
+                        <p className='text-body-1 lg:text-body-6'>Terpilih </p>
                     </div>
                     <div className='flex flex-col items-center gap-1'>
                         <div className='flex h-[36px] w-[36px] items-center justify-center rounded-[6px]  bg-pur-4 text-white'>
                             <p>A1</p>
                         </div>
-                        <p className='text-body-6'>Tersedia</p>
+                        <p className='text-body-1 lg:text-body-6'>Tersedia</p>
                     </div>
                     <div className='flex flex-col items-center gap-1'>
                         <div className='flex h-[36px] w-[36px] items-center justify-center rounded-[6px]  bg-[#d0d0d0] text-white'>
                             <p>A1</p>
                         </div>
-                        <p className='text-body-6'>Tdk Tersedia</p>
+                        <p className='text-body-1 lg:text-body-6'>Tdk Tersedia</p>
                     </div>
                 </div>
             </div>

@@ -76,14 +76,15 @@ export default function Home() {
             {/* banner */}
 
             {/* homesearch */}
-            <HomeSearch
-                className={'lg:h-[298px] lg:w-[968px]'}
-                handleActionHomeSearch={() => {
-                    dispatch(setSearchPageIsSearchAgain(true));
-                    // dispatch(setFetchFlightStatus(true));
-                    router.push('/search');
-                }}
-            />
+            <div className='hidden lg:block'>
+                <HomeSearch
+                    handleActionHomeSearch={() => {
+                        dispatch(setSearchPageIsSearchAgain(true));
+                        // dispatch(setFetchFlightStatus(true));
+                        router.push('/search');
+                    }}
+                />
+            </div>
             {/* homesearch */}
 
             {/* destination */}
@@ -148,7 +149,7 @@ export default function Home() {
                         <h1 className='text-head-3 font-bold'>Travel with Enjoy</h1>
                         <div className='w-full border border-white'></div>
                         <h2 className='text-head-1'>Because {"you're"} our priority</h2>
-                        <Button className=' rounded-rad-2 border-2 border-white bg-transparent px-5 py-3 text-white hover:border-pur-3 hover:bg-pur-3'>
+                        <Button className='rounded-rad-2 border-2 border-white bg-transparent px-5 py-3 text-white hover:border-pur-3 hover:bg-pur-3'>
                             Lebih Detail
                         </Button>
                     </div>
@@ -206,10 +207,10 @@ export default function Home() {
             {/* our partnets */}
 
             {/* footer */}
-            <footer style={{ height: 'calc(100vh - 200px)' }} className=' relative hidden bg-pur-5 font-poppins lg:block'>
-                <div className=' mx-auto grid h-full max-w-screen-lg grid-cols-12 pb-12 '>
+            <footer style={{ height: 'calc(100vh - 200px)' }} className='relative hidden bg-pur-5 font-poppins lg:block'>
+                <div className='mx-auto grid h-full max-w-screen-lg grid-cols-12 pb-12 '>
                     <div className='col-span-4 flex flex-col gap-5'>
-                        <div className='mt-3  '>
+                        <div className='mt-3 '>
                             <Image
                                 src={'/new_images/logo_white.svg'}
                                 width={150}
@@ -283,7 +284,7 @@ export default function Home() {
 
                     <div className='col-span-5 flex flex-col justify-center gap-6 '>
                         <div className='mt-4 flex gap-16'>
-                            <div className='  flex flex-col gap-1 text-net-2'>
+                            <div className='flex flex-col gap-1 text-net-2'>
                                 <h1 className='font-bold '>
                                     About FLY<span className='text-[12px]'>ID</span>
                                 </h1>
@@ -295,7 +296,7 @@ export default function Home() {
                                     <p className='cursor-pointer text-body-6 hover:font-bold'>About Us</p>
                                 </div>
                             </div>
-                            <div className='  flex flex-col gap-1 text-net-2'>
+                            <div className='flex flex-col gap-1 text-net-2'>
                                 <h1 className='font-bold '>Products</h1>
                                 <div className='flex flex-col gap-2'>
                                     <p className='cursor-pointer text-body-6 hover:font-bold'>Flights</p>
@@ -304,7 +305,7 @@ export default function Home() {
                                 </div>
                             </div>
                         </div>
-                        <div className=' mb-4 flex flex-col gap-1 text-net-2'>
+                        <div className='mb-4 flex flex-col gap-1 text-net-2'>
                             <h1 className='font-bold '>Follow Us On</h1>
                             <div className='flex flex-col gap-2'>
                                 <div className='group flex cursor-pointer items-center gap-2'>
@@ -319,7 +320,7 @@ export default function Home() {
                                     <FaInstagramSquare className='from-indigo-500 via-purple-500 to-pink-500 group-hover:bg-gradient-to-r' />{' '}
                                     <p className='text-body-6 group-hover:font-bold'>Instagram</p>
                                 </div>
-                                <div className='group flex  cursor-pointer items-center gap-2'>
+                                <div className='group flex cursor-pointer items-center gap-2'>
                                     <FaYoutube className='group-hover:text-[#FF0000]' />
                                     <p className='text-body-6 group-hover:font-bold'>Youtube</p>
                                 </div>
@@ -332,7 +333,7 @@ export default function Home() {
                             </div>
                         </div>
                     </div>
-                    <div className='col-span-3 flex  items-center justify-center text-net-2'>
+                    <div className='col-span-3 flex items-center justify-center text-net-2'>
                         <div className='flex flex-col gap-3'>
                             <h1 className='text-title-1 font-bold'>
                                 Download FLY<span className='text-[12px]'>ID</span> App
@@ -356,8 +357,8 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
-                <div className='absolute bottom-0  w-full bg-net-4 py-4 text-center'>
-                    <h1 className='  text-title-1 text-white'>
+                <div className='absolute bottom-0 w-full bg-net-4 py-4 text-center'>
+                    <h1 className='text-title-1 text-white'>
                         Copyright © 2023 FLY<span className='text-[12px]'>ID</span>. All rights reserved
                     </h1>
                 </div>
@@ -367,7 +368,22 @@ export default function Home() {
             {/* ==== DEKSTOP MODE ====  */}
 
             {/* ==== MOBILE MODE ====  */}
-
+            <div className='h-screen bg-pur-4 lg:hidden'>
+                <div className='px-4 '>
+                    <h1 className='pt-[32px] text-head-2 font-bold text-white'>Hei, Mau Kemana</h1>
+                    <div className='block lg:hidden'>
+                        <HomeSearch
+                            handleActionHomeSearch={() => {
+                                dispatch(setSearchPageIsSearchAgain(true));
+                                // dispatch(setFetchFlightStatus(true));
+                                router.push('/search');
+                            }}
+                        />
+                    </div>
+                </div>
+                <div className=' mb-[100px] mt-[-100px] h-screen bg-white'></div>
+                <BottomNavbar />
+            </div>
             {/* ==== MOBILE MODE ==== */}
         </div>
     );

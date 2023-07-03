@@ -114,6 +114,7 @@ export default function SearchFlight() {
     const [isDetail, setIsDetail] = useState(false);
     const [chosenDetailFlight, setChosenDetailFlight] = useState(0);
     const [openChooseFilterFlight, setOpenChooseFilterFlight] = useState(false);
+    const [openChooseFilterFlightMobile, setOpenChooseFilterFlightMobile] = useState(false);
     const [selectDate, setSelectDate] = useState(new Date(searchPage.search_date) || '');
 
     /*=== function ===*/
@@ -135,6 +136,7 @@ export default function SearchFlight() {
     };
     const handleDetailFlight = () => setOpenDetailFlight(!openDetailFlight);
     const handleOpenChooseFilterFlight = () => setOpenChooseFilterFlight(!openChooseFilterFlight);
+    const handleOpenChooseFilterFlightMobile = () => setOpenChooseFilterFlightMobile(!openChooseFilterFlightMobile);
     const handleOpenHomeSearch = () => setOpenHomeSearch(!openHomeSearch);
     //Milih flight
     const handleChoosedFlight = (data) => {
@@ -490,9 +492,6 @@ export default function SearchFlight() {
                                 <div className='col-span-12 mt-[27px] grid grid-cols-8 divide-x-2'>
                                     {dateOfWeek?.length ? (
                                         dateOfWeek?.map((val, index) => {
-                                            // console.log('====================================');
-                                            // console.log('DATE', val);
-                                            // console.log('====================================');
                                             return (
                                                 <div
                                                     key={index}
@@ -853,7 +852,6 @@ export default function SearchFlight() {
                         </div>
                     </div>
 
-                    {/* ======= Modal and Pop  start ====== */}
                     {/* homeSearch  start */}
                     <div>
                         {openHomeSearch && (
@@ -1118,11 +1116,10 @@ export default function SearchFlight() {
                         )}
                     </div>
                     {/* sidebar */}
-                    {/* ======= Modal and Pop  end ====== */}
+
                     {/* DEKSTOP MODE */}
 
                     {/* MOBILE MODE */}
-
                     <div className='h-screen font-poppins lg:hidden'>
                         <div
                             onClick={() => router.push('/')}
@@ -1136,9 +1133,6 @@ export default function SearchFlight() {
                         <div className='mt-[50px] flex gap-2 divide-y-0 overflow-x-scroll '>
                             {dateOfWeek?.length ? (
                                 dateOfWeek?.map((val, index) => {
-                                    // console.log('====================================');
-                                    // console.log('DATE', val);
-                                    // console.log('====================================');
                                     return (
                                         <div key={index} className='cursor-pointer px-2' onClick={() => chooseDate(val.date)}>
                                             <div
@@ -1166,17 +1160,21 @@ export default function SearchFlight() {
                                 <h1>Loadinggg</h1>
                             )}
                         </div>
-                        <div className='flex justify-between px-4'>
-                            <div className='flex items-center gap-1 rounded-rad-3 border border-net-3 px-3 py-1'>
+                        <div className='mt-5 flex justify-between px-4'>
+                            {/* <div className='flex items-center gap-1 px-3 py-1 border rounded-rad-3 border-net-3'>
                                 <MdAirplanemodeActive /> <p>Your Flight</p>
                             </div>
 
-                            <div className='flex items-center gap-1 rounded-rad-3 border border-net-3 px-3 py-1'>
+                            <div className='flex items-center gap-1 px-3 py-1 border rounded-rad-3 border-net-3'>
                                 <MdTravelExplore />
                                 <p>{isTwoWay ? 'Round Trip' : 'One Trip'}</p>
-                            </div>
-                            <div className='flex items-center gap-1 rounded-rad-3 border border-net-3 px-3 py-1'>
-                                <FiFilter /> <p>Filter</p>
+                            </div> */}
+                            <div className=''>
+                                <Button
+                                    onClick={() => handleOpenChooseFilterFlightMobile()}
+                                    className='flex items-center gap-2 rounded-rad-4 border border-pur-4 px-3 py-2 font-poppins text-body-3 font-medium text-pur-4'>
+                                    <RiArrowUpDownLine /> {filterFlightName.type}
+                                </Button>
                             </div>
                         </div>
                         <div className='mt-4 px-4'>
@@ -1364,6 +1362,21 @@ export default function SearchFlight() {
                             </div>
                         </div>
                     )}
+
+                    {/* filtet flight start */}
+                    <div>
+                        {openChooseFilterFlightMobile && (
+                            <div className='fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-60'>
+                                <ChooseFilterTicketModal
+                                    open={openChooseFilterFlightMobile}
+                                    handleOpen={handleOpenChooseFilterFlightMobile}
+                                    handleChooseFilter={handleChooseFilter}
+                                />
+                            </div>
+                        )}
+                    </div>
+                    {/* filtet flight end */}
+
                     {/* MOBILE MODE */}
                 </div>
             );

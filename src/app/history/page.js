@@ -271,10 +271,9 @@ export default function History() {
         );
     }
     return (
-        <div className='overflow-x-hidden bg-pur-3 lg:bg-white'>
+        <div className='overflow-x-hidden bg-pur-4 lg:bg-white'>
             <Navbar className={'hidden lg:block'} />
             {/* DESKTOP MODE */}
-
             <div className='mt-[80px]  hidden w-screen border border-b-net-2 pb-4 lg:block'>
                 <div className='container relative mx-auto hidden max-w-screen-lg grid-cols-12 gap-3 font-poppins lg:grid'>
                     <h1 className='col-span-12 mb-[24px] mt-[47px] font-poppins text-head-1 font-bold'>Riwayat Pemesanan</h1>
@@ -819,20 +818,23 @@ export default function History() {
             {/* DESKTOP MODE */}
 
             {/* MOBILE MODE */}
-            <div className='h-screen  font-poppins lg:hidden'>
+            <div className='h-screen font-poppins lg:hidden'>
                 <div className='mx-4 mt-[64px] flex items-center justify-between text-head-2 font-bold text-white'>
                     <h1>Riwayat Pesanan</h1>
-                    <MdSearch className='h-6 w-6' />
                 </div>
                 <div className='mx-4 mt-8 flex justify-end'>
-                    <Button className='flex items-center gap-2 rounded-rad-4 bg-white px-3 py-1 text-body-6'>
-                        <FiFilter /> Filter
-                    </Button>
+                    <Input
+                        onChange={handleOnChangeFilterByCode}
+                        value={filterInput}
+                        onClick={() => setHistoryItem('')}
+                        placeholder={'Masukan kode transaksi Anda'}
+                        className='w-[220px] rounded-rad-4 border-net-2 px-6 py-[14px] text-body-6 focus:border-pur-4'
+                    />
                 </div>
 
                 <div className='mx-4 mt-3'>
-                    {historyData?.length &&
-                        historyData.map((history, index) => {
+                    {historyFilter?.length &&
+                        historyFilter.map((history, index) => {
                             return (
                                 <div key={index}>
                                     <h1 className='text-title-1 font-bold text-white'>{history.month}</h1>
@@ -857,7 +859,7 @@ export default function History() {
 
                                                         <div className='mt-6 flex flex-col gap-2'>
                                                             {historyItem?.transaction?.Flights[0] && (
-                                                                <div className='grid w-full grid-cols-12 items-center  gap-3 '>
+                                                                <div className='grid w-full grid-cols-12 items-center gap-3 '>
                                                                     <div className='col-span-5 flex items-start gap-2'>
                                                                         <IoLocationSharp className='h-[24px] w-[24px] text-net-3' />
                                                                         <div className='text-body-4'>
@@ -910,7 +912,7 @@ export default function History() {
                                                             )}
 
                                                             {historyItem?.transaction?.Flights[1] && (
-                                                                <div className='grid w-full grid-cols-12 items-center  gap-3 '>
+                                                                <div className='grid w-full grid-cols-12 items-center gap-3 '>
                                                                     <div className='col-span-5 flex items-start gap-2'>
                                                                         <IoLocationSharp className='h-[24px] w-[24px] text-net-3' />
                                                                         <div className='text-body-4'>
@@ -996,11 +998,11 @@ export default function History() {
             </div>
 
             {openMobileHistoryDetail && (
-                <div className='fixed  inset-0 top-0 h-screen overflow-y-scroll bg-white font-poppins'>
+                <div className='fixed inset-0 top-0 h-screen overflow-y-scroll bg-white font-poppins'>
                     <div className='px-4'>
                         <div
                             onClick={() => setOpenMobileHistoryDetail(!openMobileHistoryDetail)}
-                            className='fixed inset-x-0 top-0  flex cursor-pointer items-center gap-6 bg-pur-3  px-[16px] py-[10px] text-white '>
+                            className='fixed inset-x-0 top-0  flex cursor-pointer items-center gap-6 bg-pur-4  px-[16px] py-[10px] text-white '>
                             <FiArrowLeft className='h-[30px] w-[30px]' /> <h1>Rincian Penerbangan</h1>
                         </div>
 
@@ -1098,7 +1100,7 @@ export default function History() {
                             )}
                             {/* Detail Transaction 0 */}
 
-                            {mobileHistoryDetailData.transaction.Flights[1] && <div className=' w-full border'></div>}
+                            {mobileHistoryDetailData.transaction.Flights[1] && <div className='w-full border '></div>}
 
                             {/* Detail Transaction 1 */}
                             {mobileHistoryDetailData.transaction.Flights[1] && (
@@ -1198,7 +1200,7 @@ export default function History() {
                                     )}
                                 </div>
                             )}
-                            {mobileHistoryDetailData.transaction.Flights[1] && <div className=' w-full border'></div>}
+                            {mobileHistoryDetailData.transaction.Flights[1] && <div className='w-full border '></div>}
                             {mobileHistoryDetailData.transaction.Flights[1] && (
                                 <div>
                                     <p className='w-max rounded-rad-4 bg-pur-5 px-2 py-1 text-body-6 text-white'>
@@ -1246,8 +1248,27 @@ export default function History() {
                                 </h1>
                             </div>
 
-                            <Button
-                                onClick={() => console.log('Hello')}
+                            {mobileHistoryDetailData?.transaction?.transaction_status.toLowerCase() === 'unpaid' ? (
+                                <Button
+                                    onClick={() => handleUpdatePayment(mobileHistoryDetailData?.transaction)}
+                                    className='my-1 w-full rounded-rad-3 bg-alert-3 py-2 font-medium text-white hover:bg-red-500 '>
+                                    Lanjut Bayar
+                                </Button>
+                            ) : (
+                                // BUTOON
+                                <Button
+                                    onClick={() =>
+                                        handleSendTicket(
+                                            mobileHistoryDetailData?.transaction?.Flights[0]?.Transaction_Flight?.transaction_id
+                                        )
+                                    }
+                                    className='my-1 w-full rounded-rad-3 bg-pur-4 py-2 font-medium text-white hover:bg-pur-3 '>
+                                    Cetak Tiket
+                                </Button>
+                            )}
+
+                            {/* <Button
+                                onClick={() => handleUpdatePayment(mobileHistoryDetailData?.transaction)}
                                 disabled={mobileHistoryDetailData?.transaction?.transaction_status?.toLowerCase() === 'issued'}
                                 className={`${
                                     mobileHistoryDetailData?.transaction?.transaction_status?.toLowerCase() === 'issued'
@@ -1257,7 +1278,7 @@ export default function History() {
                                 {mobileHistoryDetailData?.transaction?.transaction_status?.toLowerCase() === 'unpaid'
                                     ? 'Bayar!'
                                     : 'Sudah di Bayar'}
-                            </Button>
+                            </Button> */}
                         </div>
                     </div>
                 </div>
@@ -1284,7 +1305,7 @@ export default function History() {
                     <div className='h-[300px] w-[668px] rounded-rad-3 bg-white px-4 shadow-low'>
                         <div className='flex items-center gap-2 pt-3'>
                             <Input
-                                className='w-full appearance-none  px-4 py-2 font-poppins outline-none'
+                                className='w-full appearance-none px-4 py-2 font-poppins outline-none'
                                 // onChange={handleFromInputChange}
                                 onChange={handleOnChangeFilterByCode}
                                 value={filterInput}

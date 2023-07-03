@@ -206,6 +206,14 @@ abbr[title] {
 
 /* `sm` applies to x-small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
+    .react-daterange-picker.react-daterange-picker--open.react-daterange-picker--enabled.calendar__range {
+        top: 74%;
+        transform: translateY(-74%);
+
+        right: 90%;
+        transform: translateX(-90%);
+        position: absolute;
+    }
 }
 
 /* `md` applies to small devices (landscape phones, less than 768px) */

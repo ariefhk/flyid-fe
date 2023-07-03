@@ -151,7 +151,7 @@ export default function Notifikasi() {
                 {/* DESKTOP MODE */}
 
                 <div className='mt-[80px] hidden w-screen border border-b-net-2 pb-4 lg:block'>
-                    <div className='container relative mx-auto hidden max-w-screen-lg grid-cols-12 gap-3 font-poppins lg:grid'>
+                    <div className='container mx-auto hidden max-w-screen-lg grid-cols-12 gap-3 font-poppins lg:grid'>
                         <h1 className='col-span-12 mb-[24px] mt-[47px] font-poppins text-head-1 font-bold'>Notifikasi</h1>
                         <div className='col-span-12 grid grid-cols-12 gap-[18px]'>
                             <div
@@ -161,10 +161,11 @@ export default function Notifikasi() {
                                 <p>Beranda</p>
                             </div>
                             <div className='col-span-2 flex items-center gap-4'>
-                                <Button className='flex items-center gap-2 rounded-rad-4 border-[1px] border-pur-4 px-2 py-[4px] text-title-2'>
-                                    <FiFilter className='h-5 w-5 text-net-3 ' /> Filter
+                                <Button
+                                    onClick={() => handleReadNotif()}
+                                    className='rounded-rad-3 border border-pur-5 bg-white px-5 py-3 text-body-6 text-pur-5 hover:border-white hover:bg-pur-3 hover:text-white'>
+                                    Sudah Dibaca
                                 </Button>
-                                <IoSearchSharp className='h-6 w-6 text-pur-4' />
                             </div>
                         </div>
                     </div>
@@ -182,6 +183,7 @@ export default function Notifikasi() {
 
     return (
         <div className='overflow-x-hidden'>
+            {/* DEKSTOP MODE */}
             <Navbar className={'hidden lg:block'} />
             <div className='mt-[80px] hidden w-screen border border-b-net-2 pb-4 lg:block'>
                 <div className='container mx-auto hidden max-w-screen-lg grid-cols-12 gap-3 font-poppins lg:grid'>
@@ -260,14 +262,8 @@ export default function Notifikasi() {
                         </div>
                     </div>
                 )}
-
-                {/* <AlertBottom
-                    visibleAlert={visibleAlert}
-                    handleVisibleAlert={handleVisibleAlert}
-                    text={alertText}
-                    type={alertType}
-                /> */}
             </div>
+            {/* DEKSTOP MODE */}
 
             {/* RESPONSIVE MODE */}
             <div className='mx-[24px] mt-[64px] font-poppins lg:hidden'>
@@ -277,7 +273,7 @@ export default function Notifikasi() {
                     <div className='col-span-12 mb-2 flex items-center justify-end'>
                         <Button
                             onClick={() => handleReadNotif()}
-                            className='rounded-rad-3 border border-pur-5 bg-white px-3 py-2 text-body-3 text-pur-5 hover:border-white hover:bg-purple-400 hover:text-white'>
+                            className='rounded-rad-3 border border-pur-5 bg-white px-3 py-2 text-body-3 text-pur-5 hover:border-white hover:bg-pur-3 hover:text-white'>
                             Sudah Dibaca
                         </Button>
                     </div>
@@ -292,8 +288,8 @@ export default function Notifikasi() {
                             };
 
                             return (
-                                <div key={index} className='col-span-12  border-b border-net-3 py-4'>
-                                    <div className=' grid grid-cols-12 gap-2 '>
+                                <div key={index} className='col-span-12 border-b border-net-3 py-4'>
+                                    <div className='grid grid-cols-12 gap-2 '>
                                         <div className='relative col-span-1 h-[24px] w-[24px]'>
                                             <Image alt='' src={'/new_images/notif.svg'} fill />
                                         </div>
@@ -334,7 +330,7 @@ export default function Notifikasi() {
                                                 src={'/images/notif_notread.svg'}
                                                 width={12}
                                                 height={12}
-                                                className='mt-1 block'
+                                                className='block mt-1'
                                             />
                                         ) : (
                                             <Image
@@ -342,7 +338,7 @@ export default function Notifikasi() {
                                                 src={'/images/notif_read.svg'}
                                                 width={12}
                                                 height={12}
-                                                className='mt-1 block'
+                                                className='block mt-1'
                                             />
                                         )}
                                     </div> */}

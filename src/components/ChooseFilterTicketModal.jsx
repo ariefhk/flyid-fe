@@ -75,7 +75,7 @@ export default function ChooseFilterTicketModal({ open, handleOpen, handleChoose
         <>
             {open && (
                 <div className='fixed inset-0 bg-black bg-opacity-60 '>
-                    <div className='absolute h-[356px] w-[400px] lg:bottom-[124px] lg:right-[175px]'>
+                    <div className='absolute  h-[356px] w-[360px] lg:bottom-[124px] lg:right-[175px] lg:h-[356px] lg:w-[400px]'>
                         <Card>
                             <Card.Title handleCardShow={() => handleOpen()} className={'border-b-[1px] py-[10px]'} />
 

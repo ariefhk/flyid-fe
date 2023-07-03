@@ -959,7 +959,7 @@ export default function Order() {
                                 <div key={index} className='mx-4 rounded-t-rad-2 border border-pur-3'>
                                     <div className='rounded-t-rad-2 bg-pur-5 px-4 py-2 text-white'>
                                         <h2 className='text-title-2'>
-                                            Data Diri Penumpang {index + 1} {' - '}
+                                            P{index + 1} {' - '} Data Diri Penumpang {index + 1} {' - '}
                                             {form.type}
                                         </h2>
                                         {formStatus && <BsFillCheckCircleFill className='h-[24px] w-[24px] text-alert-1' />}
@@ -1043,6 +1043,30 @@ export default function Order() {
                 </div>
 
                 {/* SEAT DISINI */}
+                <Seat
+                    flightSeat={flightSeatDepart}
+                    handleSeat={handleSeatDepart}
+                    seat={seatDepart}
+                    type={isTwoWay ? 'Kepergian' : ''}
+                    flight_class={detailFlight?.berangkat?.flight_class}
+                    flight_airline={detailFlight?.berangkat?.Airline?.airline_name}
+                    flight_from={detailFlight?.berangkat?.from}
+                    flight_to={detailFlight?.berangkat?.to}
+                />
+
+                {isTwoWay && (
+                    <Seat
+                        flightSeat={flightSeatReturn}
+                        handleSeat={handleSeatReturn}
+                        seat={seatReturn}
+                        type={isTwoWay && 'Kepulangan'}
+                        flight_class={detailFlight?.pulang?.flight_class}
+                        flight_airline={detailFlight?.pulang?.Airline?.airline_name}
+                        flight_from={detailFlight?.pulang?.from}
+                        flight_to={detailFlight?.pulang?.to}
+                    />
+                )}
+
                 {/* SEAT DISINI */}
                 <div className='invisible h-[110px] '></div>
 

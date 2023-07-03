@@ -86,9 +86,13 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
     const [chosenToAirport, setChosenToAirport] = useState(homeSearch.to || '');
     //OPEN MODAL
     const [isToggle, setIsToggle] = useState(false);
+    const [openPassengerModalMobile, setOpenPassengerModalMobile] = useState(false);
     const [openPassengerModal, setOpenPassengerModal] = useState(false);
+    const [openFlightClassModalMobile, setOpenFlightClassModalMobile] = useState(false);
     const [openFlightClassModal, setOpenFlightClassModal] = useState(false);
     const [openCalendar, setOpenCalendar] = useState(false);
+    const [openCalendarMobile, setOpenCalendarMobile] = useState(false);
+    const [openCalendarRangeMobile, setOpenCalendarRangeMobile] = useState(false);
     const [openCalendarRange, setOpenCalendarRange] = useState(false);
     // DATE
     const [pickedDate, setPickedDate] = useState(homeSearch.departure_dateTime && new Date(homeSearch.departure_dateTime));
@@ -99,10 +103,14 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
 
     /*=== function ===*/
     //MODAL HANDLER
+    const handleOpenPassengerModalMobile = () => setOpenPassengerModalMobile(!openPassengerModalMobile);
+    const handleOpenFlightClassModalMobile = () => setOpenFlightClassModalMobile(!openFlightClassModalMobile);
     const handleOpenPassengerModal = () => setOpenPassengerModal(!openPassengerModal);
     const handleOpenFlightClassModal = () => setOpenFlightClassModal(!openFlightClassModal);
     const handleOpenCalendar = () => setOpenCalendar(!openCalendar);
+    const handleOpenCalendarMobile = () => setOpenCalendarMobile(!openCalendarMobile);
     const handleOpenCalendarRange = () => setOpenCalendarRange(!openCalendarRange);
+    const handleOpenCalendarRangeMobile = () => setOpenCalendarRangeMobile(!openCalendarRangeMobile);
     const handleCloseAllCalendar = () => {
         setOpenCalendar(false);
         setOpenCalendarRange(false);
@@ -148,6 +156,7 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
             }
         });
         handleOpenCalendar();
+        setOpenCalendarMobile(false);
     };
 
     const handlePickedRangeDate = (date) => {
@@ -159,6 +168,7 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
             return [pickedDate, date];
         });
         handleOpenCalendarRange();
+        setOpenCalendarRangeMobile(false);
     };
 
     //OPEN CALENDAR RANGE
@@ -535,225 +545,221 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                     </Button>
                 </div>
             </div>
+            {/* DEKSTOP MODE */}
 
             {/* RESPONSIVE MODE */}
             <div className=' font-poppins lg:hidden'>
-                <div style={{ height: 'calc(100vh - 40vh)' }} className='bg-pur-3 px-4 '>
-                    <h1 className='pt-[32px] text-head-2 font-bold text-white'>Hei, Mau Kemana</h1>
-                    <div className='mt-2 grid grid-cols-12 rounded-rad-2 bg-white shadow-low'>
-                        <div className='col-span-12 m-5 border px-1'>
-                            <div>
-                                {/* Choose Airport From */}
-                                <div className='grid grid-cols-12'>
-                                    <div className='col-span-3 flex items-center gap-2 text-net-3'>
-                                        <MdFlightTakeoff />
-                                        <p className='text-body-4'>From</p>
-                                    </div>
-                                    <div className='relative col-span-9'>
-                                        <Input
-                                            className='border-b-0 border-l-0 border-r-0 border-t-0 py-3 font-poppins text-title-1 font-medium'
-                                            placeholder={'Silahkan pilih lokasi...'}
-                                            value={chosenFromAirport}
-                                            onFocus={() => setMobileFocusFromInput(true)}
-                                            onChange={handleFromInputChange}
-                                        />
-                                        {mobileFocusFromInput && (
-                                            <div className='absolute z-10 flex h-[100px] w-full flex-col  gap-2 overflow-y-scroll bg-white'>
-                                                {fromAirports.length ? (
-                                                    fromAirports.map((data, index) => (
-                                                        <div
-                                                            onClick={() => {
-                                                                handleChooseFromAirport(data.airport_code);
-                                                                handleChosenFromAirport(
-                                                                    `${data.airport_location} (${data.airport_code})`
-                                                                );
-                                                            }}
-                                                            key={index}
-                                                            className='cursor-pointer bg-pur-3 p-3 font-poppins text-white'>
-                                                            {data.airport_location} ({data.airport_code})
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    <div className='text-head-1-5 pt-2 font-poppins font-semibold'>
-                                                        <h1>Inputkan Lokasi...</h1>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        )}
-                                    </div>
+                <div className='relative mt-2 grid grid-cols-12 rounded-rad-2 bg-white shadow-low'>
+                    <div className='col-span-12 m-5 border px-1'>
+                        <div>
+                            {/* Choose Airport From */}
+                            <div className='grid w-[80%] grid-cols-12 gap-2'>
+                                <div className='col-span-3 flex items-center gap-2 text-net-3'>
+                                    <MdFlightTakeoff />
+                                    <p className='text-body-4'>From</p>
                                 </div>
-                                {/* Choose Airport From */}
-
-                                {/* Toggle Rotate */}
-                                <div className='flex items-center gap-2'>
-                                    <div className='w-full border'></div>
-                                    <ToggleRotate isToggle={isToggle} handleToggleAction={handleToggleAction} />
-                                </div>
-                                {/* Toggle Rotate */}
-
-                                {/* Choose Airport To*/}
-                                <div className='grid grid-cols-12'>
-                                    <div className='col-span-3 flex items-center gap-2 text-net-3'>
-                                        <MdFlightTakeoff />
-                                        <p className='text-body-4'>to</p>
-                                    </div>
-                                    <div className='relative col-span-9'>
-                                        <Input
-                                            className='border-b-0 border-l-0 border-r-0 border-t-0 py-3 font-poppins text-title-1 font-medium'
-                                            placeholder={'Silahkan pilih lokasi...'}
-                                            onFocus={() => setMobileFocusToInput(true)}
-                                            value={chosenToAirport}
-                                            onChange={handleToInputChange}
-                                        />
-                                        {mobileFocusToInput && (
-                                            <div className='absolute z-10 flex h-[100px] w-full flex-col  gap-2 overflow-y-scroll bg-white'>
-                                                {toAirports.length ? (
-                                                    toAirports.map((data, index) => (
-                                                        <div
-                                                            onClick={() => {
-                                                                handleChooseToAirport(data.airport_code);
-                                                                handleChosenToAirport(
-                                                                    `${data.airport_location} (${data.airport_code})`
-                                                                );
-                                                            }}
-                                                            key={index}
-                                                            className='cursor-pointer bg-pur-3 p-3 font-poppins text-white'>
-                                                            {data.airport_location} ({data.airport_code})
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    <div className='text-head-1-5 pt-2 font-poppins font-semibold'>
-                                                        <h1>Inputkan Lokasi...</h1>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                                {/* Choose Airport */}
-                            </div>
-                        </div>
-
-                        {/* Toggle Switch */}
-                        <div className='col-span-12 flex items-center justify-between px-4'>
-                            <h1 className='text-body-6 font-medium'>Pulang Pergi</h1>
-                            <ToggleSwitch
-                                id={'toggle_calendar'}
-                                isToggle={isTwoWay}
-                                handleToggleAction={handleCalendarToggleAction}
-                            />
-                        </div>
-                        {/* Toggle Switch */}
-
-                        <div className='col-span-12 my-4 grid grid-cols-12 gap-2 px-4'>
-                            {/* Choose Departure */}
-                            <div className='col-span-6 flex items-center gap-3'>
-                                <MdDateRange className='h-[40px] w-[40px] text-net-4' />
-                                <div>
-                                    <Label className='font-poppins text-body-6 font-medium text-net-3' htmlFor={'departure2'}>
-                                        Departure
-                                    </Label>
-
+                                <div className='relative col-span-9'>
                                     <Input
-                                        id={'departure2'}
-                                        readOnly
-                                        value={formatToLocale(homeSearch.departure_dateTime)}
-                                        onClick={() => {
-                                            handleOpenCalendar();
-                                            setIsDesktop(false);
-                                        }}
-                                        className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-1 font-poppins text-body-6 font-medium'
+                                        className='border-b-0 border-l-0 border-r-0 border-t-0 py-3 font-poppins text-title-2 font-medium'
+                                        placeholder={'Silahkan pilih lokasi...'}
+                                        value={chosenFromAirport}
+                                        onFocus={() => setMobileFocusFromInput(true)}
+                                        onChange={handleFromInputChange}
                                     />
+                                    {mobileFocusFromInput && (
+                                        <div className='absolute z-10 flex h-[100px] w-full flex-col  gap-2 overflow-y-scroll bg-white'>
+                                            {fromAirports.length ? (
+                                                fromAirports.map((data, index) => (
+                                                    <div
+                                                        onClick={() => {
+                                                            handleChooseFromAirport(data.airport_code);
+                                                            handleChosenFromAirport(
+                                                                `${data.airport_location} (${data.airport_code})`
+                                                            );
+                                                        }}
+                                                        key={index}
+                                                        className='cursor-pointer bg-pur-3 p-3 font-poppins text-white'>
+                                                        {data.airport_location} ({data.airport_code})
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <div className='text-head-1-5 pt-2 font-poppins font-semibold'>
+                                                    <h1>Inputkan Lokasi...</h1>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
-                            {/* Choose Departure */}
+                            {/* Choose Airport From */}
 
-                            {/* Choose Return */}
-                            <div className='col-span-6 flex items-center gap-3'>
-                                <MdDateRange className='h-[40px] w-[40px] text-net-4' />
-                                <div>
-                                    <Label className='font-poppins text-body-6 font-medium text-net-3' htmlFor={'return2'}>
-                                        Return
-                                    </Label>
+                            {/* Toggle Rotate */}
+                            <div className='flex items-center gap-2'>
+                                <div className='w-full border'></div>
+                                <ToggleRotate isToggle={isToggle} handleToggleAction={handleToggleAction} />
+                            </div>
+                            {/* Toggle Rotate */}
 
+                            {/* Choose Airport To*/}
+                            <div className='grid w-[80%] grid-cols-12 '>
+                                <div className='col-span-3 flex items-center gap-2 text-net-3'>
+                                    <MdFlightTakeoff />
+                                    <p className='text-body-4'>to</p>
+                                </div>
+                                <div className='relative col-span-9'>
                                     <Input
-                                        // id={'return'}
-                                        // readOnly
-                                        // className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-1 font-poppins text-body-6 font-medium'
-                                        id={'return2'}
-                                        readOnly
-                                        value={
-                                            !homeSearch.return_dateTime
-                                                ? 'Pilih Tanggal'
-                                                : formatToLocale(homeSearch.return_dateTime)
-                                        }
-                                        onClick={() => {
-                                            handleOpenCalendarRange();
-                                            setIsDesktop(false);
-                                        }}
-                                        className={`${isTwoWay ? 'visible' : 'invisible'} 
+                                        className='border-b-0 border-l-0 border-r-0 border-t-0 py-3 font-poppins text-title-2 font-medium'
+                                        placeholder={'Silahkan pilih lokasi...'}
+                                        onFocus={() => setMobileFocusToInput(true)}
+                                        value={chosenToAirport}
+                                        onChange={handleToInputChange}
+                                    />
+                                    {mobileFocusToInput && (
+                                        <div className='absolute z-10 flex h-[100px] w-full flex-col  gap-2 overflow-y-scroll bg-white'>
+                                            {toAirports.length ? (
+                                                toAirports.map((data, index) => (
+                                                    <div
+                                                        onClick={() => {
+                                                            handleChooseToAirport(data.airport_code);
+                                                            handleChosenToAirport(
+                                                                `${data.airport_location} (${data.airport_code})`
+                                                            );
+                                                        }}
+                                                        key={index}
+                                                        className='cursor-pointer bg-pur-3 p-3 font-poppins text-white'>
+                                                        {data.airport_location} ({data.airport_code})
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <div className='text-head-1-5 pt-2 font-poppins font-semibold'>
+                                                    <h1>Inputkan Lokasi...</h1>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                            {/* Choose Airport */}
+                        </div>
+                    </div>
+
+                    {/* Toggle Switch */}
+                    <div className='col-span-12 flex items-center justify-between px-4'>
+                        <h1 className='text-body-6 font-medium'>Pulang Pergi</h1>
+                        <ToggleSwitch
+                            id={'toggle_calendar'}
+                            isToggle={isTwoWay}
+                            handleToggleAction={handleCalendarToggleAction}
+                        />
+                    </div>
+                    {/* Toggle Switch */}
+
+                    <div className='col-span-12 my-4 grid grid-cols-12 gap-2 px-4'>
+                        {/* Choose Departure */}
+                        <div className='col-span-6 flex items-center gap-3'>
+                            <MdDateRange className='h-[40px] w-[40px] text-net-4' />
+                            <div>
+                                <Label className='font-poppins text-body-6 font-medium text-net-3' htmlFor={'departure2'}>
+                                    Departure
+                                </Label>
+
+                                <Input
+                                    id={'departure2'}
+                                    readOnly
+                                    value={formatToLocale(homeSearch.departure_dateTime)}
+                                    onClick={() => {
+                                        setIsDesktop(false);
+                                        setOpenCalendarMobile(!openCalendarMobile);
+                                    }}
+                                    className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-1 font-poppins text-body-6 font-medium'
+                                />
+                            </div>
+                        </div>
+                        {/* Choose Departure */}
+
+                        {/* Choose Return */}
+                        <div className='col-span-6 flex items-center gap-3'>
+                            <MdDateRange className='h-[40px] w-[40px] text-net-4' />
+                            <div>
+                                <Label className='font-poppins text-body-6 font-medium text-net-3' htmlFor={'return2'}>
+                                    Return
+                                </Label>
+
+                                <Input
+                                    // id={'return'}
+                                    // readOnly
+                                    // className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-1 font-poppins text-body-6 font-medium'
+                                    id={'return2'}
+                                    readOnly
+                                    value={
+                                        !homeSearch.return_dateTime ? 'Pilih Tanggal' : formatToLocale(homeSearch.return_dateTime)
+                                    }
+                                    onClick={() => {
+                                        setIsDesktop(false);
+                                        setOpenCalendarRangeMobile(!openCalendarRangeMobile);
+                                    }}
+                                    className={`${isTwoWay ? 'visible' : 'invisible'} 
                         ${
                             !homeSearch.return_dateTime
                                 ? 'text-[14px] font-normal text-pur-3'
                                 : 'text-body-6 font-medium text-black'
                         } cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-1 font-poppins text-body-6 font-medium`}
-                                    />
-                                </div>
+                                />
                             </div>
-                            {/* Choose Return */}
-
-                            {/* Choose Passenger */}
-                            <div className='col-span-6 flex items-center gap-3'>
-                                <FaUser className='h-[36px] w-[36px] text-net-4' />
-                                <div>
-                                    <Label className='font-poppins text-body-6 font-medium text-net-3' htmlFor={'passenger2'}>
-                                        Passengers
-                                    </Label>
-                                    <Input
-                                        id={'passenger2'}
-                                        readOnly
-                                        onClick={handleOpenPassengerModal}
-                                        className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-1 font-poppins text-body-6 font-medium'
-                                        value={`${totalPassenger} penumpang`}
-                                    />
-                                </div>
-                            </div>
-                            {/* Choose Passenger */}
-
-                            {/* Choose Seat */}
-                            <div className='col-span-6 flex items-center gap-3'>
-                                <MdAirlineSeatReclineNormal className='h-[44px] w-[44px] text-net-4' />
-                                <div>
-                                    <Label className='font-poppins text-body-6 font-medium text-net-3' htmlFor={'seat2'}>
-                                        Seat Class
-                                    </Label>
-                                    <Input
-                                        // id={'seat2'}
-                                        // readOnly
-                                        // className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-1 font-poppins text-body-6 font-medium'
-                                        // placeholder={'Pilih kelas pesawat'}
-
-                                        id={'seat2'}
-                                        readOnly
-                                        onClick={handleOpenFlightClassModal}
-                                        className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-1 font-poppins text-body-6 font-medium'
-                                        value={flightClass}
-                                        placeholder={'Pilih kelas pesawat'}
-                                    />
-                                </div>
-                            </div>
-                            {/* Choose Seat */}
-
-                            {/* Button */}
-                            <div className='col-span-12 mt-6'>
-                                <Button
-                                    onClick={handleActionHomeSearch}
-                                    className='font-body-6 w-full rounded-rad-2 bg-pur-3 py-3 text-white'>
-                                    Cari Penerbangan
-                                </Button>
-                            </div>
-                            {/* Button */}
                         </div>
+                        {/* Choose Return */}
+
+                        {/* Choose Passenger */}
+                        <div className='col-span-6 flex items-center gap-3'>
+                            <FaUser className='h-[36px] w-[36px] text-net-4' />
+                            <div>
+                                <Label className='font-poppins text-body-6 font-medium text-net-3' htmlFor={'passenger2'}>
+                                    Passengers
+                                </Label>
+                                <Input
+                                    id={'passenger2'}
+                                    readOnly
+                                    onClick={handleOpenPassengerModalMobile}
+                                    className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-1 font-poppins text-body-6 font-medium'
+                                    value={`${totalPassenger} penumpang`}
+                                />
+                            </div>
+                        </div>
+                        {/* Choose Passenger */}
+
+                        {/* Choose Seat */}
+                        <div className='col-span-6 flex items-center gap-3'>
+                            <MdAirlineSeatReclineNormal className='h-[44px] w-[44px] text-net-4' />
+                            <div>
+                                <Label className='font-poppins text-body-6 font-medium text-net-3' htmlFor={'seat2'}>
+                                    Seat Class
+                                </Label>
+                                <Input
+                                    // id={'seat2'}
+                                    // readOnly
+                                    // className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-1 font-poppins text-body-6 font-medium'
+                                    // placeholder={'Pilih kelas pesawat'}
+
+                                    id={'seat2'}
+                                    readOnly
+                                    onClick={handleOpenFlightClassModalMobile}
+                                    className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-1 font-poppins text-body-6 font-medium'
+                                    value={flightClass}
+                                    placeholder={'Pilih kelas pesawat'}
+                                />
+                            </div>
+                        </div>
+                        {/* Choose Seat */}
+
+                        {/* Button */}
+                        <div className='col-span-12 mt-6'>
+                            <Button
+                                onClick={handleActionHomeSearch}
+                                className='font-body-6 w-full rounded-rad-2 bg-pur-4 py-3 text-white hover:bg-pur-3'>
+                                Cari Penerbangan
+                            </Button>
+                        </div>
+                        {/* Button */}
                     </div>
                 </div>
             </div>
@@ -761,23 +767,58 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
 
             {/* ======= Modal and Pop Up DEKSTOP start ====== */}
             {/* handling open passenger modal start */}
-            {/* <div>
-                {openPassengerModal && (
+            <div>
+                {openPassengerModalMobile && (
                     <div className='fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-60'>
-                        <ChoosePassengerTypeModal handleOpenPassengerModal={handleOpenPassengerModal} />
+                        <ChoosePassengerTypeModal handleOpenPassengerModal={handleOpenPassengerModalMobile} />
                     </div>
                 )}
-            </div> */}
+            </div>
+            <div>
+                {openCalendarMobile && (
+                    <div
+                        onClick={() => setOpenCalendarMobile(!openCalendarMobile)}
+                        className='fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-60 px-5'>
+                        <CalendarPicker
+                            isDesktop={isDekstop}
+                            initialDate={pickedDate}
+                            handlePickedDate={handlePickedDate}
+                            open={openCalendarMobile}
+                            handleOpen={handleOpenCalendarMobile}
+                        />
+                    </div>
+                )}
+            </div>
+            <div>
+                {openCalendarRangeMobile && (
+                    <div
+                        onClick={() => setOpenCalendarRangeMobile(!openCalendarRangeMobile)}
+                        className='fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-60 px-4'>
+                        <div
+                            className='relative h-screen w-screen '
+                            onClick={() => setOpenCalendarRangeMobile(!openCalendarRangeMobile)}>
+                            <CalendarRangePicker
+                                isDesktop={isDekstop}
+                                initialRangeDate={pickedRangeDate}
+                                handlePickedRangeDate={handlePickedRangeDate}
+                                open={openCalendarRangeMobile}
+                                handleOpen={handleOpenCalendarMobile}
+                            />
+                        </div>
+                    </div>
+                )}
+            </div>
+
             {/* handling open passenger modal end */}
 
             {/* handling open flight class modal start */}
-            {/* <div>
-                {openFlightClassModal && (
+            <div>
+                {openFlightClassModalMobile && (
                     <div className='fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-60'>
-                        <ChooseFlightClassModal handleOpenFlightClassModal={handleOpenFlightClassModal} />
+                        <ChooseFlightClassModal handleOpenFlightClassModal={handleOpenFlightClassModalMobile} />
                     </div>
                 )}
-            </div> */}
+            </div>
 
             {/* handling open flight class modal end */}
 

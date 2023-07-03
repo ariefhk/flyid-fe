@@ -36,6 +36,7 @@ export default function Akun() {
     //----
 
     /*=== state ===*/
+    const [isMobileUpdateProfil, setIsMobileUpdateProfil] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [errorInput, setErrorInput] = useState(false);
     const [changeData, setChangeData] = useState(false);
@@ -65,6 +66,10 @@ export default function Akun() {
     ];
 
     /*=== function === */
+
+    const handleMobileUpdateProfil = () => {
+        setIsMobileUpdateProfil(!isMobileUpdateProfil);
+    };
 
     const handleOnChangeProfil = (event) => {
         setUserData({ ...userData, [event.target.name]: event.target.value });
@@ -196,12 +201,12 @@ export default function Akun() {
                                 </div>
                             ))}
                     </div>
-                    <div className=' col-span-8 h-max rounded-rad-2 px-6 shadow-low'>
+                    <div className='col-span-8 h-max rounded-rad-2 px-6 shadow-low'>
                         {selectedMenu === 1 && (
                             <div>
                                 <div className='mb-5 mt-[40px] flex gap-2'>
-                                    <h1 className=' text-head-1 font-bold'>Ubah Data Profil </h1>
-                                    <p className=' text-start text-body-3 font-normal text-alert-3'>
+                                    <h1 className='text-head-1 font-bold'>Ubah Data Profil </h1>
+                                    <p className='text-start text-body-3 font-normal text-alert-3'>
                                         *Anda tidak dapat mengubah email!
                                     </p>
                                 </div>
@@ -313,21 +318,11 @@ export default function Akun() {
                             <div
                                 key={opt.id} //opt.action;
                                 //handleSelectedMenu(opt.id);
-                                onClick={() => (opt.id === 3 ? signOut() : handleSelectedMenu(opt.id))}
-                                className={`${
-                                    selectedMenu === opt.id ? 'group bg-pur-3 text-white' : 'group bg-white text-black'
-                                }  flex cursor-pointer items-center gap-4 rounded-rad-2 border-b-[1px] px-3 py-4 hover:bg-pur-3 `}>
+                                onClick={() => (opt.id === 3 ? signOut() : handleMobileUpdateProfil())}
+                                className={`  group flex cursor-pointer items-center gap-4 rounded-rad-2 border-b-[1px] px-3 py-4 hover:bg-pur-3  `}>
                                 {opt.icons}
-                                <p
-                                    className={`${
-                                        selectedMenu === opt.id ? ' text-white' : ' text-black'
-                                    } font-poppins text-title-2 font-medium  group-hover:text-white`}>
-                                    <span
-                                        className={`${
-                                            selectedMenu === opt.id ? ' text-white' : ' text-black'
-                                        }  group-hover:text-white`}>
-                                        {opt.menu}
-                                    </span>
+                                <p className={` font-poppins text-title-2 font-medium  text-black group-hover:text-white`}>
+                                    <span className={`  text-black group-hover:text-white`}>{opt.menu}</span>
                                 </p>
                             </div>
                         ))}
@@ -339,6 +334,95 @@ export default function Akun() {
 
                 <BottomNavbar />
             </div>
+
+            {isMobileUpdateProfil && (
+                <div className='fixed inset-0 top-0 h-screen overflow-y-scroll bg-white font-poppins'>
+                    <div className='px-4'>
+                        <div
+                            onClick={() => handleMobileUpdateProfil()}
+                            className='fixed inset-x-0 top-0 z-10 flex items-center gap-6 bg-pur-5 px-[16px]  py-2  text-white'>
+                            <FiArrowLeft className='h-[28px] w-[28px]' /> <p>Update Data Profil</p>
+                        </div>
+
+                        <div className='mt-[100px] flex flex-col gap-3'>
+                            <div className='flex flex-col gap-2'>
+                                <Label htmlFor={'name'} className='text-body-6 font-bold text-pur-5'>
+                                    Nama Lengkap
+                                </Label>
+                                <Input
+                                    id={'name'}
+                                    onChange={handleOnChangeProfil}
+                                    name={'name'}
+                                    // readOnly
+                                    disabled={!changeData}
+                                    value={isLoading ? 'Sedang menload data...' : userData.name}
+                                    className={`${
+                                        errorInput && !userData.name ? 'border-alert-3' : 'border'
+                                    } rounded-rad-1   px-4 py-2`}
+                                />
+                            </div>
+                            <div className='flex flex-col gap-2'>
+                                <Label htmlFor={'phone'} className='text-body-6 font-bold text-pur-5'>
+                                    Nomor Telepon
+                                </Label>
+                                <Input
+                                    id={'phone'}
+                                    onChange={handleOnChangeProfil}
+                                    name={'phone'}
+                                    // readOnly
+                                    disabled={!changeData}
+                                    value={isLoading ? 'Sedang menload data...' : userData.phone}
+                                    className={`${
+                                        errorInput && !userData.phone ? 'border-alert-3' : 'border'
+                                    } rounded-rad-1 px-4 py-2`}
+                                />
+                            </div>
+                            <div className='flex flex-col gap-2'>
+                                <Label htmlFor={'email'} className='text-body-6 font-bold text-pur-5'>
+                                    Email
+                                </Label>
+                                <Input
+                                    id={'email'}
+                                    readOnly
+                                    disabled
+                                    value={isLoading ? 'Sedang menload data...' : userData.email}
+                                    className='cursor-not-allowed rounded-rad-1 px-4 py-2'
+                                />
+                            </div>
+                            <div className='mb-6 mt-5 flex justify-center'>
+                                <div className='flex gap-2'>
+                                    {!changeData ? (
+                                        <Button
+                                            onClick={() => setChangeData(true)}
+                                            className='rounded-rad-3 bg-pur-5 px-11 py-3 text-white'>
+                                            Ubah Data
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            onClick={() => updateProfile()}
+                                            className='rounded-rad-3 bg-pur-3 px-11 py-3 text-white'>
+                                            Simpan
+                                        </Button>
+                                    )}
+
+                                    {changeData && (
+                                        <Button
+                                            onClick={() => {
+                                                setErrorInput(false);
+                                                setChangeData(false);
+                                                setIsLoading(true);
+                                                setFetchData(true);
+                                            }}
+                                            className='rounded-rad-3 bg-alert-3 px-11 py-3 text-white'>
+                                            Cancel
+                                        </Button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
             {/* RESPONSIVE MODE */}
 
             <AlertTop

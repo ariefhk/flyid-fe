@@ -328,7 +328,7 @@ export default function OrderPaymentId() {
         ),
         3: (
             <div className='mx-3 flex flex-col gap-3 font-poppins'>
-                <div className=' mt-3'>
+                <div className='mt-3 '>
                     <Label className='text-body-6 font-medium'>Card number</Label>
                     <Input
                         className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-1 font-poppins text-body-6 font-medium'
@@ -600,7 +600,7 @@ export default function OrderPaymentId() {
                             <FiArrowLeft className='h-[30px] w-[30px]' /> <h1>Proses Pembayaran</h1>
                         </div>
 
-                        <div className=' flex h-screen flex-col items-center justify-center gap-2'>
+                        <div className='flex h-screen flex-col items-center justify-center gap-2 '>
                             <h1 className='text-title-2 font-bold text-net-3'>Harap menunggu...</h1>
                             <Image
                                 alt=''
@@ -755,7 +755,7 @@ export default function OrderPaymentId() {
                         )}
 
                         {/* divider */}
-                        {transactionHistory?.arrival?.transaction_type && <div className=' w-full border'></div>}
+                        {transactionHistory?.arrival?.transaction_type && <div className='w-full border '></div>}
                         {/* divider */}
 
                         {/* return */}
@@ -857,7 +857,7 @@ export default function OrderPaymentId() {
                                     )}
                                 </div>
                             )}
-                            {transactionHistory?.price?.arrival && <div className=' w-full border'></div>}
+                            {transactionHistory?.price?.arrival && <div className='w-full border '></div>}
                             {transactionHistory?.price?.arrival && (
                                 <div>
                                     <p className='w-max rounded-rad-4 bg-pur-5 px-2 py-1 text-body-6 text-white'>
@@ -910,7 +910,9 @@ export default function OrderPaymentId() {
             {transactionHistory && (
                 <div className='fixed inset-0 top-0 h-screen overflow-y-scroll bg-white font-poppins lg:hidden'>
                     <div className='px-4'>
-                        <div className='fixed inset-x-0 top-0  flex cursor-pointer items-center gap-6 bg-pur-5  px-[16px] py-[10px] text-white '>
+                        <div
+                            onClick={() => router.push('/')}
+                            className='fixed inset-x-0 top-0  flex cursor-pointer items-center gap-6 bg-pur-5  px-[16px] py-[10px] text-white '>
                             <FiArrowLeft className='h-[30px] w-[30px]' /> <h1>Proses Pembayaran</h1>
                         </div>
 
@@ -943,7 +945,7 @@ export default function OrderPaymentId() {
                             </h1>
 
                             {transactionHistory?.departure && (
-                                <div className='grid w-full grid-cols-12 items-center  gap-3 '>
+                                <div className='grid w-full grid-cols-12 items-center gap-3 '>
                                     <div className='col-span-5 flex items-start gap-2'>
                                         <IoLocationSharp className='h-[24px] w-[24px] text-net-3' />
                                         <div className='text-body-4'>
@@ -969,7 +971,7 @@ export default function OrderPaymentId() {
                                 </div>
                             )}
                             {transactionHistory?.arrival?.transaction_type && (
-                                <div className='grid w-full grid-cols-12 items-center  gap-3 '>
+                                <div className='grid w-full grid-cols-12 items-center gap-3 '>
                                     <div className='col-span-5 flex items-start gap-2'>
                                         <IoLocationSharp className='h-[24px] w-[24px] text-net-3' />
                                         <div className='text-body-4'>
