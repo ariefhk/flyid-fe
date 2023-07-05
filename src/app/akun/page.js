@@ -336,11 +336,11 @@ export default function Akun() {
             </div>
 
             {isMobileUpdateProfil && (
-                <div className='fixed inset-0 top-0 h-screen overflow-y-scroll bg-white font-poppins'>
+                <div className='fixed inset-0 top-0 z-20 h-screen overflow-y-scroll bg-white font-poppins lg:hidden'>
                     <div className='px-4'>
                         <div
                             onClick={() => handleMobileUpdateProfil()}
-                            className='fixed inset-x-0 top-0 z-10 flex items-center gap-6 bg-pur-5 px-[16px]  py-2  text-white'>
+                            className='fixed inset-x-0 top-0 z-10 flex items-center gap-6 bg-pur-3 px-[16px]  py-2  text-white'>
                             <FiArrowLeft className='h-[28px] w-[28px]' /> <p>Update Profile</p>
                         </div>
 

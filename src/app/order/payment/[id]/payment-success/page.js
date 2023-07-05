@@ -67,14 +67,10 @@ export default function PaymentSuccess() {
 
                 if (res.status === 201 || res.data.status === 'Ok') {
                     // console.log('SUCCESS');
-                    handleVisibleAlert('Tiket sudah dikirim, harap check email Anda');
-                    setTimeout(() => {
-                        // handleVisibleAlert();
-                        router.push('/history');
-                    }, 1800);
+                    handleVisibleAlert('Tickets have been sent, please check your email!');
                 }
             } catch (error) {
-                handleVisibleAlertError('Kami tidak bisa memproses tiketmu, mohon untuk mencoba dilain waktu', 'failed');
+                handleVisibleAlertError(`We can't process your ticket, please try again later!`, 'failed');
             }
         }
     };
@@ -104,17 +100,19 @@ export default function PaymentSuccess() {
                     <div className='flex flex-col justify-center gap-8'>
                         <div className='flex flex-col items-center justify-center text-center'>
                             <Image alt='' src={'/new_images/empty_list.svg'} width={200} height={200} />
-                            <h1 className='mt-2 text-body-6 font-bold text-pur-5'>Selamat!</h1>
-                            <h3 className='text-body-6'>Transaksi Pembayaran Tiket success</h3>
+                            <h1 className='mt-2 text-body-6 font-bold text-pur-5'>Congratulation!</h1>
+                            <h3 className='text-body-6'>Successfull create a transactions</h3>
                         </div>
                         <div className='flex w-full flex-col gap-3'>
                             <Button
                                 onClick={() => handleSendTicket()}
-                                className='rounded-rad-3 bg-pur-4 py-3 text-white hover:bg-pur-3'>
-                                Terbitkan Tiket
+                                className='rounded-rad-3 bg-pur-3 py-3 text-white hover:bg-pur-2'>
+                                Print Ticket
                             </Button>
-                            <Button className='rounded-rad-3 bg-pur-2 py-3 text-white hover:bg-pur-3'>
-                                Cari Penerbangan Lain
+                            <Button
+                                onClick={() => router.push('/')}
+                                className='rounded-rad-3 bg-pur-4 py-3 text-white hover:bg-pur-2'>
+                                Find Other Flights
                             </Button>
                         </div>
                     </div>

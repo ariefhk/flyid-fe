@@ -101,7 +101,7 @@ export default function Notifikasi() {
 
                         console.log('CURRENT USER:', res.data);
                     } catch (error) {
-                        handleVisibleAlert('Sesi Anda telah Berakhir!', 'failed');
+                        handleVisibleAlert('Session Expired!', 'failed');
                         setTimeout(() => {
                             signOut();
                         }, 2500);
@@ -152,19 +152,19 @@ export default function Notifikasi() {
 
                 <div className='mt-[80px] hidden w-screen border border-b-net-2 pb-4 lg:block'>
                     <div className='container mx-auto hidden max-w-screen-lg grid-cols-12 gap-3 font-poppins lg:grid'>
-                        <h1 className='col-span-12 mb-[24px] mt-[47px] font-poppins text-head-1 font-bold'>Notifikasi</h1>
+                        <h1 className='col-span-12 mb-[24px] mt-[47px] font-poppins text-head-1 font-bold'>Notification</h1>
                         <div className='col-span-12 grid grid-cols-12 gap-[18px]'>
                             <div
-                                className='col-span-10 flex cursor-pointer items-center gap-4 rounded-rad-3 bg-pur-4 py-[13px] font-poppins text-title-2 font-medium text-white'
+                                className='col-span-10 flex cursor-pointer items-center gap-4 rounded-rad-3 bg-pur-3 py-[13px] font-poppins text-title-2 font-medium text-white'
                                 onClick={() => router.push('/')}>
                                 <FiArrowLeft className='ml-[21px]  h-6 w-6 ' />
-                                <p>Beranda</p>
+                                <p>Home</p>
                             </div>
                             <div className='col-span-2 flex items-center gap-4'>
                                 <Button
                                     onClick={() => handleReadNotif()}
-                                    className='rounded-rad-3 border border-pur-5 bg-white px-5 py-3 text-body-6 text-pur-5 hover:border-white hover:bg-pur-3 hover:text-white'>
-                                    Sudah Dibaca
+                                    className='w-full rounded-rad-3 border border-pur-3 bg-white py-3 text-body-6 text-pur-3 hover:border-white hover:bg-pur-2 hover:text-white'>
+                                    Read All
                                 </Button>
                             </div>
                         </div>
@@ -174,7 +174,7 @@ export default function Notifikasi() {
                 <div
                     style={{ height: 'calc(100vh - 270px)' }}
                     className=' container mx-auto mt-[27px]  hidden max-w-screen-lg flex-col items-center  justify-center gap-3  font-poppins lg:flex'>
-                    <h1 className='text-title-2 font-bold text-net-3'>Harap menunggu...</h1>
+                    <h1 className='text-title-2 font-bold text-net-3'>Please wait...</h1>
                     <Image alt='' src={'/new_images/loading.svg'} width={200} height={200} priority style={{ width: 'auto' }} />
                 </div>
             </div>
@@ -187,19 +187,19 @@ export default function Notifikasi() {
             <Navbar className={'hidden lg:block'} />
             <div className='mt-[80px] hidden w-screen border border-b-net-2 pb-4 lg:block'>
                 <div className='container mx-auto hidden max-w-screen-lg grid-cols-12 gap-3 font-poppins lg:grid'>
-                    <h1 className='col-span-12 mb-[24px] mt-[47px] font-poppins text-head-1 font-bold'>Notifikasi</h1>
+                    <h1 className='col-span-12 mb-[24px] mt-[47px] font-poppins text-head-1 font-bold'>Notification</h1>
                     <div className='col-span-12 grid grid-cols-12 gap-[18px]'>
                         <div
-                            className='col-span-10 flex cursor-pointer items-center gap-4 rounded-rad-3 bg-pur-4 py-[13px] font-poppins text-title-2 font-medium text-white'
+                            className='col-span-10 flex cursor-pointer items-center gap-4 rounded-rad-3 bg-pur-3 py-[13px] font-poppins text-title-2 font-medium text-white'
                             onClick={() => router.push('/')}>
                             <FiArrowLeft className='ml-[21px]  h-6 w-6 ' />
-                            <p>Beranda</p>
+                            <p>Home</p>
                         </div>
                         <div className='col-span-2 flex items-center gap-4'>
                             <Button
                                 onClick={() => handleReadNotif()}
-                                className='rounded-rad-3 border border-pur-5 bg-white px-5 py-3 text-body-6 text-pur-5 hover:border-white hover:bg-pur-3 hover:text-white'>
-                                Sudah Dibaca
+                                className='w-full rounded-rad-3 border border-pur-3 bg-white py-3 text-body-6 text-pur-3 hover:border-white hover:bg-pur-2 hover:text-white'>
+                                Read All
                             </Button>
                         </div>
                     </div>
@@ -256,25 +256,27 @@ export default function Notifikasi() {
                         <div className='flex flex-col justify-center gap-8'>
                             <div className='flex flex-col items-center justify-center text-center'>
                                 <Image alt='' src={'/new_images/empty_list.svg'} width={200} height={200} />
-                                <h1 className='mt-4 text-body-6 font-bold text-pur-3'>Oops! Notifikasi Anda Kosong!</h1>
-                                <h3 className='text-body-6'>Anda belum melakukan penerbangan</h3>
+                                <h1 className='mt-4 text-body-6 font-bold text-pur-3'>Oops! Your Notification is Empty!</h1>
+                                <h3 className='text-body-6'>You {"haven't"} taken a flight yet</h3>
                             </div>
                         </div>
                     </div>
                 )}
+
+                <div className='invisible h-[100px]'></div>
             </div>
             {/* DEKSTOP MODE */}
 
             {/* RESPONSIVE MODE */}
             <div className='mx-[24px] mt-[64px] font-poppins lg:hidden'>
-                <h1 className='text-head-2 font-bold text-black'>Notifikasi</h1>
+                <h1 className='text-head-2 font-bold text-black'>Notification</h1>
                 {/* notif container */}
                 <div className='mt-[30px] grid grid-cols-12'>
                     <div className='col-span-12 mb-2 flex items-center justify-end'>
                         <Button
                             onClick={() => handleReadNotif()}
-                            className='rounded-rad-3 border border-pur-5 bg-white px-3 py-2 text-body-3 text-pur-5 hover:border-white hover:bg-pur-3 hover:text-white'>
-                            Sudah Dibaca
+                            className='rounded-rad-3 border border-pur-3 bg-white px-6 py-2 text-body-3 text-pur-3 hover:border-white hover:bg-pur-2 hover:text-white'>
+                            Read All
                         </Button>
                     </div>
                     {notifications.length ? (
@@ -352,12 +354,13 @@ export default function Notifikasi() {
                             <div className='flex flex-col justify-center gap-8'>
                                 <div className='flex flex-col items-center justify-center text-center'>
                                     <Image alt='' src={'/new_images/empty_list.svg'} width={200} height={200} />
-                                    <h1 className='mt-4 text-body-6 font-bold text-pur-3'>Oops! Notifikasi Anda Kosong!</h1>
-                                    <h3 className='text-body-6'>Anda belum melakukan penerbangan</h3>
+                                    <h1 className='mt-4 text-body-6 font-bold text-pur-3'>Oops! Your Notification is Empty!</h1>
+                                    <h3 className='text-body-6'>You {"haven't"} taken a flight yet</h3>
                                 </div>
                             </div>
                         </div>
                     )}
+                    <div className='invisible h-[100px]'></div>
                 </div>
                 {/* notif container */}
                 <BottomNavbar />

@@ -679,10 +679,7 @@ export const flightSlice = createSlice({
 
         setChoosedFlight: (state, action) => {
             //ketika fligt 1 belom ada data dan dia bukan two way
-            if (
-                (!state.choosedFlight.flight_1.is_choose && !state.isTwoWay) ||
-                (state.choosedFlight.flight_1.is_choose && !state.isTwoWay)
-            ) {
+            if (!state.choosedFlight.flight_1.is_choose && !state.isTwoWay) {
                 state.flightDetailId = [action.payload.id];
                 state.choosedFlight.flight_1.flight_id = action.payload.id;
                 state.choosedFlight.flight_1.airline = action.payload.airline;
@@ -733,8 +730,8 @@ export const flightSlice = createSlice({
             }
 
             //ketika fligt 1  ada data dan dia  two way
-            if (state.choosedFlight.flight_1.is_choose && state.isTwoWay) {
-                state.flightDetailId = [...state.flightDetailId, action.payload.id];
+            if (state.isTwoWay && state.choosedFlight.flight_1.is_choose && !state.choosedFlight.flight_2.is_choose) {
+                state.flightDetailId = [state.flightDetailId[0], action.payload.id];
                 state.choosedFlight.flight_2.flight_id = action.payload.id;
                 state.choosedFlight.flight_2.airline = action.payload.airline;
                 state.choosedFlight.flight_2.from = action.payload.from;

@@ -27,7 +27,7 @@ export default function BottomNavbar() {
                     pathname === '/history' || pathname === '/history/detail' ? 'text-pur-3' : 'text-net-3'
                 } flex cursor-pointer flex-col items-center justify-center gap-1`}>
                 <SlNotebook />
-                <h1 className='text-body-1 font-bold'>Riwayat</h1>
+                <h1 className='text-body-1 font-bold'>History</h1>
             </div>
             <div
                 onClick={() => (pathname === '/notifikasi' ? router.refresh() : router.push('/notifikasi'))}
@@ -35,7 +35,7 @@ export default function BottomNavbar() {
                     pathname === '/notifikasi' ? 'text-pur-3' : 'text-net-3'
                 } flex cursor-pointer flex-col items-center justify-center gap-1`}>
                 <MdNotifications />
-                <h1 className='text-body-1 font-bold'>Notifikasi</h1>
+                <h1 className='text-body-1 font-bold'>Notification</h1>
             </div>
             <div
                 onClick={() => (pathname === '/akun' ? router.refresh() : router.push('/akun'))}
@@ -43,7 +43,7 @@ export default function BottomNavbar() {
                     pathname === '/akun' ? 'text-pur-3' : 'text-net-3'
                 } flex cursor-pointer flex-col items-center justify-center gap-1`}>
                 <MdOutlineAccountCircle />
-                <h1 className='text-body-1 font-bold'> Akun</h1>
+                <h1 className='text-body-1 font-bold'> Account</h1>
             </div>
         </div>
     );

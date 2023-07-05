@@ -33,9 +33,6 @@ export default function SignInButton() {
                         },
                     });
                     setStatusCount(res.data.meta.total);
-                    console.log('====================================');
-                    console.log('TOTAL', res.data);
-                    console.log('====================================');
                 } catch (error) {
                     console.log('ERROR GET Notif:', error);
                 }

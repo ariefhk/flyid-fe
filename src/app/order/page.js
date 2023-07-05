@@ -194,6 +194,9 @@ export default function Order() {
 
         handleVisibleAlert('Passenger data has been successfully saved!', 'success');
         setFormData(templateObj);
+        console.log('====================================');
+        console.log('FORM VALUE :', templateObj);
+        console.log('====================================');
         setIsSuccessForm(true);
     };
 
@@ -414,7 +417,12 @@ export default function Order() {
                         });
 
                         console.log('CURRENT USER:', res.data);
-                    } catch (error) {}
+                    } catch (error) {
+                        handleVisibleAlert('Session Expired!', 'failed');
+                        setTimeout(() => {
+                            signOut();
+                        }, 2500);
+                    }
                 }
                 fetchUserData();
             }
@@ -545,7 +553,7 @@ export default function Order() {
                             flightSeat={flightSeatDepart}
                             handleSeat={handleSeatDepart}
                             seat={seatDepart}
-                            type={isTwoWay ? 'Kepergian' : ''}
+                            type={isTwoWay ? 'Departure' : ''}
                             flight_class={detailFlight?.berangkat?.flight_class}
                             flight_airline={detailFlight?.berangkat?.Airline?.airline_name}
                             flight_from={detailFlight?.berangkat?.from}
@@ -557,7 +565,7 @@ export default function Order() {
                                 flightSeat={flightSeatReturn}
                                 handleSeat={handleSeatReturn}
                                 seat={seatReturn}
-                                type={isTwoWay && 'Kepulangan'}
+                                type={isTwoWay && 'Arrival'}
                                 flight_class={detailFlight?.pulang?.flight_class}
                                 flight_airline={detailFlight?.pulang?.Airline?.airline_name}
                                 flight_from={detailFlight?.pulang?.from}
@@ -686,7 +694,7 @@ export default function Order() {
                     flightSeat={flightSeatDepart}
                     handleSeat={handleSeatDepart}
                     seat={seatDepart}
-                    type={isTwoWay ? 'Kepergian' : ''}
+                    type={isTwoWay ? 'Departure' : ''}
                     flight_class={detailFlight?.berangkat?.flight_class}
                     flight_airline={detailFlight?.berangkat?.Airline?.airline_name}
                     flight_from={detailFlight?.berangkat?.from}
@@ -698,7 +706,7 @@ export default function Order() {
                         flightSeat={flightSeatReturn}
                         handleSeat={handleSeatReturn}
                         seat={seatReturn}
-                        type={isTwoWay && 'Kepulangan'}
+                        type={isTwoWay && 'Arrival'}
                         flight_class={detailFlight?.pulang?.flight_class}
                         flight_airline={detailFlight?.pulang?.Airline?.airline_name}
                         flight_from={detailFlight?.pulang?.from}

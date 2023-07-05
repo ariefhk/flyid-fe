@@ -62,6 +62,11 @@ export default function Home() {
     };
 
     const handleActionHomeSearch = () => {
+        if (homeSearch.from.toLowerCase() === homeSearch.to.toLowerCase()) {
+            handleVisibleAlert('Location cant be same!', 'failed');
+            return;
+        }
+
         if (homeSearch.flight_type.toLowerCase() === 'round trip' && !homeSearch.return_dateTime) {
             handleVisibleAlert('Please insert return date!', 'failed');
             return;
@@ -174,7 +179,7 @@ export default function Home() {
                         <div className='w-full border border-white'></div>
                         <h2 className='text-head-1'>Because {"you're"} our priority</h2>
                         <Button className='rounded-rad-2 border-2 border-white bg-transparent px-5 py-3 text-white hover:border-pur-2 hover:bg-pur-2'>
-                            Lebih Detail
+                            More Details
                         </Button>
                     </div>
                 </div>
@@ -193,13 +198,13 @@ export default function Home() {
                             <span className='text-head-1 font-bold text-[#45705Cff]'>
                                 FLY<span className='mr-1 text-[16px]'>ID</span>
                             </span>
-                            adalah platform pemesanan tiket pesawat terdepan se-Asia Tenggara, kami menyediakan berbagai akses
-                            tiket pesawat yang kamu bisa cari dan beli untuk mempermudah kebutuhan perjalanan kamu.
+                            is the leading airline ticket booking platform in Southeast Asia, we provide various access to airline
+                            tickets that you can search for and buy to make your travel needs easier.
                         </h1>
                     </div>
                     <div>
                         <Button className=' rounded-rad-2 border-2 border-[#45705Cff] bg-transparent px-5 py-3 text-[#45705Cff] hover:border-[#45705Cff] hover:bg-[#45705Cff] hover:text-white'>
-                            Lebih Detail
+                            More Details
                         </Button>
                     </div>
                 </div>
@@ -400,9 +405,9 @@ export default function Home() {
             {/* ==== DEKSTOP MODE ====  */}
 
             {/* ==== MOBILE MODE ====  */}
-            <div className='h-screen bg-pur-4 lg:hidden'>
+            <div className='h-screen bg-pur-3 lg:hidden'>
                 <div className='px-4 '>
-                    <h1 className='pt-[32px] text-head-2 font-bold text-white'>Hei, Mau Kemana</h1>
+                    <h1 className='pt-[32px] text-head-2 font-bold text-white'>Hey, Where are you going?</h1>
                     <div className='block lg:hidden'>
                         <HomeSearch
                             handleActionHomeSearch={() => {
@@ -415,7 +420,7 @@ export default function Home() {
                 </div>
                 <div className='  mt-[-100px] h-max bg-white font-poppins'>
                     <div className='col-span-12 grid grid-cols-12 px-4 pt-[130px]'>
-                        <h1 className='col-span-12 mb-4 text-title-2 font-bold'>Destinasi Favorit</h1>
+                        <h1 className='col-span-12 mb-4 text-title-2 font-bold'>Favorite Destination</h1>
                     </div>
                     <div className='col-span-12 mx-4 mt-2 grid grid-cols-12 gap-5'>
                         {destinationDataShape &&
@@ -440,7 +445,7 @@ export default function Home() {
                                             <p className='text-body-6 font-bold text-pur-3'>AirAsia</p>
                                             <p className='ttext-body-4 font-medium'>20 - 30 Maret 2023</p>
                                             <p className='text-body-6 text-black'>
-                                                Mulai dari <span className='font-bold text-alert-3'>IDR 950.000</span>
+                                                Start From <span className='font-bold text-alert-3'>IDR 950.000</span>
                                             </p>
                                         </div>
                                     </div>
@@ -449,9 +454,7 @@ export default function Home() {
                     </div>
                 </div>
 
-                <div className='invisible h-[100px]'>
-                    <h1>Test</h1>
-                </div>
+                <div className='invisible h-[100px]'></div>
                 <BottomNavbar />
             </div>
             {/* ==== MOBILE MODE ==== */}

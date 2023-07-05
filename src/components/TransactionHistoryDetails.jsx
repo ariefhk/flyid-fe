@@ -15,7 +15,7 @@ import { extractWord } from '@/utils/extractWord';
 import { groupingByTransactionDates } from '@/utils/reShapeData';
 import { historyStatusStyling } from '@/utils/historyStatusStyling';
 
-export default function TransactionHistoryDetails({ historyItem }) {
+export default function TransactionHistoryDetails({ historyItem, handleUpdatePayment, handleSendTicket }) {
     return (
         <>
             {historyItem && (

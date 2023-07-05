@@ -81,12 +81,12 @@ export default function ResepPassword() {
         e.preventDefault();
         try {
             if (!resetPasswordData.new_password || !resetPasswordData.rep_password) {
-                handleVisibleAlert('Field harus diisi semua!', 'failed');
+                handleVisibleAlert(`All field can't be empty`, 'failed');
                 return;
             }
 
             if (resetPasswordData.new_password !== resetPasswordData.rep_password) {
-                handleVisibleAlert('Harap diisi sama password antar field!', 'failed');
+                handleVisibleAlert(`All field must be same value!`, 'failed');
                 return;
             }
 

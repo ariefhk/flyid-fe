@@ -68,15 +68,11 @@ export default function PaymentSuccess() {
 
                 if (res.status === 201 || res.data.status === 'Ok') {
                     // console.log('SUCCESS');
-                    handleVisibleAlert('Tiket sudah dikirim, harap check email Anda');
-                    setTimeout(() => {
-                        // handleVisibleAlert();
-                        router.push('/history');
-                    }, 1800);
+                    handleVisibleAlert('Tickets have been sent, please check your email!');
                 }
             } catch (error) {
                 // console.log('ERROR SEND EMAIL TICKET', error);
-                handleVisibleAlertError('Kami tidak bisa memproses tiketmu, mohon untuk mencoba dilain waktu', 'failed');
+                handleVisibleAlertError(`We can't process your ticket, please try again later!`, 'failed');
             }
         }
     };
@@ -87,11 +83,11 @@ export default function PaymentSuccess() {
     return (
         <div className='overflow-x-hidden'>
             <Navbar className={'hidden lg:block'} />
-            <div className='mt-[80px] hidden w-screen border border-b-net-2 pb-[78px] pt-[47px] lg:block'>
+            <div className='mt-[80px] hidden  w-screen border border-b-net-2 pb-5 pt-[90px] lg:block'>
                 <div className='mx-auto hidden max-w-screen-lg grid-cols-12 font-poppins lg:grid'>
-                    <div className='col-span-12 flex flex-col gap-1  text-head-1'>
-                        <h1 className=' text-body-6 text-pur-3'>Terimakasih</h1>
-                        <p className='font-medium  text-pur-5'>Selamat Menikmati Penerbanganmu!</p>
+                    <div className='col-span-12 flex flex-col gap-1 text-head-1'>
+                        <h1 className=' text-body-6 text-pur-3'>One more step left</h1>
+                        <p className='font-medium text-pur-5'>To enjoy your flight!</p>
                     </div>
                 </div>
             </div>
@@ -103,14 +99,20 @@ export default function PaymentSuccess() {
                     <div className='flex flex-col justify-center gap-8'>
                         <div className='flex flex-col items-center justify-center text-center'>
                             <Image alt='' src={'/new_images/empty_list.svg'} width={200} height={200} />
-                            <h1 className='mt-2 text-body-6 font-bold text-pur-5'>Selamat!</h1>
-                            <h3 className='text-body-6'>Transaksi Pembayaran Tiket success</h3>
+                            <h1 className='mt-2 text-body-6 font-bold text-pur-5'>Congratulation!</h1>
+                            <h3 className='text-body-6'>Successfull create a transactions</h3>
                         </div>
                         <div className='flex w-full flex-col gap-3'>
-                            <Button onClick={() => handleSendTicket()} className='rounded-rad-3 bg-pur-5 py-3 text-white'>
-                                Terbitkan Tiket
+                            <Button
+                                onClick={() => handleSendTicket()}
+                                className='rounded-rad-3 bg-pur-3 py-3 text-white hover:bg-pur-2'>
+                                Print Ticket
                             </Button>
-                            <Button className='rounded-rad-3 bg-pur-2 py-3 text-white'>Cari Penerbangan Lain</Button>
+                            <Button
+                                onClick={() => router.push('/')}
+                                className='rounded-rad-3 bg-pur-4 py-3 text-white hover:bg-pur-2'>
+                                Find Other Flights
+                            </Button>
                         </div>
                     </div>
                 </div>
@@ -121,8 +123,8 @@ export default function PaymentSuccess() {
                 <div className='flex h-screen items-center justify-center '>
                     <div className='flex flex-col items-center justify-center text-center'>
                         <Image alt='' src={'/new_images/empty_list.svg'} width={200} height={200} />
-                        <h1 className='mt-2 text-body-6 font-bold text-pur-5'>Selamat!</h1>
-                        <h3 className='text-body-6'>Transaksi Pembayaran Tiket success</h3>
+                        <h1 className='mt-2 text-body-6 font-bold text-pur-5'>Congratulation!</h1>
+                        <h3 className='text-body-6'>Successfull create a transactions</h3>
                     </div>
                 </div>
 

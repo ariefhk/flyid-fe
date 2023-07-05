@@ -146,14 +146,14 @@ export default function History() {
 
                 if (res.status === 201 || res.data.status === 'Ok') {
                     // console.log('SUCCESS');
-                    handleVisibleAlert('Tiket sudah dikirim, harap check email Anda');
+                    handleVisibleAlert('Tickets have been sent, please check your email!');
                     router.refresh();
                 }
 
                 // console.log('ID TICKET', id);
             } catch (error) {
                 // console.log('ERROR SEND EMAIL TICKET', error);
-                handleVisibleAlertError('Kami tidak bisa memproses tiketmu, mohon untuk mencoba dilain waktu', 'failed');
+                handleVisibleAlertError(`We can't process your ticket, please try again later!`, 'failed');
             }
         }
     };
@@ -178,7 +178,7 @@ export default function History() {
 
                         console.log('CURRENT USER:', res.data);
                     } catch (error) {
-                        handleVisibleAlert('Sesi Anda telah Berakhir!', 'failed');
+                        handleVisibleAlert('Session Expired!', 'failed');
                         setTimeout(() => {
                             signOut();
                         }, 2500);
@@ -256,7 +256,7 @@ export default function History() {
                                     value={filterInput}
                                     onClick={() => setHistoryItem('')}
                                     placeholder={'Enter your transaction code'}
-                                    className='rounded-rad-4 border-net-2 px-6 py-[14px] text-title-1 focus:border-pur-4'
+                                    className='rounded-rad-4 border-net-2 px-6 py-[14px] text-title-1 focus:border-pur-3'
                                 />
                             </div>
                         </div>
@@ -291,7 +291,7 @@ export default function History() {
                                 value={filterInput}
                                 onClick={() => setHistoryItem('')}
                                 placeholder={'Enter your transaction code'}
-                                className='rounded-rad-4 border-net-2 px-6 py-[14px] text-title-1 focus:border-pur-4'
+                                className='rounded-rad-4 border-net-2 px-6 py-[14px] text-title-1 focus:border-pur-3'
                             />
                         </div>
                     </div>
@@ -312,7 +312,11 @@ export default function History() {
 
                             <div className='col-span-5'>
                                 {historyItem ? (
-                                    <TransactionHistoryDetails historyItem={historyItem} />
+                                    <TransactionHistoryDetails
+                                        historyItem={historyItem}
+                                        handleUpdatePayment={handleUpdatePayment}
+                                        handleSendTicket={handleSendTicket}
+                                    />
                                 ) : (
                                     <div>
                                         <h1 className='text-title-2 font-bold'>Transaction Details</h1>

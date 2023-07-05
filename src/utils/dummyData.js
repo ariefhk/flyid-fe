@@ -1,7 +1,7 @@
 export const menuDataShape = [
     {
         id: 1,
-        destination: 'Semua',
+        destination: 'All',
     },
     {
         id: 2,
