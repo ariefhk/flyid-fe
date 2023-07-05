@@ -132,35 +132,35 @@ export default function ResepPassword() {
                     {/* left side end*/}
 
                     {/* rigth side  start*/}
-                    <div className='relative col-span-6 flex   flex-col items-center  justify-center px-0 '>
+                    <div className='relative col-span-6 flex flex-col items-center justify-center px-0 '>
                         <form onSubmit={handleResetPassword} className='flex  w-[452px] flex-col  gap-5'>
                             <h1 className='text-heading-2 mb-2 font-poppins text-2xl font-bold'>Reset Password</h1>
                             <div className='flex flex-col'>
                                 <Label htmlFor='new_password' className='mb-1 flex justify-between text-body-4'>
-                                    Masukan Password Baru
+                                    Enter New Password
                                 </Label>
                                 <PasswordInput
                                     id='new_password'
                                     name='new_password'
-                                    placeholder='Masukan password baru...'
+                                    placeholder='Enter new password...'
                                     value={resetPasswordData.new_password}
                                     onChange={handleResetPasswordData}
                                 />
                             </div>
                             <div className='flex flex-col'>
                                 <Label htmlFor='rep_password' className='mb-1 flex justify-between text-body-4'>
-                                    Ulangi Password Baru
+                                    Repeat New Password
                                 </Label>
                                 <PasswordInput
                                     id='rep_password'
                                     name='rep_password'
-                                    placeholder='Ulangi password...'
+                                    placeholder='Repeat new password...'
                                     value={resetPasswordData.rep_password}
                                     onChange={handleResetPasswordData}
                                 />
                             </div>
 
-                            <Button type={'submit'}>Simpan</Button>
+                            <Button type={'submit'}>Save</Button>
                         </form>
                         <AlertBottom
                             visibleAlert={visibleAlert}
@@ -175,7 +175,7 @@ export default function ResepPassword() {
             {/* DEKSTOP MODE */}
 
             {/* MOBILE MODE */}
-            <section className=' h-screen bg-white font-poppins lg:hidden'>
+            <section className='h-screen bg-white font-poppins lg:hidden'>
                 <div className='grid h-full w-full grid-cols-12'>
                     {/* left side start*/}
                     <div className='col-span-12 flex flex-col gap-16 '>
@@ -192,33 +192,33 @@ export default function ResepPassword() {
                             </button>
                             <h1 className='mt-[48px]  text-head-2 font-bold'>Reset Password</h1>
                         </div>
-                        <form onSubmit={handleResetPassword} className='mx-6 flex  flex-col  gap-5'>
+                        <form onSubmit={handleResetPassword} className='mx-6 flex flex-col gap-5'>
                             <div className='flex flex-col'>
                                 <Label htmlFor='new_password' className='mb-1 flex justify-between text-body-4'>
-                                    Masukan Password Baru
+                                    Enter New Password
                                 </Label>
                                 <PasswordInput
                                     id='new_password'
                                     name='new_password'
-                                    placeholder='Masukan password baru...'
+                                    placeholder=' Enter new password...'
                                     value={resetPasswordData.new_password}
                                     onChange={handleResetPasswordData}
                                 />
                             </div>
                             <div className='flex flex-col'>
                                 <Label htmlFor='rep_password' className='mb-1 flex justify-between text-body-4'>
-                                    Ulangi Password Baru
+                                    Repeat New Password
                                 </Label>
                                 <PasswordInput
                                     id='rep_password'
                                     name='rep_password'
-                                    placeholder='Ulangi password...'
+                                    placeholder='Repeat new password..'
                                     value={resetPasswordData.rep_password}
                                     onChange={handleResetPasswordData}
                                 />
                             </div>
 
-                            <Button type={'submit'}>Simpan</Button>
+                            <Button type={'submit'}>Save</Button>
                         </form>
                     </div>
                     {/* left side end*/}

@@ -1,8 +1,7 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 export default function AlertBottom({ visibleAlert, handleVisibleAlert, className, text, type = 'success' }) {
-
     const alertType = {
         success: 'bg-alert-1',
         warn: 'bg-alert-2',

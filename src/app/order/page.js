@@ -37,6 +37,9 @@ import ToggleSwitch from '@/components/ToggleSwitch';
 import AlertTop from '@/components/AlertTop';
 import styles from '../../style/SeatSelect.module.css';
 import Seat from '@/components/Seat';
+import MobileFlightDetails from '@/components/MobileFlightDetails';
+import FlightDetails from '@/components/FlightDetails';
+import DynamicForm from '@/components/DynamicForm';
 
 //Utils
 import { formatToLocale } from '@/utils/formatToLocale';
@@ -103,17 +106,18 @@ export default function Order() {
     });
 
     /*=== function ===*/
+
     const handleFormStatus = () => {
         if (seatDepart.length !== elements.length && isTwoWay) {
-            handleVisibleAlert('Mohon untuk memilih kursi sesuai jumlah penumpang', 'failed');
+            handleVisibleAlert('Please select a seat fit to number of passengers', 'failed');
             return;
         }
         if (seatReturn.length !== elements.length && isTwoWay) {
-            handleVisibleAlert('Mohon untuk memilih kursi sesuai jumlah penumpang', 'failed');
+            handleVisibleAlert('Please select a seat fit to number of passengers', 'failed');
             return;
         }
         if (seatDepart.length !== elements.length) {
-            handleVisibleAlert('Mohon untuk memilih kursi sesuai jumlah penumpang', 'failed');
+            handleVisibleAlert('Please select a seat fit to number of passengers', 'failed');
             return;
         }
 
@@ -142,13 +146,12 @@ export default function Order() {
         const inputPassengerCheck = elements.every((elementForm) => {
             return elementForm.fields.every((formInput, index) => {
                 if (
-                    (formInput['field_label'] === 'Nama Lengkap' && !formInput['field_value']) ||
-                    (formInput['field_label'] === 'Tanggal Lahir' && !formInput['field_value']) ||
-                    (formInput['field_label'] === 'Kewarganegaraan' && !formInput['field_value']) ||
-                    (formInput['field_label'] === 'KTP/Paspor' && !formInput['field_value']) ||
-                    (formInput['field_label'] === 'Negara Penerbit' && !formInput['field_value'])
+                    (formInput['field_label'] === 'Full Lengkap' && !formInput['field_value']) ||
+                    (formInput['field_label'] === 'Birthday' && !formInput['field_value']) ||
+                    (formInput['field_label'] === 'Nationality' && !formInput['field_value']) ||
+                    (formInput['field_label'] === 'KTP/Paspor' && !formInput['field_value'])
                 ) {
-                    handleVisibleAlert('Data tidak boleh ada yang kosong!', 'failed');
+                    handleVisibleAlert('Passenger data must not be empty!', 'failed');
                     setFormInputError(true);
                     return false;
                 }
@@ -174,10 +177,10 @@ export default function Order() {
                 name: element.fields.find((test) => test.field_category === `name`).field_value,
                 family_name: element.fields.find((test) => test.field_category === `family_name`).field_value,
                 birthday: convertToDate(new Date(element.fields.find((test) => test.field_category === `birthday`).field_value)),
-                nationality: element.fields.find((test) => test.field_category === `kewarganegaraan`).field_value,
+                nationality: element.fields.find((test) => test.field_category === `nationality`).field_value,
                 nik: element.fields.find((test) => test.field_category === `ktp_paspor`).field_value,
-                issued_country: element.fields.find((test) => test.field_category === `negara_penerbit`).field_value,
-                expired: convertToDate(new Date(element.fields.find((test) => test.field_category === `expired`).field_value)),
+                // issued_country: element.fields.find((test) => test.field_category === `negara_penerbit`).field_value,
+                // expired: convertToDate(new Date(element.fields.find((test) => test.field_category === `expired`).field_value)),
                 seatDeparture: seatDepart[idx].code,
                 seatReturn: isTwoWay ? seatReturn[idx].code : '',
             };
@@ -189,100 +192,101 @@ export default function Order() {
             passenger: passengerDataShape,
         };
 
-        handleVisibleAlert('Data Anda berhasil tersimpan!', 'success');
-        setFormData(templateObj);
-    };
-
-    const handleMobileFormStatus = () => {
-        if (seatDepart.length !== elements.length && isTwoWay) {
-            handleVisibleAlert('Mohon untuk memilih kursi sesuai jumlah penumpang', 'failed');
-            return;
-        }
-        if (seatReturn.length !== elements.length && isTwoWay) {
-            handleVisibleAlert('Mohon untuk memilih kursi sesuai jumlah penumpang', 'failed');
-            return;
-        }
-        if (seatDepart.length !== elements.length) {
-            handleVisibleAlert('Mohon untuk memilih kursi sesuai jumlah penumpang', 'failed');
-            return;
-        }
-
-        if (flights) {
-            if (flights.length === 2) {
-                if (flights[0].flight_type !== 'Departure' || !flights[0].flight_id) {
-                    handleVisibleAlert('Departure Flight are not complete yet!', 'failed');
-                    return;
-                }
-                if (flights[1].flight_type !== 'Arrival' || !flights[0].flight_id) {
-                    handleVisibleAlert('Arrival Flight are not complete yet!', 'failed');
-                    return;
-                }
-            }
-            if (flights[0].flight_type !== 'Departure' || !flights[0].flight_id) {
-                handleVisibleAlert('Departure Flight are not complete yet!', 'failed');
-                return;
-            }
-        }
-
-        if (!detailFlight.totalPrice) {
-            handleVisibleAlert('Amount is not set!', 'failed');
-            return;
-        }
-
-        const inputPassengerCheck = elements.every((elementForm) => {
-            return elementForm.fields.every((formInput, index) => {
-                if (
-                    (formInput['field_label'] === 'Nama Lengkap' && !formInput['field_value']) ||
-                    (formInput['field_label'] === 'Tanggal Lahir' && !formInput['field_value']) ||
-                    (formInput['field_label'] === 'Kewarganegaraan' && !formInput['field_value']) ||
-                    (formInput['field_label'] === 'KTP/Paspor' && !formInput['field_value']) ||
-                    (formInput['field_label'] === 'Negara Penerbit' && !formInput['field_value'])
-                ) {
-                    handleVisibleAlert('Data tidak boleh ada yang kosong!', 'failed');
-                    setFormInputError(true);
-                    return false;
-                }
-
-                setFormInputError(false);
-                return true;
-            });
-        });
-
-        if (!inputPassengerCheck) {
-            setFormStatus(false);
-            return;
-        }
-        setFormStatus(true);
-
-        const passengerDataShape = elements.map((element, indexForm) => {
-            let elementType = element.type;
-            let idx = indexForm;
-
-            return {
-                type: elementType,
-                title: element.fields.find((test) => test.field_category === `title`).field_value,
-                name: element.fields.find((test) => test.field_category === `name`).field_value,
-                family_name: element.fields.find((test) => test.field_category === `family_name`).field_value,
-                birthday: convertToDate(new Date(element.fields.find((test) => test.field_category === `birthday`).field_value)),
-                nationality: element.fields.find((test) => test.field_category === `kewarganegaraan`).field_value,
-                nik: element.fields.find((test) => test.field_category === `ktp_paspor`).field_value,
-                issued_country: element.fields.find((test) => test.field_category === `negara_penerbit`).field_value,
-                expired: convertToDate(new Date(element.fields.find((test) => test.field_category === `expired`).field_value)),
-                seatDeparture: seatDepart[idx].code,
-                seatReturn: isTwoWay ? seatReturn[idx].code : '',
-            };
-        });
-
-        const templateObj = {
-            flights,
-            amount: detailFlight.totalPrice,
-            passenger: passengerDataShape,
-        };
-
-        handleVisibleAlert('Data Anda berhasil tersimpan!', 'success');
+        handleVisibleAlert('Passenger data has been successfully saved!', 'success');
         setFormData(templateObj);
         setIsSuccessForm(true);
     };
+
+    // const handleMobileFormStatus = () => {
+    //     if (seatDepart.length !== elements.length && isTwoWay) {
+    //         handleVisibleAlert('Please select a seat fit to number of passengers', 'failed');
+    //         return;
+    //     }
+    //     if (seatReturn.length !== elements.length && isTwoWay) {
+    //         handleVisibleAlert('Please select a seat fit to number of passengers', 'failed');
+    //         return;
+    //     }
+    //     if (seatDepart.length !== elements.length) {
+    //         handleVisibleAlert('Please select a seat fit to number of passengers', 'failed');
+    //         return;
+    //     }
+
+    //     if (flights) {
+    //         if (flights.length === 2) {
+    //             if (flights[0].flight_type !== 'Departure' || !flights[0].flight_id) {
+    //                 handleVisibleAlert('Departure Flight are not complete yet!', 'failed');
+    //                 return;
+    //             }
+    //             if (flights[1].flight_type !== 'Arrival' || !flights[0].flight_id) {
+    //                 handleVisibleAlert('Arrival Flight are not complete yet!', 'failed');
+    //                 return;
+    //             }
+    //         }
+    //         if (flights[0].flight_type !== 'Departure' || !flights[0].flight_id) {
+    //             handleVisibleAlert('Departure Flight are not complete yet!', 'failed');
+    //             return;
+    //         }
+    //     }
+
+    //     if (!detailFlight.totalPrice) {
+    //         handleVisibleAlert('Amount is not set!', 'failed');
+    //         return;
+    //     }
+
+    //     const inputPassengerCheck = elements.every((elementForm) => {
+    //         return elementForm.fields.every((formInput, index) => {
+    //             if (
+    //                 (formInput['field_label'] === 'Nama Lengkap' && !formInput['field_value']) ||
+    //                 (formInput['field_label'] === 'Tanggal Lahir' && !formInput['field_value']) ||
+    //                 (formInput['field_label'] === 'Kewarganegaraan' && !formInput['field_value']) ||
+    //                 (formInput['field_label'] === 'KTP/Paspor' && !formInput['field_value']) ||
+    //                 (formInput['field_label'] === 'Negara Penerbit' && !formInput['field_value'])
+    //             ) {
+    //                 handleVisibleAlert('Passenger data must not be empty!', 'failed');
+    //                 setFormInputError(true);
+    //                 return false;
+    //             }
+
+    //             setFormInputError(false);
+    //             return true;
+    //         });
+    //     });
+
+    //     if (!inputPassengerCheck) {
+    //         setFormStatus(false);
+    //         return;
+    //     }
+    //     setFormStatus(true);
+
+    //     const passengerDataShape = elements.map((element, indexForm) => {
+    //         let elementType = element.type;
+    //         let idx = indexForm;
+
+    //         return {
+    //             type: elementType,
+    //             title: element.fields.find((test) => test.field_category === `title`).field_value,
+    //             name: element.fields.find((test) => test.field_category === `name`).field_value,
+    //             family_name: element.fields.find((test) => test.field_category === `family_name`).field_value,
+    //             birthday: convertToDate(new Date(element.fields.find((test) => test.field_category === `birthday`).field_value)),
+    //             nationality: element.fields.find((test) => test.field_category === `kewarganegaraan`).field_value,
+    //             nik: element.fields.find((test) => test.field_category === `ktp_paspor`).field_value,
+    //             issued_country: element.fields.find((test) => test.field_category === `negara_penerbit`).field_value,
+    //             expired: convertToDate(new Date(element.fields.find((test) => test.field_category === `expired`).field_value)),
+    //             seatDeparture: seatDepart[idx].code,
+    //             seatReturn: isTwoWay ? seatReturn[idx].code : '',
+    //         };
+    //     });
+
+    //     const templateObj = {
+    //         flights,
+    //         amount: detailFlight.totalPrice,
+    //         passenger: passengerDataShape,
+    //     };
+
+    //     handleVisibleAlert('Passenger data has been successfully saved!', 'success');
+    //     setFormData(templateObj);
+    //     setIsSuccessForm(true);
+    // };
 
     const handleVisibleAlert = (text, alertType) => {
         setAlertText(text);
@@ -319,7 +323,12 @@ export default function Order() {
     };
     // Handling Seat
 
-    const handleOpenCalendar = (field_id = null, form_id = null) => {
+    const handleOpenCalendar = (field_id = null, form_id = null, isMobile) => {
+        if (!isMobile) {
+            setIsDesktop(true);
+        } else {
+            setIsDesktop(false);
+        }
         setDateId({
             field_id,
             form_id,
@@ -405,12 +414,7 @@ export default function Order() {
                         });
 
                         console.log('CURRENT USER:', res.data);
-                    } catch (error) {
-                        handleVisibleAlertError('Anda Harus Login Terlebih Dahulu!', 'failed');
-                        setTimeout(() => {
-                            router.replace('/');
-                        }, 2500);
-                    }
+                    } catch (error) {}
                 }
                 fetchUserData();
             }
@@ -471,11 +475,11 @@ export default function Order() {
                 <div className='mx-auto hidden max-w-screen-lg grid-cols-12 font-poppins lg:grid'>
                     {/* header order */}
                     <div className='col-span-12 flex gap-3 text-head-1 font-bold'>
-                        <h1 className='cursor-pointer text-black'>Isi Data Diri</h1>
+                        <h1 className='text-black '>Input Details</h1>
                         <p>{'>'}</p>
-                        <h1 className='text-net-3'>Bayar</h1>
+                        <h1 className='text-net-3'>Payment</h1>
                         <p>{'>'}</p>
-                        <h1 className='text-net-3'>Selesai</h1>
+                        <h1 className='text-net-3'>Completed</h1>
                     </div>
                     {/* header order */}
                 </div>
@@ -485,12 +489,15 @@ export default function Order() {
                     <div className='col-span-7 flex flex-col gap-6'>
                         {/* INPUT USER */}
                         <div className='flex flex-col gap-4 rounded-rad-2 px-[16px] py-[24px] shadow-low'>
-                            <h1 className='text-head-1 font-bold'>Data Diri Pemesan</h1>
-                            <div className='rounded-t-rad-2 bg-net-4 px-4 py-2 text-white'>
-                                <h2 className='text-title-2'>Data Diri Pemesan</h2>
+                            <h1 className='text-head-1 font-bold'>Contact Details</h1>
+                            <div className='flex items-center justify-between rounded-t-rad-2 bg-net-4 px-4 py-2 text-white'>
+                                <h2 className='text-title-2'>Contact Details</h2>
+                                {userData.email && (
+                                    <BsFillCheckCircleFill className='h-[20px] w-[20px]  text-alert-1 lg:h-[24px] lg:w-[24px]' />
+                                )}
                             </div>
                             <div className='flex flex-col gap-1'>
-                                <Label className='text-body-6 font-bold text-pur-5'>Nama Lengkap</Label>
+                                <Label className='text-body-6 font-bold text-pur-5'>Full Name</Label>
                                 <Input
                                     readOnly
                                     disabled
@@ -499,16 +506,8 @@ export default function Order() {
                                 />
                             </div>
 
-                            <div className='flex items-center justify-between'>
-                                <p>Punya Nama Keluarga?</p>
-                                <ToggleSwitch isToggle={toggleUser} handleToggleAction={handleToggleUser} />
-                            </div>
-                            <div className={`${toggleUser ? 'visible' : 'hidden'} flex flex-col gap-1 `}>
-                                <Label className='text-body-6 font-bold text-pur-5'>Nama Keluarga</Label>
-                                <Input className={` w-full appearance-none border px-4 py-2 font-poppins outline-none`} />
-                            </div>
                             <div>
-                                <Label className='text-body-6 font-bold text-pur-5'>Nomor Telepon</Label>
+                                <Label className='text-body-6 font-bold text-pur-5'>Phone Number</Label>
                                 <Input
                                     disabled
                                     readOnly
@@ -528,113 +527,20 @@ export default function Order() {
                         </div>
                         {/* INPUT USER */}
 
-                        {/* FORM  */}
+                        {/* FORM  DEKSTOP*/}
                         <div className='flex flex-col gap-8 rounded-rad-2 px-[16px] py-[24px] shadow-low'>
-                            {elements &&
-                                elements.map((form, index) => {
-                                    return (
-                                        <div key={index}>
-                                            <div className='flex items-center justify-between rounded-t-rad-2 bg-net-4 px-4 py-2 text-white'>
-                                                <h2 className='text-title-2'>
-                                                    P{index + 1} {' - '} Data Diri Penumpang {index + 1} {' - '}
-                                                    {form.type}
-                                                </h2>
-                                                {formStatus && (
-                                                    <BsFillCheckCircleFill className='h-[24px] w-[24px] text-alert-1' />
-                                                )}
-                                            </div>
-                                            {form &&
-                                                form.fields.map((formElement, index) => {
-                                                    //formInputError
-                                                    // console.log('Form Element', formElement);
-                                                    return (
-                                                        <div key={index} className='mt-4'>
-                                                            {formElement.field_type === 'text' && (
-                                                                <div className='flex flex-col gap-1'>
-                                                                    <Label
-                                                                        className='text-body-6 font-bold text-pur-5'
-                                                                        htmlFor={formElement.field_id}>
-                                                                        {formElement.field_label}
-                                                                    </Label>
-                                                                    <Input
-                                                                        className={`${
-                                                                            formInputError ? 'border-red-500' : 'border'
-                                                                        } w-full appearance-none  px-4 py-2 font-poppins outline-none`}
-                                                                        id={formElement.field_id}
-                                                                        onChange={(event) =>
-                                                                            handleChange(
-                                                                                formElement.field_id,
-                                                                                event,
-                                                                                form.form_id
-                                                                            )
-                                                                        }
-                                                                    />
-                                                                </div>
-                                                            )}
-                                                            {formElement.field_type === 'date' && (
-                                                                <div className='flex flex-col gap-1'>
-                                                                    <Label
-                                                                        className='text-body-6 font-bold text-pur-5'
-                                                                        htmlFor={formElement.field_id}>
-                                                                        {formElement.field_label}
-                                                                    </Label>
-                                                                    <Input
-                                                                        className={`${
-                                                                            formInputError ? 'border-red-500' : 'border'
-                                                                        } w-full appearance-none  px-4 py-2 font-poppins outline-none`}
-                                                                        readOnly
-                                                                        id={formElement.field_id}
-                                                                        value={
-                                                                            formElement.field_value &&
-                                                                            formatToLocale(formElement.field_value)
-                                                                        }
-                                                                        onClick={() => {
-                                                                            handleOpenCalendar(
-                                                                                formElement.field_id,
-                                                                                form.form_id
-                                                                            );
-                                                                            setIsDesktop(true);
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                            )}
-                                                            {formElement.field_type === 'select' && (
-                                                                <div className='flex flex-col gap-1 '>
-                                                                    <Label className='text-body-6 font-bold text-pur-5'>
-                                                                        {formElement.field_label}
-                                                                    </Label>
-                                                                    <select
-                                                                        onChange={(event) =>
-                                                                            handleChange(
-                                                                                formElement.field_id,
-                                                                                event,
-                                                                                form.form_id
-                                                                            )
-                                                                        }
-                                                                        className={`${
-                                                                            formInputError ? 'border-red-500' : 'border'
-                                                                        } w-full cursor-pointer appearance-none border px-4 py-2 font-poppins outline-none`}
-                                                                        aria-label='Default select example'>
-                                                                        {formElement.field_options.length > 0 &&
-                                                                            formElement.field_options.map((option, i) => (
-                                                                                <option value={option.option_label} key={i}>
-                                                                                    {option.option_label}
-                                                                                </option>
-                                                                            ))}
-                                                                    </select>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    );
-                                                })}
-                                        </div>
-                                    );
-                                })}
+                            <DynamicForm
+                                isMobile={false}
+                                elements={elements}
+                                formInputError={formInputError}
+                                formStatus={formStatus}
+                                handleChange={handleChange}
+                                handleOpenCalendar={handleOpenCalendar}
+                            />
                         </div>
-                        {/* FORM */}
+                        {/* FORM DEKSTOP*/}
 
-                        {/* SEAT_FORM */}
-
+                        {/* SEAT DEKSTOP */}
                         <Seat
                             flightSeat={flightSeatDepart}
                             handleSeat={handleSeatDepart}
@@ -658,217 +564,36 @@ export default function Order() {
                                 flight_to={detailFlight?.pulang?.to}
                             />
                         )}
+                        {/* SEAT DEKSTOP */}
 
-                        {/* SEAT */}
                         <Button
                             onClick={() => handleFormStatus()}
                             className={` ${
-                                formData ? 'bg-pur-3' : 'bg-pur-5'
+                                formData ? 'bg-pur-2' : 'bg-pur-3'
                             } mb-[50px]  w-full rounded-rad-3  py-4 text-head-1 text-white`}>
-                            Simpan
+                            Save
                         </Button>
                     </div>
-                    <div className='relative col-span-5 font-poppins'>
-                        <h1 className='text-title-3 font-bold'>Detail Penerbangan</h1>
-                        {detailFlight?.pulang?.departure_date && (
-                            <div className='mb-2 mt-1'>
-                                <p className='w-max rounded-rad-4 bg-pur-5 px-2 py-1 text-body-6 text-white'>
-                                    Kepergian - Flight 1
-                                </p>
-                            </div>
-                        )}
-                        {detailFlight.berangkat && (
-                            <div>
-                                <div className='flex justify-between'>
-                                    <div>
-                                        <h1 className='text-title-2 font-bold'>
-                                            {fixedHour(detailFlight.berangkat.departure_time)}
-                                        </h1>
-                                        <h1 className='text-body-6'>{reformatDate(detailFlight.berangkat.departure_date)}</h1>
-                                        <h1 className='text-body-6 font-medium'>
-                                            {detailFlight.berangkat.Airport_from.airport_name}
-                                        </h1>
-                                    </div>
-                                    <h1 className='text-body-3 font-bold text-pur-3'>Keberangkatan</h1>
-                                </div>
-                                <div className='mb-2 mt-4 w-full border text-net-3'></div>
-                                <div className='flex items-center gap-2'>
-                                    <div className='relative h-[24px] w-[24px] '>
-                                        <Image src={'./images/flight_badge.svg'} fill alt='' />
-                                    </div>
-                                    <div className='flex flex-col gap-4'>
-                                        <div>
-                                            <h3 className='text-body-5 font-bold'>
-                                                {detailFlight.berangkat.Airline.airline_name} -{' '}
-                                                {detailFlight.berangkat.flight_class}
-                                            </h3>
-                                            <h3 className='text-body-5 font-bold'>
-                                                {detailFlight.berangkat.Airline.airline_code}
-                                            </h3>
-                                        </div>
-                                        <div>
-                                            <h3 className='text-body-5 font-bold'>Informasi : </h3>
-                                            <h4 className='text-body-6'>{extractWord(detailFlight.berangkat.description)} </h4>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='mb-4 mt-2 w-full border text-net-3'></div>
-                                <div className='flex justify-between'>
-                                    <div>
-                                        <h1 className='text-title-2 font-bold'>
-                                            {fixedHour(detailFlight.berangkat.arrival_time)}
-                                        </h1>
-                                        <h1 className='text-body-6'>{reformatDate(detailFlight.berangkat.arrival_date)}</h1>
-                                        <h1 className='text-body-6 font-medium'>
-                                            {detailFlight.berangkat.Airport_to.airport_name}
-                                        </h1>
-                                    </div>
-                                    <h1 className='text-body-3 font-bold text-pur-3'>Kedatangan</h1>
-                                </div>
-                            </div>
-                        )}
 
-                        {detailFlight?.pulang?.departure_date && (
-                            <div className='mb-2 mt-4'>
-                                <p className='w-max rounded-rad-4 bg-pur-5 px-2 py-1 text-body-6 text-white'>
-                                    Kepulangan - Flight 2
-                                </p>
-                            </div>
-                        )}
-
-                        {detailFlight?.pulang?.departure_date && (
-                            <div>
-                                <div className='flex justify-between'>
-                                    <div>
-                                        <h1 className='text-title-2 font-bold'>
-                                            {fixedHour(detailFlight.pulang.departure_time)}
-                                        </h1>
-                                        <h1 className='text-body-6'>{reformatDate(detailFlight.pulang.departure_date)}</h1>
-                                        <h1 className='text-body-6 font-medium'>
-                                            {detailFlight.pulang.Airport_from.airport_name}
-                                        </h1>
-                                    </div>
-                                    <h1 className='text-body-3 font-bold text-pur-3'>Keberangkatan</h1>
-                                </div>
-                                <div className='mb-2 mt-4 w-full border text-net-3'></div>
-                                <div className='flex items-center gap-2'>
-                                    <div className='relative h-[24px] w-[24px] '>
-                                        <Image src={'./images/flight_badge.svg'} fill alt='' />
-                                    </div>
-                                    <div className='flex flex-col gap-4'>
-                                        <div>
-                                            <h3 className='text-body-5 font-bold'>
-                                                {detailFlight.pulang.Airline.airline_name} - {detailFlight.pulang.flight_class}
-                                            </h3>
-                                            <h3 className='text-body-5 font-bold'>{detailFlight.pulang.Airline.airline_code}</h3>
-                                        </div>
-                                        <div>
-                                            <h3 className='text-body-5 font-bold'>Informasi : </h3>
-                                            <h4 className='text-body-6'>{extractWord(detailFlight.pulang.description)} </h4>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='mb-4 mt-2 w-full border text-net-3'></div>
-                                <div className='flex justify-between'>
-                                    <div>
-                                        <h1 className='text-title-2 font-bold'>{fixedHour(detailFlight.pulang.arrival_time)}</h1>
-
-                                        <h1 className='text-body-6'>{reformatDate(detailFlight.pulang.arrival_date)}</h1>
-                                        <h1 className='text-body-6 font-medium'>{detailFlight.pulang.Airport_to.airport_name}</h1>
-                                    </div>
-                                    <h1 className='text-body-3 font-bold text-pur-3'>Kedatangan</h1>
-                                </div>
-                            </div>
-                        )}
-                        <div className='mb-2 mt-4 w-full border text-net-3'></div>
-                        <h1 className='mb-2 text-body-6 font-bold'>Rincian Harga</h1>
-                        <div className='flex flex-col gap-2'>
-                            {detailFlight?.berangkat?.departure_date && (
-                                <div className='flex flex-col gap-1'>
-                                    {detailFlight?.pulang?.departure_date && (
-                                        <p className='w-max rounded-rad-4 bg-pur-5 px-2 py-1 text-body-6 text-white'>
-                                            {detailFlight?.berangkat?.Airline?.airline_name} - Kepergian
-                                        </p>
-                                    )}
-                                    {passengerType.dewasa > 0 && (
-                                        <div className='flex justify-between text-body-6'>
-                                            <h1>{passengerType.dewasa} Dewasa</h1>
-                                            <h1> {formatRupiah(detailFlight?.berangkat?.price)}</h1>
-                                        </div>
-                                    )}
-                                    {passengerType.anak > 0 && (
-                                        <div className='flex justify-between text-body-6'>
-                                            <h1>{passengerType.anak} Anak</h1>
-                                            <h1> {formatRupiah(detailFlight?.berangkat?.price)}</h1>
-                                        </div>
-                                    )}
-                                    {passengerType.bayi > 0 && (
-                                        <div className='flex justify-between text-body-6'>
-                                            <h1>{passengerType.bayi} Bayi</h1>
-                                            <h1> {formatRupiah(0)}</h1>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                            {detailFlight?.pulang?.departure_date && <div className='w-full border '></div>}
-                            {detailFlight?.pulang?.departure_date && (
-                                <div className='flex flex-col gap-1'>
-                                    {detailFlight?.pulang?.departure_date && (
-                                        <p className='w-max rounded-rad-4 bg-pur-5 px-2 py-1 text-body-6 text-white'>
-                                            {detailFlight?.pulang?.Airline?.airline_name} - Kepulangan
-                                        </p>
-                                    )}
-                                    {passengerType.dewasa > 0 && (
-                                        <div className='flex justify-between text-body-6'>
-                                            <h1>{passengerType.dewasa} Dewasa</h1>
-                                            <h1> {formatRupiah(detailFlight?.pulang?.price)}</h1>
-                                        </div>
-                                    )}
-                                    {passengerType.anak > 0 && (
-                                        <div className='flex justify-between text-body-6'>
-                                            <h1>{passengerType.anak} Anak</h1>
-                                            <h1> {formatRupiah(detailFlight?.pulang?.price)}</h1>
-                                        </div>
-                                    )}
-                                    {passengerType.bayi > 0 && (
-                                        <div className='flex justify-between text-body-6'>
-                                            <h1>{passengerType.bayi} Bayi</h1>
-                                            <h1> {formatRupiah(0)}</h1>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                            <div className='mb-3 mt-2 w-full border text-net-3'></div>
-                            <div className='flex justify-between text-body-6'>
-                                <h1>Tax</h1>
-                                <h1>
-                                    <span>{formatRupiah(detailFlight.tax)}</span>
-                                </h1>
-                            </div>
-
-                            <div className='flex justify-between text-title-2 font-bold'>
-                                <h1>Total</h1>
-                                <h1 className='text-pur-4'>
-                                    <span className='ml-1'>{formatRupiah(detailFlight.totalPrice)}</span>
-                                </h1>
-                            </div>
-                            {/* {detailFlight?.pulang?.departure_date} */}
-                        </div>
+                    {/* RIGHT DETAILS */}
+                    <div className='col-span-5 font-poppins'>
+                        <FlightDetails data={detailFlight} passengerType={passengerType} />
                         {formData && (
                             <Button
                                 onClick={() => handleSubmit()}
                                 className='mt-[32px] w-full rounded-rad-3 bg-alert-3 py-4 text-head-1 text-white'>
-                                Lanjut Bayar
+                                Continue to Pay
                             </Button>
                         )}
                     </div>
+                    {/* RIGHT DETAILS */}
                 </div>
             </div>
 
             {/* POP UP */}
             <div>
                 {openCalendar && (
-                    <div className='fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-60'>
+                    <div className='fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-60 '>
                         <CalendarPicker
                             isDesktop={isDekstop}
                             initialDate={pickedDate}
@@ -888,32 +613,31 @@ export default function Order() {
                 type={alertType}
                 bgType='none'
             />
+
             <AlertTop
                 visibleAlert={visibleAlertError}
                 handleVisibleAlert={handleVisibleAlertError}
                 text={alertTextError}
                 type={alertTypeError}
-                // bgType='none'
             />
-            {/* DEKSTOP MODE */}
+            {/* DEKSTOP MODE END*/}
 
-            {/* MOBILE MODE */}
+            {/* MOBILE MODE START*/}
             <div className='h-screen font-poppins lg:hidden'>
                 <div
                     onClick={() => router.push('/')}
                     className='fixed inset-x-0 top-0 z-10 flex items-center gap-6 bg-pur-5 px-[16px]  py-2  text-white'>
-                    <FiArrowLeft className='h-[28px] w-[28px]' /> <p>Halaman Booking</p>
+                    <FiArrowLeft className='h-[28px] w-[28px]' /> <p> Booking Page</p>
                 </div>
                 <div className='mt-[64px]'>
                     {/* INPUT USER */}
                     <div className='mx-4 rounded-t-rad-2 border border-pur-3'>
-                        {/* <h1 className='font-bold text-head-1'>Data Diri Pemesan</h1> */}
                         <div className='rounded-t-rad-2 bg-pur-5 px-4 py-2 text-white'>
-                            <h2 className='text-title-2'>Data Diri Pemesan</h2>
+                            <h2 className='text-title-2'>Contact Details</h2>
                         </div>
                         <div className='flex flex-col gap-4 p-4'>
                             <div className='flex flex-col gap-1 '>
-                                <Label className='text-body-6 font-bold text-pur-5'>Nama Lengkap</Label>
+                                <Label className='text-body-6 font-bold text-pur-5'>Full Name</Label>
                                 <Input
                                     readOnly
                                     disabled
@@ -921,16 +645,8 @@ export default function Order() {
                                     className='w-full appearance-none border px-4 py-2 font-poppins outline-none'
                                 />
                             </div>
-                            <div className='flex items-center justify-between'>
-                                <p>Punya Nama Keluarga?</p>
-                                <ToggleSwitch isToggle={toggleUser} handleToggleAction={handleToggleUser} />
-                            </div>
-                            <div className={`${toggleUser ? 'visible' : 'hidden'} flex flex-col gap-1 `}>
-                                <Label className='text-body-6 font-bold text-pur-5'>Nama Keluarga</Label>
-                                <Input className={` w-full appearance-none border px-4 py-2 font-poppins outline-none`} />
-                            </div>
                             <div>
-                                <Label className='text-body-6 font-bold text-pur-5'>Nomor Telepon</Label>
+                                <Label className='text-body-6 font-bold text-pur-5'>Phone Number</Label>
                                 <Input
                                     disabled
                                     readOnly
@@ -939,7 +655,7 @@ export default function Order() {
                                 />
                             </div>
                             <div>
-                                <Label className='text-body-6 font-bold text-pur-5'>Email</Label>
+                                <Label className='text-body-6 font-bold text-pur-5'>Emails</Label>
                                 <Input
                                     disabled
                                     readOnly
@@ -952,97 +668,20 @@ export default function Order() {
                     {/* INPUT USER */}
                 </div>
 
+                {/* FORM  MOBILE*/}
                 <div className='mt-[32px] flex flex-col gap-4 '>
-                    {elements &&
-                        elements.map((form, index) => {
-                            return (
-                                <div key={index} className='mx-4 rounded-t-rad-2 border border-pur-3'>
-                                    <div className='rounded-t-rad-2 bg-pur-5 px-4 py-2 text-white'>
-                                        <h2 className='text-title-2'>
-                                            P{index + 1} {' - '} Data Diri Penumpang {index + 1} {' - '}
-                                            {form.type}
-                                        </h2>
-                                        {formStatus && <BsFillCheckCircleFill className='h-[24px] w-[24px] text-alert-1' />}
-                                    </div>
-                                    {form &&
-                                        form.fields.map((formElement, index) => {
-                                            //formInputError
-                                            // console.log('Form Element', formElement);
-                                            return (
-                                                <div key={index} className='mt-4 p-4'>
-                                                    {formElement.field_type === 'text' && (
-                                                        <div className='flex flex-col gap-1'>
-                                                            <Label
-                                                                className='text-body-6 font-bold text-pur-5'
-                                                                htmlFor={formElement.field_id}>
-                                                                {formElement.field_label}
-                                                            </Label>
-                                                            <Input
-                                                                className={`${
-                                                                    formInputError ? 'border-red-500' : 'border'
-                                                                } w-full appearance-none  px-4 py-2 font-poppins outline-none`}
-                                                                id={formElement.field_id}
-                                                                onChange={(event) =>
-                                                                    handleChange(formElement.field_id, event, form.form_id)
-                                                                }
-                                                            />
-                                                        </div>
-                                                    )}
-                                                    {formElement.field_type === 'date' && (
-                                                        <div className='flex flex-col gap-1'>
-                                                            <Label
-                                                                className='text-body-6 font-bold text-pur-5'
-                                                                htmlFor={formElement.field_id}>
-                                                                {formElement.field_label}
-                                                            </Label>
-                                                            <Input
-                                                                className={`${
-                                                                    formInputError ? 'border-red-500' : 'border'
-                                                                } w-full appearance-none  px-4 py-2 font-poppins outline-none`}
-                                                                readOnly
-                                                                id={formElement.field_id}
-                                                                value={
-                                                                    formElement.field_value &&
-                                                                    formatToLocale(formElement.field_value)
-                                                                }
-                                                                onClick={() => {
-                                                                    setIsDesktop(false);
-                                                                    handleOpenCalendar(formElement.field_id, form.form_id);
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    )}
-                                                    {formElement.field_type === 'select' && (
-                                                        <div className='flex flex-col gap-1 '>
-                                                            <Label className='text-body-6 font-bold text-pur-5'>
-                                                                {formElement.field_label}
-                                                            </Label>
-                                                            <select
-                                                                onChange={(event) =>
-                                                                    handleChange(formElement.field_id, event, form.form_id)
-                                                                }
-                                                                className={`${
-                                                                    formInputError ? 'border-red-500' : 'border'
-                                                                } w-full cursor-pointer appearance-none px-4 py-2 font-poppins outline-none`}
-                                                                aria-label='Default select example'>
-                                                                {formElement.field_options.length > 0 &&
-                                                                    formElement.field_options.map((option, i) => (
-                                                                        <option value={option.option_label} key={i}>
-                                                                            {option.option_label}
-                                                                        </option>
-                                                                    ))}
-                                                            </select>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            );
-                                        })}
-                                </div>
-                            );
-                        })}
+                    <DynamicForm
+                        isMobile={true}
+                        elements={elements}
+                        formInputError={formInputError}
+                        formStatus={formStatus}
+                        handleChange={handleChange}
+                        handleOpenCalendar={handleOpenCalendar}
+                    />
                 </div>
+                {/* FORM  MOBILE*/}
 
-                {/* SEAT DISINI */}
+                {/* MOBILE SEAT */}
                 <Seat
                     flightSeat={flightSeatDepart}
                     handleSeat={handleSeatDepart}
@@ -1066,191 +705,48 @@ export default function Order() {
                         flight_to={detailFlight?.pulang?.to}
                     />
                 )}
+                {/* MOBILE SEAT  */}
 
-                {/* SEAT DISINI */}
+                {/* DIVIDER */}
                 <div className='invisible h-[110px] '></div>
+                {/* DIVIDER */}
 
+                {/* MOBILE SAVE FORM*/}
                 <div className='fixed inset-x-0 bottom-0  flex  h-[100px] flex-col items-center justify-center gap-3  bg-white  px-5 shadow-low'>
                     <Button
-                        onClick={() => handleMobileFormStatus()}
-                        className={` ${formData ? 'bg-pur-2' : 'bg-pur-5'}  my-1 w-full rounded-rad-3 py-2 text-white`}>
-                        Simpan
+                        onClick={() => handleFormStatus()}
+                        className={` ${formData ? 'bg-pur-2' : 'bg-pur-3'}  my-1 w-full rounded-rad-3 py-2 text-white`}>
+                        Save
                     </Button>
                 </div>
+                {/* MOBILE SAVE FORM*/}
             </div>
-            {/* MOBILE MODE*/}
 
+            {/* MOBILE POP UP DETAILS */}
             {isSuccessForm && (
-                <div className='fixed inset-0 top-0 z-20 h-screen overflow-y-scroll bg-white font-poppins'>
-                    <div className='px-4'>
-                        <div
-                            onClick={() => setIsSuccessForm(!isSuccessForm)}
-                            className='fixed inset-x-0 top-0 z-20 flex items-center gap-6 bg-pur-5 px-[16px]  py-2  text-white'>
-                            <FiArrowLeft className='h-[28px] w-[28px]' /> <p>Detail Penerbangan</p>
-                        </div>
-                        <h1 className='mt-[64px] text-title-3 font-bold'>Detail Penerbangan</h1>
-                        {detailFlight.berangkat && (
-                            <div className='mb-2 mt-1'>
-                                <h1 className='w-max rounded-rad-3 bg-alert-1 px-2 py-1 text-title-2 font-bold text-white'>
-                                    Keberangkatan
-                                </h1>
-                            </div>
-                        )}
-                        {detailFlight.berangkat && (
-                            <div>
-                                <div className='flex justify-between'>
-                                    <div>
-                                        <h1 className='text-title-2 font-bold'>
-                                            {fixedHour(detailFlight.berangkat.departure_time)}
-                                        </h1>
-                                        <h1 className='text-body-6'>{reformatDate(detailFlight.berangkat.departure_date)}</h1>
-                                        <h1 className='text-body-6 font-medium'>
-                                            {detailFlight.berangkat.Airport_from.airport_name}
-                                        </h1>
-                                    </div>
-                                    <h1 className='text-body-3 font-bold text-pur-3'>Keberangkatan</h1>
-                                </div>
-                                <div className='mb-2 mt-4 w-full border text-net-3'></div>
-                                <div className='flex items-center gap-2'>
-                                    <div className='relative h-[24px] w-[24px] '>
-                                        <Image src={'./images/flight_badge.svg'} fill alt='' />
-                                    </div>
-                                    <div className='flex flex-col gap-4'>
-                                        <div>
-                                            <h3 className='text-body-5 font-bold'>
-                                                {detailFlight.berangkat.Airline.airline_name} -{' '}
-                                                {detailFlight.berangkat.flight_class}
-                                            </h3>
-                                            <h3 className='text-body-5 font-bold'>
-                                                {detailFlight.berangkat.Airline.airline_code}
-                                            </h3>
-                                        </div>
-                                        <div>
-                                            <h3 className='text-body-5 font-bold'>Informasi : </h3>
-                                            <h4 className='text-body-6'>{extractWord(detailFlight.berangkat.description)} </h4>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='mb-4 mt-2 w-full border text-net-3'></div>
-                                <div className='flex justify-between'>
-                                    <div>
-                                        <h1 className='text-title-2 font-bold'>
-                                            {fixedHour(detailFlight.berangkat.arrival_time)}
-                                        </h1>
-                                        <h1 className='text-body-6'>{reformatDate(detailFlight.berangkat.arrival_date)}</h1>
-                                        <h1 className='text-body-6 font-medium'>
-                                            {detailFlight.berangkat.Airport_to.airport_name}
-                                        </h1>
-                                    </div>
-                                    <h1 className='text-body-3 font-bold text-pur-3'>Kedatangan</h1>
-                                </div>
-                            </div>
-                        )}
-
-                        {detailFlight?.pulang?.departure_date && (
-                            <div className='mb-2 mt-4'>
-                                <h1 className='w-max rounded-rad-3 bg-alert-1 px-2 py-1 text-title-2 font-bold text-white'>
-                                    Kepulangan
-                                </h1>
-                            </div>
-                        )}
-
-                        {detailFlight?.pulang?.departure_date && (
-                            <div>
-                                <div className='flex justify-between'>
-                                    <div>
-                                        <h1 className='text-title-2 font-bold'>
-                                            {fixedHour(detailFlight.pulang.departure_time)}
-                                        </h1>
-                                        <h1 className='text-body-6'>{reformatDate(detailFlight.pulang.departure_date)}</h1>
-                                        <h1 className='text-body-6 font-medium'>
-                                            {detailFlight.pulang.Airport_from.airport_name}
-                                        </h1>
-                                    </div>
-                                    <h1 className='text-body-3 font-bold text-pur-3'>Keberangkatan</h1>
-                                </div>
-                                <div className='mb-2 mt-4 w-full border text-net-3'></div>
-                                <div className='flex items-center gap-2'>
-                                    <div className='relative h-[24px] w-[24px] '>
-                                        <Image src={'./images/flight_badge.svg'} fill alt='' />
-                                    </div>
-                                    <div className='flex flex-col gap-4'>
-                                        <div>
-                                            <h3 className='text-body-5 font-bold'>
-                                                {detailFlight.pulang.Airline.airline_name} - {detailFlight.pulang.flight_class}
-                                            </h3>
-                                            <h3 className='text-body-5 font-bold'>{detailFlight.pulang.Airline.airline_code}</h3>
-                                        </div>
-                                        <div>
-                                            <h3 className='text-body-5 font-bold'>Informasi : </h3>
-                                            <h4 className='text-body-6'>{extractWord(detailFlight.pulang.description)} </h4>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='mb-4 mt-2 w-full border text-net-3'></div>
-                                <div className='flex justify-between'>
-                                    <div>
-                                        <h1 className='text-title-2 font-bold'>{fixedHour(detailFlight.pulang.arrival_time)}</h1>
-
-                                        <h1 className='text-body-6'>{reformatDate(detailFlight.pulang.arrival_date)}</h1>
-                                        <h1 className='text-body-6 font-medium'>{detailFlight.pulang.Airport_to.airport_name}</h1>
-                                    </div>
-                                    <h1 className='text-body-3 font-bold text-pur-3'>Kedatangan</h1>
-                                </div>
-                            </div>
-                        )}
-                        <div className='mb-2 mt-4 w-full border text-net-3'></div>
-                        <h1 className='text-body-6 font-bold'>Rincian Harga</h1>
-                        <div>
-                            {detailFlight.totalPrice && (
-                                <div className='flex flex-col gap-1'>
-                                    {passengerType.dewasa > 0 && (
-                                        <div className='flex justify-between text-body-6'>
-                                            <h1>{passengerType.dewasa} Dewasa</h1>
-                                            <h1> {formatRupiah(detailFlight.totalAdults)}</h1>
-                                        </div>
-                                    )}
-                                    {passengerType.anak > 0 && (
-                                        <div className='flex justify-between text-body-6'>
-                                            <h1>{passengerType.anak} Anak</h1>
-                                            <h1> {formatRupiah(detailFlight.totalChild)}</h1>
-                                        </div>
-                                    )}
-                                    {passengerType.bayi > 0 && (
-                                        <div className='flex justify-between text-body-6'>
-                                            <h1>{passengerType.bayi} Bayi</h1>
-                                            <h1> {formatRupiah(detailFlight.totalBaby)}</h1>
-                                        </div>
-                                    )}
-                                    <div className='flex justify-between text-body-6'>
-                                        <h1>Tax</h1>
-                                        <h1>
-                                            <span>{formatRupiah(detailFlight.tax)}</span>
-                                        </h1>
-                                    </div>
-                                    <div className='mb-3 mt-2 w-full border text-net-3'></div>
-                                    <div className='flex justify-between text-title-2 font-bold'>
-                                        <h1>Total</h1>
-                                        <h1 className='text-pur-4'>
-                                            <span className='ml-1'>{formatRupiah(detailFlight.totalPrice)}</span>
-                                        </h1>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                        <div className='invisible h-[110px] '></div>
+                <div className='fixed inset-0 top-0 z-20 h-screen overflow-y-scroll bg-white px-4 font-poppins lg:hidden'>
+                    <div
+                        onClick={() => setIsSuccessForm(!isSuccessForm)}
+                        className='fixed inset-x-0 top-0 z-20 flex items-center gap-6 bg-pur-5 px-[16px]  py-2  text-white'>
+                        <FiArrowLeft className='h-[28px] w-[28px]' /> <p>Flights Detail</p>
+                    </div>
+                    <div>
+                        <FlightDetails data={detailFlight} passengerType={passengerType} />
                         {formData && (
                             <div className='fixed inset-x-0 bottom-0  flex  h-[100px] flex-col items-center justify-center gap-3  bg-white  px-5 shadow-low'>
                                 <Button
                                     onClick={() => handleSubmit()}
                                     className='my-1 w-full rounded-rad-3 bg-alert-3 py-2 text-white'>
-                                    Lanjut Bayar
+                                    Continue to Pay
                                 </Button>
                             </div>
                         )}
                     </div>
                 </div>
             )}
+            {/* MOBILE POP UP DETAILS */}
+
+            {/* MOBILE MODE END*/}
         </div>
     );
 }

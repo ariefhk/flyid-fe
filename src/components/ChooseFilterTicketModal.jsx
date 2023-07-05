@@ -41,31 +41,31 @@ export default function ChooseFilterTicketModal({ open, handleOpen, handleChoose
         {
             id: 1,
 
-            type: 'Termurah',
+            type: 'Lowest price',
             query: 'tolower',
         },
         {
             id: 2,
 
-            type: 'Keberangkatan Paling Awal',
+            type: 'Earliest departure',
             query: 'earlydeparture',
         },
         {
             id: 3,
 
-            type: 'Keberangkatan Paling Akhir',
+            type: 'Latest departure',
             query: 'lastdeparture',
         },
         {
             id: 4,
 
-            type: 'Kedatangan Paling Awal',
+            type: 'Earliest arrival',
             query: 'earlyarrive',
         },
         {
             id: 5,
 
-            type: 'Kedatangan Paling Akhir',
+            type: 'Latest arrival',
             query: 'lastarrive',
         },
     ];
@@ -75,19 +75,21 @@ export default function ChooseFilterTicketModal({ open, handleOpen, handleChoose
         <>
             {open && (
                 <div className='fixed inset-0 bg-black bg-opacity-60 '>
-                    <div className='absolute  h-[356px] w-[360px] lg:bottom-[124px] lg:right-[175px] lg:h-[356px] lg:w-[400px]'>
+                    <div className='absolute  h-[356px] w-[360px] lg:bottom-[124px] lg:right-[175px] lg:h-[324px] lg:w-[400px]'>
                         <Card>
                             <Card.Title handleCardShow={() => handleOpen()} className={'border-b-[1px] py-[10px]'} />
 
                             <Card.Body>
-                                <div className='flex flex-col'>
+                                <div className='flex flex-col font-poppins'>
                                     {filterTicket &&
                                         filterTicket.map((ticket) => (
                                             <div
                                                 onClick={() => handleChosenFilterTicket(ticket.id, ticket.type, ticket.query)}
                                                 key={ticket.id}
                                                 className={`${
-                                                    chooseFilterTicket.id === ticket.id ? 'bg-pur-5 text-white' : 'bg-white'
+                                                    chooseFilterTicket.id === ticket.id
+                                                        ? 'bg-pur-2 font-medium text-white'
+                                                        : 'bg-white'
                                                 }`}>
                                                 <div
                                                     className={`mx-5 flex cursor-pointer items-center  justify-between border-b-[1px] border-b-net-2 py-[10px] font-normal`}>
@@ -100,14 +102,14 @@ export default function ChooseFilterTicketModal({ open, handleOpen, handleChoose
                                                         </h1>
                                                     </div>
                                                     {chooseFilterTicket.id === ticket.id && (
-                                                        <FaCheckCircle className='h-4 w-4 text-alert-1' />
+                                                        <FaCheckCircle className='h-4 w-4 text-white' />
                                                     )}
                                                 </div>
                                             </div>
                                         ))}
                                 </div>
                             </Card.Body>
-                            <Card.Footer handleCardAction={() => handleFilter()}>Simpan</Card.Footer>
+                            <Card.Footer handleCardAction={() => handleFilter()}>Save</Card.Footer>
                         </Card>
                     </div>
                 </div>

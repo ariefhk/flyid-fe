@@ -14,7 +14,7 @@ export default function BottomNavbar() {
             <div
                 onClick={() => (pathname === '/' ? router.refresh() : router.push('/'))}
                 className={`${
-                    pathname === '/' ? 'text-pur-4' : 'text-net-3'
+                    pathname === '/' ? 'text-pur-3' : 'text-net-3'
                 } flex cursor-pointer flex-col items-center justify-center gap-1`}>
                 <FiHome />
                 <h1 className='text-body-1 font-bold'>Home</h1>
@@ -24,7 +24,7 @@ export default function BottomNavbar() {
                     pathname === '/history' || pathname === '/history/detail' ? router.refresh() : router.push('/history')
                 }
                 className={`${
-                    pathname === '/history' || pathname === '/history/detail' ? 'text-pur-4' : 'text-net-3'
+                    pathname === '/history' || pathname === '/history/detail' ? 'text-pur-3' : 'text-net-3'
                 } flex cursor-pointer flex-col items-center justify-center gap-1`}>
                 <SlNotebook />
                 <h1 className='text-body-1 font-bold'>Riwayat</h1>
@@ -32,7 +32,7 @@ export default function BottomNavbar() {
             <div
                 onClick={() => (pathname === '/notifikasi' ? router.refresh() : router.push('/notifikasi'))}
                 className={`${
-                    pathname === '/notifikasi' ? 'text-pur-4' : 'text-net-3'
+                    pathname === '/notifikasi' ? 'text-pur-3' : 'text-net-3'
                 } flex cursor-pointer flex-col items-center justify-center gap-1`}>
                 <MdNotifications />
                 <h1 className='text-body-1 font-bold'>Notifikasi</h1>
@@ -40,7 +40,7 @@ export default function BottomNavbar() {
             <div
                 onClick={() => (pathname === '/akun' ? router.refresh() : router.push('/akun'))}
                 className={`${
-                    pathname === '/akun' ? 'text-pur-4' : 'text-net-3'
+                    pathname === '/akun' ? 'text-pur-3' : 'text-net-3'
                 } flex cursor-pointer flex-col items-center justify-center gap-1`}>
                 <MdOutlineAccountCircle />
                 <h1 className='text-body-1 font-bold'> Akun</h1>

@@ -76,7 +76,7 @@ export default function Register() {
         e.preventDefault();
         try {
             if (!regisData.name || !regisData.email || !regisData.password || !regisData.phone) {
-                handleVisibleAlert('Field harus diisi semua!', 'failed');
+                handleVisibleAlert('All input must be filled!', 'failed');
                 return;
             }
             const templateObj = {
@@ -107,7 +107,7 @@ export default function Register() {
             {/* DEKSTOP MODE */}
             <section className='hidden h-screen bg-white lg:block'>
                 <div className='grid h-full w-full grid-cols-12'>
-                    <div className='relative  col-span-6 '>
+                    <div className='relative col-span-6 '>
                         <div className='relative h-full'>
                             <Image
                                 src={`/new_images/left_login.svg`}
@@ -118,14 +118,14 @@ export default function Register() {
                             />
                         </div>
                     </div>
-                    <div className='relative col-span-6 flex   flex-col items-center justify-center px-0 '>
+                    <div className='relative col-span-6 flex flex-col items-center justify-center px-0 '>
                         <form className='flex  w-[452px] flex-col  gap-5' onSubmit={handleRegis}>
-                            <h1 className='text-heading-2 mb-2 font-poppins text-2xl font-bold '>Daftar</h1>
+                            <h1 className='text-heading-2 mb-2 font-poppins text-2xl font-bold '>Register</h1>
                             <div className='flex flex-col'>
-                                <Label htmlFor='name'>Nama </Label>
+                                <Label htmlFor='name'>Full name </Label>
                                 <Input
                                     id='name'
-                                    placeholder='Nama Lengkap'
+                                    placeholder='Full name'
                                     name='name'
                                     value={regisData.name}
                                     onChange={handleRegisData}
@@ -136,16 +136,16 @@ export default function Register() {
                                 <Input
                                     id='email'
                                     name='email'
-                                    placeholder='Contoh: Johndee@gmail.com'
+                                    placeholder='Example: Johndee@gmail.com'
                                     value={regisData.email}
                                     onChange={handleRegisData}
                                 />
                             </div>
                             <div className='flex flex-col'>
-                                <Label htmlFor='phone'>No Telepon</Label>
+                                <Label htmlFor='phone'>Phone number</Label>
                                 <Input
                                     id='phone'
-                                    placeholder='+62'
+                                    placeholder='+62/0'
                                     name='phone'
                                     value={regisData.phone}
                                     onChange={handleRegisData}
@@ -153,20 +153,20 @@ export default function Register() {
                             </div>
                             <div className='flex flex-col'>
                                 <Label htmlFor='password' className='mb-1 flex justify-between text-body-4'>
-                                    Passwords
+                                    Password
                                 </Label>
                                 <PasswordInput
                                     id='password'
                                     name='password'
-                                    placeholder='Buat Password'
+                                    placeholder='Password'
                                     value={regisData.password}
                                     onChange={handleRegisData}
                                 />
                             </div>
-                            <Button type='submit'>Daftar</Button>
+                            <Button type='submit'>Register</Button>
                             <AskAccountButton
-                                prefix={'Sudah Punya Akun?'}
-                                suffix={'Masuk Disini'}
+                                prefix={'Already have an account?'}
+                                suffix={'Login here!'}
                                 onClick={() => router.push('/login')}
                             />
                         </form>
@@ -186,12 +186,12 @@ export default function Register() {
                 <div className='grid h-full w-full grid-cols-12'>
                     <div className='col-span-12 flex flex-col justify-center  px-[26px] '>
                         <form className='flex w-full flex-col gap-5 ' onSubmit={handleRegis}>
-                            <h1 className='text-heading-2 mb-2 font-poppins text-2xl font-bold '>Daftar</h1>
+                            <h1 className='text-heading-2 mb-2 font-poppins text-2xl font-bold '>Register New Account</h1>
                             <div className='flex flex-col'>
-                                <Label htmlFor='name'>Nama </Label>
+                                <Label htmlFor='name'>Full name</Label>
                                 <Input
                                     id='name'
-                                    placeholder='Nama Lengkap'
+                                    placeholder='Full name'
                                     name='name'
                                     value={regisData.name}
                                     onChange={handleRegisData}
@@ -202,16 +202,16 @@ export default function Register() {
                                 <Input
                                     id='email'
                                     name='email'
-                                    placeholder='Contoh: Johndee@gmail.com'
+                                    placeholder='example: Johndee@gmail.com'
                                     value={regisData.email}
                                     onChange={handleRegisData}
                                 />
                             </div>
                             <div className='flex flex-col'>
-                                <Label htmlFor='phone'>No Telepon</Label>
+                                <Label htmlFor='phone'>Phone number</Label>
                                 <Input
                                     id='phone'
-                                    placeholder='+62'
+                                    placeholder='+62/0'
                                     name='phone'
                                     value={regisData.phone}
                                     onChange={handleRegisData}
@@ -219,20 +219,20 @@ export default function Register() {
                             </div>
                             <div className='flex flex-col'>
                                 <Label htmlFor='password' className='mb-1 flex justify-between text-body-4'>
-                                    Passwords
+                                    Password
                                 </Label>
                                 <PasswordInput
                                     id='password'
                                     name='password'
-                                    placeholder='Buat Password'
+                                    placeholder='Password'
                                     value={regisData.password}
                                     onChange={handleRegisData}
                                 />
                             </div>
-                            <Button type='submit'>Daftar</Button>
+                            <Button type='submit'>Register</Button>
                             <AskAccountButton
-                                prefix={'Sudah Punya Akun?'}
-                                suffix={'Masuk Disini'}
+                                prefix={'Already have an account?'}
+                                suffix={'Login here!'}
                                 onClick={() => router.push('/login')}
                             />
                         </form>

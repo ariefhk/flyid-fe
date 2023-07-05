@@ -39,8 +39,8 @@ export default function CalendarRangePicker({ isDesktop = true, open, handleOpen
                     }}
                     defaultValue={initialRangeDate}
                     minDate={Array.isArray(initialRangeDate) ? initialRangeDate[0] : initialRangeDate}
-                    prevLabel={<FiChevronLeft style={{ color: '#7126b5' }} />}
-                    nextLabel={<FiChevronRight style={{ color: '#7126b5' }} />}
+                    prevLabel={<FiChevronLeft style={{ color: '#00AD10' }} />}
+                    nextLabel={<FiChevronRight style={{ color: '#00AD10' }} />}
                     showDoubleView={isDesktop}
                     prev2Label={null}
                     next2Label={null}

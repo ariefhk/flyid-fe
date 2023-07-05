@@ -36,21 +36,21 @@ export default function ChoosePassengerTypeModal({ handleOpenPassengerModal }) {
     const passengerType = [
         {
             id: 1,
-            category: 'Dewasa',
+            category: 'Adult',
             src: './images/male.svg',
-            description: '(12 tahun keatas)',
+            description: '(12 years and above)',
         },
         {
             id: 2,
-            category: 'Anak',
+            category: 'Child',
             src: './images/female.svg',
-            description: '(2 - 11 tahun)',
+            description: '(2 - 11 years)',
         },
         {
             id: 3,
-            category: 'Bayi',
+            category: 'Baby',
             src: './images/baby.svg',
-            description: '(dibawah 2 tahun)',
+            description: '(under 2 years)',
         },
     ];
 
@@ -66,8 +66,8 @@ export default function ChoosePassengerTypeModal({ handleOpenPassengerModal }) {
                             <div className='flex items-start gap-3 '>
                                 <Image src={'./images/male.svg'} alt='' width={12} height={12} />
                                 <div className='p-0'>
-                                    <h1 className='font-poppins text-body-6 font-bold'>Dewasa</h1>
-                                    <p className='font-poppins text-body-6 font-normal text-net-3'>(12 tahun keatas)</p>
+                                    <h1 className='font-poppins text-body-6 font-bold'>Adult</h1>
+                                    <p className='font-poppins text-body-6 font-normal text-net-3'>(12 years and above)</p>
                                 </div>
                             </div>
                             <div className='flex h-[40px] items-center gap-1 '>
@@ -97,8 +97,8 @@ export default function ChoosePassengerTypeModal({ handleOpenPassengerModal }) {
                             <div className='flex items-start gap-3 '>
                                 <Image src={'./images/female.svg'} alt='' width={12} height={12} />
                                 <div className='p-0'>
-                                    <h1 className='font-poppins text-body-6 font-bold'>Anak</h1>
-                                    <p className='font-poppins text-body-6 font-normal text-net-3'>(2 - 11 tahun)</p>
+                                    <h1 className='font-poppins text-body-6 font-bold'>Child</h1>
+                                    <p className='font-poppins text-body-6 font-normal text-net-3'>(2 - 11 years)</p>
                                 </div>
                             </div>
                             <div className='flex h-[40px] items-center gap-1 '>
@@ -128,8 +128,8 @@ export default function ChoosePassengerTypeModal({ handleOpenPassengerModal }) {
                             <div className='flex items-start gap-3 '>
                                 <Image src={'./images/baby.svg'} alt='' width={12} height={12} />
                                 <div className='p-0'>
-                                    <h1 className='font-poppins text-body-6 font-bold'>Bayi</h1>
-                                    <p className='font-poppins text-body-6 font-normal text-net-3'>(dibawah 2 tahun)</p>
+                                    <h1 className='font-poppins text-body-6 font-bold'>Baby</h1>
+                                    <p className='font-poppins text-body-6 font-normal text-net-3'>(under 2 years)</p>
                                 </div>
                             </div>
                             <div className='flex h-[40px] items-center gap-1 '>

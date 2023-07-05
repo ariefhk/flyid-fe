@@ -7,5 +7,5 @@ export const formatToLocale = (date) => {
         year: 'numeric',
     };
 
-    return new Date(date).toLocaleDateString('id', option);
+    return new Date(date).toLocaleDateString('us', option);
 };

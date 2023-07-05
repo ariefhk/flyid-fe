@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 export default function PasswordInput({
-    className = 'rounded-rad-4 border-neutral-2 px-6 py-[14px] text-body-6 font-normal focus:border-pur-4',
+    className = 'rounded-rad-4 border-neutral-2 px-6 py-[14px] text-body-6 font-normal focus:border-pur-2',
     id,
     placeholder,
     ...rest
@@ -24,7 +24,7 @@ export default function PasswordInput({
             {showPassword ? (
                 <FiEye
                     onClick={togglePassword}
-                    className='absolute right-1 top-[50%] mr-3 h-5 w-5 translate-y-[-50%] cursor-pointer text-pur-4'
+                    className='absolute right-1 top-[50%] mr-3 h-5 w-5 translate-y-[-50%] cursor-pointer text-pur-2'
                 />
             ) : (
                 <FiEyeOff

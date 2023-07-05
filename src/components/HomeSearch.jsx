@@ -229,9 +229,9 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                     <div className='mx-8 my-6'>
                         {/* home search title start */}
                         <h1 className='pt-5 font-poppins text-head-1 font-bold'>
-                            Pilih Jadwal Penerbangan spesial di{' '}
-                            <span className='text-pur-5'>
-                                FLY<span className='text-[14px]'>ID</span>!
+                            Choose special flight at{' '}
+                            <span className='text-pur-3'>
+                                FLY<span className='text-[16px]'>ID</span>!
                             </span>
                         </h1>
                         {/* home search title end */}
@@ -249,7 +249,7 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                                         </div>
                                         <Input
                                             className='border-[1px] border-l-0 border-r-0 border-t-0 border-b-net-2  py-3 font-poppins text-title-3 font-medium'
-                                            placeholder={'Silahkan pilih lokasi...'}
+                                            placeholder={'Please select a location...'}
                                             value={chosenFromAirport}
                                             readOnly
                                             onFocus={() => {
@@ -290,15 +290,15 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                                                             className={`${
                                                                 chosenFromAirport.toLowerCase() ===
                                                                 `${data.airport_location} (${data.airport_code})`.toLowerCase()
-                                                                    ? 'bg-pur-3 text-white'
+                                                                    ? 'bg-pur-2 text-white'
                                                                     : ''
-                                                            } cursor-pointer border-b p-3 font-poppins hover:bg-pur-3 hover:text-white`}>
+                                                            } cursor-pointer border-b p-3 font-poppins hover:bg-pur-2 hover:text-white`}>
                                                             {data.airport_location} ({data.airport_code})
                                                         </div>
                                                     ))
                                                 ) : (
                                                     <div className='text-head-1-5 mb-2 pt-2 font-poppins font-semibold'>
-                                                        <h1>Lokasi tidak Ditemukan...</h1>
+                                                        <h1>Location not found...</h1>
                                                     </div>
                                                 )}
                                             </div>
@@ -368,7 +368,7 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                                                     readOnly
                                                     value={
                                                         !homeSearch.return_dateTime
-                                                            ? 'Pilih Tanggal'
+                                                            ? 'Choose dates'
                                                             : formatToLocale(homeSearch.return_dateTime)
                                                     }
                                                     onClick={() => {
@@ -423,7 +423,7 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                                         </div>
                                         <Input
                                             className='border-[1px] border-l-0 border-r-0 border-t-0 border-b-net-2  py-3 font-poppins text-title-3 font-medium'
-                                            placeholder={'Silahkan pilih lokasi...'}
+                                            placeholder={'Please select a location...'}
                                             value={chosenToAirport}
                                             readOnly
                                             onFocus={() => {
@@ -462,15 +462,15 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                                                             className={`${
                                                                 chosenToAirport.toLowerCase() ===
                                                                 `${data.airport_location} (${data.airport_code})`.toLowerCase()
-                                                                    ? 'bg-pur-3 text-white'
+                                                                    ? 'bg-pur-2 text-white'
                                                                     : ''
-                                                            } cursor-pointer border-b p-3 font-poppins hover:bg-pur-3 hover:text-white`}>
+                                                            } cursor-pointer border-b p-3 font-poppins hover:bg-pur-2 hover:text-white`}>
                                                             {data.airport_location} ({data.airport_code})
                                                         </div>
                                                     ))
                                                 ) : (
                                                     <div className='text-head-1-5 mb-2 pt-2 font-poppins font-semibold'>
-                                                        <h1>Lokasi tidak Ditemukan...</h1>
+                                                        <h1>Location not found...</h1>
                                                     </div>
                                                 )}
                                             </div>
@@ -497,7 +497,7 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                                                     readOnly
                                                     onClick={handleOpenPassengerModal}
                                                     className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-2 font-poppins text-title-3 font-medium'
-                                                    value={`${totalPassenger} penumpang`}
+                                                    value={`${totalPassenger} passenger`}
                                                 />
                                             </div>
                                         </div>
@@ -522,7 +522,7 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                                                     onClick={handleOpenFlightClassModal}
                                                     className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-2 font-poppins text-title-3 font-medium'
                                                     value={flightClass}
-                                                    placeholder={'Pilih kelas pesawat'}
+                                                    placeholder={'Choose seat class'}
                                                 />
                                             </div>
                                         </div>
@@ -539,9 +539,9 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                         {/* home search menu end */}
                     </div>
                     <Button
-                        className='absolute bottom-0 w-full rounded-b-rad-3 bg-pur-4 py-3 text-title-2 font-bold text-white hover:bg-pur-3'
+                        className='absolute bottom-0 w-full rounded-b-rad-3 bg-pur-3 py-3 text-title-2 font-bold text-white hover:bg-pur-2'
                         onClick={handleActionHomeSearch}>
-                        Cari Penerbangan
+                        Search Flight
                     </Button>
                 </div>
             </div>
@@ -561,7 +561,7 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                                 <div className='relative col-span-9'>
                                     <Input
                                         className='border-b-0 border-l-0 border-r-0 border-t-0 py-3 font-poppins text-title-2 font-medium'
-                                        placeholder={'Silahkan pilih lokasi...'}
+                                        placeholder={'Please select a location...'}
                                         value={chosenFromAirport}
                                         onFocus={() => setMobileFocusFromInput(true)}
                                         onChange={handleFromInputChange}
@@ -578,13 +578,13 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                                                             );
                                                         }}
                                                         key={index}
-                                                        className='cursor-pointer bg-pur-3 p-3 font-poppins text-white'>
+                                                        className='cursor-pointer bg-pur-2 p-3 font-poppins text-white'>
                                                         {data.airport_location} ({data.airport_code})
                                                     </div>
                                                 ))
                                             ) : (
                                                 <div className='text-head-1-5 pt-2 font-poppins font-semibold'>
-                                                    <h1>Inputkan Lokasi...</h1>
+                                                    <h1>Location not found...</h1>
                                                 </div>
                                             )}
                                         </div>
@@ -609,7 +609,7 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                                 <div className='relative col-span-9'>
                                     <Input
                                         className='border-b-0 border-l-0 border-r-0 border-t-0 py-3 font-poppins text-title-2 font-medium'
-                                        placeholder={'Silahkan pilih lokasi...'}
+                                        placeholder={'Please select a location...'}
                                         onFocus={() => setMobileFocusToInput(true)}
                                         value={chosenToAirport}
                                         onChange={handleToInputChange}
@@ -626,13 +626,13 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                                                             );
                                                         }}
                                                         key={index}
-                                                        className='cursor-pointer bg-pur-3 p-3 font-poppins text-white'>
+                                                        className='cursor-pointer bg-pur-2 p-3 font-poppins text-white'>
                                                         {data.airport_location} ({data.airport_code})
                                                     </div>
                                                 ))
                                             ) : (
                                                 <div className='text-head-1-5 pt-2 font-poppins font-semibold'>
-                                                    <h1>Inputkan Lokasi...</h1>
+                                                    <h1>Location not found...</h1>
                                                 </div>
                                             )}
                                         </div>
@@ -645,7 +645,7 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
 
                     {/* Toggle Switch */}
                     <div className='col-span-12 flex items-center justify-between px-4'>
-                        <h1 className='text-body-6 font-medium'>Pulang Pergi</h1>
+                        <h1 className='text-body-6 font-medium'>Round Trip</h1>
                         <ToggleSwitch
                             id={'toggle_calendar'}
                             isToggle={isTwoWay}
@@ -721,7 +721,7 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                                     readOnly
                                     onClick={handleOpenPassengerModalMobile}
                                     className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-1 font-poppins text-body-6 font-medium'
-                                    value={`${totalPassenger} penumpang`}
+                                    value={`${totalPassenger} passenger`}
                                 />
                             </div>
                         </div>
@@ -745,7 +745,7 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                                     onClick={handleOpenFlightClassModalMobile}
                                     className='cursor-pointer border-[1px] border-l-0 border-r-0 border-t-0  border-b-net-2 py-1 font-poppins text-body-6 font-medium'
                                     value={flightClass}
-                                    placeholder={'Pilih kelas pesawat'}
+                                    placeholder={'Choose seat class'}
                                 />
                             </div>
                         </div>
@@ -755,8 +755,8 @@ export default function HomeSearch({ className, buttonAction, handleActionHomeSe
                         <div className='col-span-12 mt-6'>
                             <Button
                                 onClick={handleActionHomeSearch}
-                                className='font-body-6 w-full rounded-rad-2 bg-pur-4 py-3 text-white hover:bg-pur-3'>
-                                Cari Penerbangan
+                                className='font-body-6 w-full rounded-rad-2 bg-pur-3 py-3 text-white hover:bg-pur-2'>
+                                Search Flight
                             </Button>
                         </div>
                         {/* Button */}

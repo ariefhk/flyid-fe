@@ -16,8 +16,8 @@ export default function CalendarPicker({ isDesktop = true, open, handleOpen, ini
                     }}
                     defaultValue={initialDate}
                     minDate={minDate && new Date()}
-                    prevLabel={<FiChevronLeft style={{ color: '#7126b5' }} />}
-                    nextLabel={<FiChevronRight style={{ color: '#7126b5' }} />}
+                    prevLabel={<FiChevronLeft style={{ color: '#00AD10' }} />}
+                    nextLabel={<FiChevronRight style={{ color: '#00AD10' }} />}
                     showDoubleView={isDesktop}
                     prev2Label={null}
                     next2Label={null}

@@ -18,8 +18,8 @@ import { FiHome, FiX, FiSearch } from 'react-icons/fi';
 import { SlNotebook } from 'react-icons/sl';
 
 //redux
-import { useDispatch } from 'react-redux';
-import { flightSlice } from '@/store/flight';
+import { useDispatch, useSelector } from 'react-redux';
+import { flightSlice, getHomeSearch } from '@/store/flight';
 
 //components
 import Navbar from '@/components/Navbar';
@@ -30,6 +30,7 @@ import Input from '@/components/Input';
 import BottomNavbar from '@/components/BottomNavbar';
 import ToggleRotate from '@/components/ToggleRotate';
 import Label from '@/components/Label';
+import AlertTop from '@/components/AlertTop';
 
 //utils
 import { menuDataShape, destinationDataShape } from '@/utils/dummyData';
@@ -44,15 +45,44 @@ export default function Home() {
     /*=== redux ===*/
     const dispatch = useDispatch();
     const { setFetchFlightStatus, setSearchPageIsSearchAgain } = flightSlice.actions;
+    const homeSearch = useSelector(getHomeSearch);
 
     /*=== state ===*/
     const [choosedDesinationMenu, setChoosedDesinationMenu] = useState(1);
+    const [visibleAlert, setVisibleAlert] = useState(false);
+    const [alertText, setAlertText] = useState('');
+    const [alertType, setAlertType] = useState('');
 
     /*=== function ===*/
-    //----
+
+    const handleVisibleAlert = (text, alertType) => {
+        setAlertText(text);
+        setAlertType(alertType);
+        setVisibleAlert(!visibleAlert);
+    };
+
+    const handleActionHomeSearch = () => {
+        if (homeSearch.flight_type.toLowerCase() === 'round trip' && !homeSearch.return_dateTime) {
+            handleVisibleAlert('Please insert return date!', 'failed');
+            return;
+        }
+
+        if (!homeSearch.from || !homeSearch.to) {
+            handleVisibleAlert('Please fill all locations!', 'failed');
+            return;
+        }
+
+        dispatch(setSearchPageIsSearchAgain(true));
+        // dispatch(setFetchFlightStatus(true));
+        router.push('/search');
+    };
 
     /*=== effects ===*/
     //----
+
+    console.log('====================================');
+    console.log('HOME SEARCH DATA', homeSearch);
+    console.log('====================================');
 
     return (
         <div className='overflow-x-hidden'>
@@ -77,20 +107,14 @@ export default function Home() {
 
             {/* homesearch */}
             <div className='hidden lg:block'>
-                <HomeSearch
-                    handleActionHomeSearch={() => {
-                        dispatch(setSearchPageIsSearchAgain(true));
-                        // dispatch(setFetchFlightStatus(true));
-                        router.push('/search');
-                    }}
-                />
+                <HomeSearch handleActionHomeSearch={handleActionHomeSearch} />
             </div>
             {/* homesearch */}
 
             {/* destination */}
             <div className='mx-auto mt-8 hidden max-w-screen-lg grid-cols-12 font-poppins lg:grid'>
                 <div className='col-span-12 grid grid-cols-12'>
-                    <h1 className='col-span-12 mb-4 text-title-2 font-bold'>Destinasi Favorit</h1>
+                    <h1 className='col-span-12 mb-4 text-title-2 font-bold'>Favorite Destination</h1>
                     <div className='col-span-12 flex items-center gap-4'>
                         {menuDataShape &&
                             menuDataShape.map((menu, index) => {
@@ -98,7 +122,7 @@ export default function Home() {
                                     <div key={index}>
                                         <Button
                                             className={`${
-                                                choosedDesinationMenu === menu.id ? 'bg-pur-3 text-white ' : 'bg-pur-4 text-net-1'
+                                                choosedDesinationMenu === menu.id ? 'bg-pur-2 text-white ' : 'bg-pur-3 text-net-1'
                                             } flex items-center  gap-2 rounded-rad-3  px-6 py-[14px] text-body-6 `}>
                                             <FiSearch /> {menu.destination}
                                         </Button>
@@ -130,7 +154,7 @@ export default function Home() {
                                         <p className='text-body-6 font-bold text-pur-3'>AirAsia</p>
                                         <p className='ttext-body-4 font-medium'>20 - 30 Maret 2023</p>
                                         <p className='text-body-6 text-black'>
-                                            Mulai dari <span className='font-bold text-alert-3'>IDR 950.000</span>
+                                            Starting from <span className='font-bold text-alert-3'>IDR 950.000</span>
                                         </p>
                                     </div>
                                 </div>
@@ -149,7 +173,7 @@ export default function Home() {
                         <h1 className='text-head-3 font-bold'>Travel with Enjoy</h1>
                         <div className='w-full border border-white'></div>
                         <h2 className='text-head-1'>Because {"you're"} our priority</h2>
-                        <Button className='rounded-rad-2 border-2 border-white bg-transparent px-5 py-3 text-white hover:border-pur-3 hover:bg-pur-3'>
+                        <Button className='rounded-rad-2 border-2 border-white bg-transparent px-5 py-3 text-white hover:border-pur-2 hover:bg-pur-2'>
                             Lebih Detail
                         </Button>
                     </div>
@@ -364,6 +388,14 @@ export default function Home() {
                 </div>
             </footer>
             {/* footer */}
+
+            <AlertTop
+                visibleAlert={visibleAlert}
+                handleVisibleAlert={handleVisibleAlert}
+                text={alertText}
+                type={alertType}
+                bgType='none'
+            />
 
             {/* ==== DEKSTOP MODE ====  */}
 

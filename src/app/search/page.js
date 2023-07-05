@@ -54,6 +54,7 @@ import Button from '@/components/Button';
 import Navbar from '@/components/Navbar';
 import HomeSearch from '@/components/HomeSearch';
 import ChooseFilterTicketModal from '@/components/ChooseFilterTicketModal';
+import AlertTop from '@/components/AlertTop';
 
 //Utils
 import { getDateInRange } from '@/utils/getDateInRange';
@@ -83,6 +84,7 @@ export default function SearchFlight() {
         setFetchFlightAgain,
         setIsReadyToOrder,
         setFetchDetailFlight,
+        setResetForBookingOrder,
     } = flightSlice.actions;
     const flightTitle = useSelector(getFlightTitle);
     const isReadyToOrder = useSelector(getIsReadyToOrder); // is ready to order
@@ -105,6 +107,9 @@ export default function SearchFlight() {
 
     /*=== state ===*/
     // const [filterFlightName, setFilterFlightName] = useState('Termurah');
+    const [visibleAlert, setVisibleAlert] = useState(false);
+    const [alertText, setAlertText] = useState('');
+    const [alertType, setAlertType] = useState('');
     const [filterFlight, setFilterFlight] = useState('');
     const [openMobileFlightDetail, setOpenMobileFlightDetail] = useState(false);
     const [mobileFlightDetailData, setMobileFlightDetailData] = useState(null);
@@ -118,6 +123,29 @@ export default function SearchFlight() {
     const [selectDate, setSelectDate] = useState(new Date(searchPage.search_date) || '');
 
     /*=== function ===*/
+    const handleVisibleAlert = (text, alertType) => {
+        setAlertText(text);
+        setAlertType(alertType);
+        setVisibleAlert(!visibleAlert);
+    };
+
+    const handleActionHomeSearch = () => {
+        if (homeSearch.flight_type.toLowerCase() === 'round trip' && !homeSearch.return_dateTime) {
+            handleVisibleAlert('Please insert return date!', 'failed');
+            return;
+        }
+
+        if (!homeSearch.from || !homeSearch.to) {
+            handleVisibleAlert('Please fill all locations!', 'failed');
+            return;
+        }
+        dispatch(setSearchPageIsSearchAgain(true));
+        dispatch(setFetchFlightAgain());
+        dispatch(setResetChoosedFlight());
+        handleOpenHomeSearch(); // close modal
+        router.refresh();
+    };
+
     const handleChooseFilter = (query, type) => {
         console.log('====================================');
         console.log('QUERY', query);
@@ -235,23 +263,26 @@ export default function SearchFlight() {
                     <div className='mt-[80px] hidden w-screen border border-b-net-2 pb-4 lg:block'>
                         <div className='container mx-auto grid max-w-screen-lg grid-cols-12 '>
                             {/* search flight menu start */}
-                            <h1 className='col-span-12 mb-[24px] mt-[47px] font-poppins text-head-1 font-bold'>
-                                Pilih Penerbangan
-                            </h1>
-                            <div className='frid col-span-12 grid grid-cols-12 gap-4'>
+                            <h1 className='col-span-12 mb-[24px] mt-[47px] font-poppins text-head-1 font-bold'>Choose Flights</h1>
+                            <div className='col-span-12 grid grid-cols-12 gap-4 '>
                                 <div
-                                    className='col-span-9 flex cursor-pointer items-center gap-4 rounded-rad-3 bg-pur-4 font-poppins text-title-2 font-medium text-white'
-                                    onClick={() => router.back()}>
+                                    className='col-span-9 flex cursor-pointer items-center gap-4 rounded-rad-3 bg-pur-3 font-poppins text-title-2 font-medium text-white'
+                                    onClick={() => {
+                                        dispatch(setSearchPageIsSearchAgain(true));
+                                        dispatch(setResetChoosedFlight());
+                                        router.replace('/');
+                                        // router.back()
+                                    }}>
                                     <FiArrowLeft className='ml-[21px] h-6 w-6 ' />
                                     <p>
                                         {searchPage.from || homeSearch.from} {' > '} {searchPage.to || homeSearch.to} -{' '}
-                                        {totalPassenger} Penumpang - {flighClass}
+                                        {totalPassenger} Passenger - {flighClass}
                                     </p>
                                 </div>
                                 <div
-                                    className=' col-span-3 cursor-pointer rounded-rad-3 bg-pur-2 py-[13px] text-center font-poppins text-title-2 font-bold text-white'
+                                    className=' col-span-3 cursor-pointer rounded-rad-3 bg-alert-1 py-[13px] text-center font-poppins text-title-2 font-bold text-white'
                                     onClick={() => handleOpenHomeSearch()}>
-                                    <p>Ubah Pencarian</p>
+                                    <p>Change Search</p>
                                 </div>
                             </div>
                             {/* search flight menu end */}
@@ -267,11 +298,11 @@ export default function SearchFlight() {
                                             <div
                                                 className={`${
                                                     new Date(val.date).getDate() === new Date(selectDate).getDate()
-                                                        ? 'bg-pur-3 text-white'
+                                                        ? 'bg-pur-2 text-white'
                                                         : 'text-[#151515]'
                                                 } flex flex-col items-center justify-center rounded-[8px] px-[22px] py-[4px] font-poppins`}>
                                                 <h3 className='text-[14px] font-bold'>
-                                                    {val.date.toLocaleDateString('id-ID', { weekday: 'long' })}
+                                                    {val.date.toLocaleDateString('us', { weekday: 'long' })}
                                                 </h3>
                                                 <p
                                                     className={`${
@@ -315,7 +346,7 @@ export default function SearchFlight() {
                                             {homeSearch.from && (
                                                 <div className='flex flex-col gap-3 border border-net-3 p-2'>
                                                     <div className='flex items-center gap-4 '>
-                                                        <div className='rounded-rad-2 bg-pur-3 p-2'>
+                                                        <div className='rounded-rad-2 bg-pur-2 p-2'>
                                                             <TbCircleNumber1 className='h-[24px] w-[24px] text-white' />
                                                         </div>
                                                         <div>
@@ -358,7 +389,7 @@ export default function SearchFlight() {
                                                             </div>
                                                             <Button
                                                                 onClick={() => handleResetChooseFlight()}
-                                                                className='w-full bg-pur-4 py-2 text-body-6 text-white hover:bg-pur-3'>
+                                                                className='w-full bg-pur-3 py-2 text-body-6 text-white hover:bg-pur-2'>
                                                                 Change departure flight
                                                             </Button>
                                                         </div>
@@ -373,7 +404,7 @@ export default function SearchFlight() {
                                             {homeSearch.return_dateTime && (
                                                 <div className='flex flex-col gap-3 border border-net-3 p-2'>
                                                     <div className='flex items-center gap-4'>
-                                                        <div className='rounded-rad-2 bg-pur-3 p-2'>
+                                                        <div className='rounded-rad-2 bg-pur-2 p-2'>
                                                             <TbCircleNumber2 className='h-[24px] w-[24px] text-white' />
                                                         </div>
                                                         <div>
@@ -416,7 +447,7 @@ export default function SearchFlight() {
                                                             </div>
                                                             <Button
                                                                 onClick={() => handleResetChooseFlight()}
-                                                                className='w-full bg-pur-4 py-2 text-body-6 text-white hover:bg-pur-3'>
+                                                                className='w-full bg-pur-3 py-2 text-body-6 text-white hover:bg-pur-2'>
                                                                 Change departure flight
                                                             </Button>
                                                         </div>
@@ -431,12 +462,12 @@ export default function SearchFlight() {
                                 {/* left filter end */}
                             </div>
                             {/* left flight end */}
-                            <div className='col-span-8 grid-cols-12 font-poppins'>
-                                <h1 className='col-span-12 text-head-2 font-bold'>Pilih {flightTitle}</h1>
+                            <div className='col-span-8 h-screen grid-cols-12 font-poppins'>
+                                <h1 className='col-span-12 text-head-2 font-bold'>Choose {flightTitle} Flight</h1>
                                 <div
-                                    style={{ height: 'calc(100vh - 340px)' }}
+                                    style={{ height: 'calc(100vh - 500px)' }}
                                     className='container col-span-12 mx-auto hidden max-w-screen-lg flex-col items-center justify-center gap-3 font-poppins lg:flex'>
-                                    <h1 className='text-title-2 font-bold text-net-3'>Harap menunggu...</h1>
+                                    <h1 className='text-title-2 font-bold text-net-3'>Please wait...</h1>
                                     <Image
                                         alt=''
                                         src={'/new_images/loading.svg'}
@@ -459,15 +490,16 @@ export default function SearchFlight() {
                     <div className='hidden lg:block'>
                         <Navbar className={'hidden lg:block'} />
 
+                        {/* top */}
                         <div className='mt-[80px] hidden w-screen border border-b-net-2 pb-4 lg:block'>
                             <div className='container mx-auto grid max-w-screen-lg grid-cols-12 '>
                                 {/* search flight menu start */}
                                 <h1 className='col-span-12 mb-[24px] mt-[47px] font-poppins text-head-1 font-bold'>
-                                    Pilih Penerbangan
+                                    Choose Flights
                                 </h1>
                                 <div className='col-span-12 grid grid-cols-12 gap-4 '>
                                     <div
-                                        className='col-span-9 flex cursor-pointer items-center gap-4 rounded-rad-3 bg-pur-4 font-poppins text-title-2 font-medium text-white'
+                                        className='col-span-9 flex cursor-pointer items-center gap-4 rounded-rad-3 bg-pur-3 font-poppins text-title-2 font-medium text-white'
                                         onClick={() => {
                                             dispatch(setSearchPageIsSearchAgain(true));
                                             dispatch(setResetChoosedFlight());
@@ -477,13 +509,13 @@ export default function SearchFlight() {
                                         <FiArrowLeft className='ml-[21px] h-6 w-6 ' />
                                         <p>
                                             {searchPage.from || homeSearch.from} {' > '} {searchPage.to || homeSearch.to} -{' '}
-                                            {totalPassenger} Penumpang - {flighClass}
+                                            {totalPassenger} Passenger - {flighClass}
                                         </p>
                                     </div>
                                     <div
-                                        className=' col-span-3 cursor-pointer rounded-rad-3 bg-pur-2 py-[13px] text-center font-poppins text-title-2 font-bold text-white'
+                                        className=' col-span-3 cursor-pointer rounded-rad-3 bg-alert-1 py-[13px] text-center font-poppins text-title-2 font-bold text-white'
                                         onClick={() => handleOpenHomeSearch()}>
-                                        <p>Ubah Pencarian</p>
+                                        <p>Change Search</p>
                                     </div>
                                 </div>
                                 {/* search flight menu end */}
@@ -500,11 +532,11 @@ export default function SearchFlight() {
                                                     <div
                                                         className={`${
                                                             new Date(val.date).getDate() === new Date(selectDate).getDate()
-                                                                ? 'bg-pur-3 text-white'
+                                                                ? 'bg-pur-2 text-white'
                                                                 : 'text-[#151515]'
                                                         } flex flex-col items-center justify-center rounded-[8px] px-[22px] py-[4px] font-poppins`}>
                                                         <h3 className='text-[14px] font-bold'>
-                                                            {val.date.toLocaleDateString('id-ID', { weekday: 'long' })}
+                                                            {val.date.toLocaleDateString('us', { weekday: 'long' })}
                                                         </h3>
                                                         <p
                                                             className={`${
@@ -525,6 +557,7 @@ export default function SearchFlight() {
                                 {/* day of week end */}
                             </div>
                         </div>
+                        {/* top */}
 
                         <div className='container mx-auto hidden max-w-screen-lg grid-cols-12 lg:grid '>
                             {/* one way start  & list flight*/}
@@ -552,7 +585,7 @@ export default function SearchFlight() {
                                                 {homeSearch.from && (
                                                     <div className='flex flex-col gap-3 border border-net-3 p-2'>
                                                         <div className='flex items-center gap-4 '>
-                                                            <div className='rounded-rad-2 bg-pur-3 p-2'>
+                                                            <div className='rounded-rad-2 bg-pur-2 p-2'>
                                                                 <TbCircleNumber1 className='h-[24px] w-[24px] text-white' />
                                                             </div>
                                                             <div>
@@ -597,7 +630,7 @@ export default function SearchFlight() {
                                                                 </div>
                                                                 <Button
                                                                     onClick={() => handleResetChooseFlight()}
-                                                                    className='w-full bg-pur-4 py-2 text-body-6 text-white hover:bg-pur-3'>
+                                                                    className='w-full bg-pur-3 py-2 text-body-6 text-white hover:bg-pur-2'>
                                                                     Change departure flight
                                                                 </Button>
                                                             </div>
@@ -612,7 +645,7 @@ export default function SearchFlight() {
                                                 {homeSearch.return_dateTime && (
                                                     <div className='flex flex-col gap-3 border border-net-3 p-2'>
                                                         <div className='flex items-center gap-4'>
-                                                            <div className='rounded-rad-2 bg-pur-3 p-2'>
+                                                            <div className='rounded-rad-2 bg-pur-2 p-2'>
                                                                 <TbCircleNumber2 className='h-[24px] w-[24px] text-white' />
                                                             </div>
                                                             <div>
@@ -657,7 +690,7 @@ export default function SearchFlight() {
                                                                 </div>
                                                                 <Button
                                                                     onClick={() => handleResetChooseFlight()}
-                                                                    className='w-full bg-pur-4 py-2 text-body-6 text-white hover:bg-pur-3'>
+                                                                    className='w-full bg-pur-3 py-2 text-body-6 text-white hover:bg-pur-2'>
                                                                     Change departure flight
                                                                 </Button>
                                                             </div>
@@ -675,8 +708,8 @@ export default function SearchFlight() {
 
                                 {/* right fligth start */}
                                 {/* Test */}
-                                <div className='col-span-8 font-poppins'>
-                                    <h1 className='text-head-2 font-bold'>Pilih {flightTitle}</h1>
+                                <div className='col-span-8 mb-[100px] font-poppins'>
+                                    <h1 className='text-head-2 font-bold'>Choose {flightTitle} Flight</h1>
                                     <div className='mt-3 grid grid-cols-12 gap-4'>
                                         {flightData?.length ? (
                                             flightData?.map((data, index) => {
@@ -746,8 +779,8 @@ export default function SearchFlight() {
                                                                 <p className='font-bold text-pur-4'>{formatRupiah(data.price)}</p>
                                                                 <Button
                                                                     onClick={() => handleChoosedFlight(data)}
-                                                                    className='rounded-rad-3 bg-pur-4 py-1 font-medium text-white hover:bg-pur-3'>
-                                                                    Pilih
+                                                                    className='rounded-rad-3 bg-pur-3 py-1 font-medium text-white hover:bg-pur-2'>
+                                                                    Choose
                                                                 </Button>
                                                             </div>
                                                             {/* Pilih Flight */}
@@ -756,7 +789,7 @@ export default function SearchFlight() {
                                                         {isDetail && chosenDetailFlight === data.id && (
                                                             <div className='mt-5 border-[1px] border-b-0 border-l-0 border-r-0 border-t-net-3'>
                                                                 <h1 className='mb-1 mt-[22px] text-body-6 font-bold text-pur-5'>
-                                                                    Detail Penerbangan
+                                                                    Flight Detail
                                                                 </h1>
 
                                                                 <div className='flex justify-between'>
@@ -772,7 +805,7 @@ export default function SearchFlight() {
                                                                         </p>
                                                                     </div>
                                                                     <div>
-                                                                        <h3 className='font-bold text-pur-4'>Keberangkaran</h3>
+                                                                        <h3 className='font-bold text-pur-3'>Departure</h3>
                                                                     </div>
                                                                 </div>
 
@@ -794,7 +827,9 @@ export default function SearchFlight() {
                                                                             </h2>
                                                                         </div>
                                                                         <div>
-                                                                            <h3 className='text-body-5 font-bold'>Informasi :</h3>
+                                                                            <h3 className='text-body-5 font-bold'>
+                                                                                Information :
+                                                                            </h3>
                                                                             <p className='text-body-5 font-normal'>
                                                                                 {extractWord(data.description)}
                                                                             </p>
@@ -819,7 +854,7 @@ export default function SearchFlight() {
                                                                         </p>
                                                                     </div>
                                                                     <div>
-                                                                        <h3 className='font-bold text-pur-4'>Kedatangan</h3>
+                                                                        <h3 className='font-bold text-pur-3'>Arrival</h3>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -852,10 +887,18 @@ export default function SearchFlight() {
                         </div>
                     </div>
 
+                    <AlertTop
+                        visibleAlert={visibleAlert}
+                        handleVisibleAlert={handleVisibleAlert}
+                        text={alertText}
+                        type={alertType}
+                        bgType='none'
+                    />
+
                     {/* homeSearch  start */}
                     <div>
                         {openHomeSearch && (
-                            <div className='fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-60 '>
+                            <div className='fixed inset-0 z-20 flex items-start justify-center bg-black bg-opacity-60 pt-[140px] '>
                                 <HomeSearch
                                     className={'h-[298px] w-[968px]'}
                                     buttonAction={
@@ -863,20 +906,14 @@ export default function SearchFlight() {
                                             className='absolute right-0 mr-3 mt-2 h-[28px] w-[28px]'
                                             onClick={() => {
                                                 // dispatch(setSearchPageIsSearchAgain(true));
-                                                // dispatch(setFetchFlightAgain());
+                                                dispatch(setFetchFlightAgain());
                                                 // dispatch(setFetchTest());
                                                 // dispatch(setResetChoosedFlight());
                                                 handleOpenHomeSearch();
                                             }}
                                         />
                                     }
-                                    handleActionHomeSearch={() => {
-                                        dispatch(setSearchPageIsSearchAgain(true));
-                                        dispatch(setFetchFlightAgain());
-                                        dispatch(setResetChoosedFlight());
-                                        handleOpenHomeSearch(); // close modal
-                                        router.refresh();
-                                    }}
+                                    handleActionHomeSearch={handleActionHomeSearch}
                                 />
                             </div>
                         )}
@@ -917,7 +954,7 @@ export default function SearchFlight() {
                                                 <div className='flex items-center gap-2'>
                                                     <MdFlightTakeoff className='h-[20px] w-[20px] text-net-3 lg:h-[30px] lg:w-[30px]' />
                                                     <div className='flex items-center gap-2'>
-                                                        <h1 className='text-body-6'>Keberangkatan</h1>
+                                                        <h1 className='text-body-6'>Departure</h1>
                                                         <h1 className='text-body-6'>
                                                             {reformatDate(choosedFlight1.departure_date)}
                                                         </h1>
@@ -958,7 +995,7 @@ export default function SearchFlight() {
                                                 <div className='flex items-center gap-2'>
                                                     <MdFlightLand className='h-[20px] w-[20px] text-net-3 lg:h-[30px] lg:w-[30px]' />
                                                     <div className='flex items-center gap-2'>
-                                                        <h1 className='text-body-6'>Kepulangan</h1>
+                                                        <h1 className='text-body-6'>Arrival</h1>
                                                         <h1 className='text-body-6'>
                                                             {reformatDate(choosedFlight2.departure_date)}
                                                         </h1>
@@ -1019,11 +1056,12 @@ export default function SearchFlight() {
                                                 <Button
                                                     onClick={() => {
                                                         router.replace('/order');
-                                                        router.refresh();
+                                                        // router.refresh();
                                                         dispatch(setFetchDetailFlight());
-                                                        dispatch(setIsReadyToOrder(false));
+                                                        // dispatch(setIsReadyToOrder(false));
+                                                        dispatch(setResetForBookingOrder());
                                                     }}
-                                                    className='h-max w-max rounded-rad-3 bg-pur-4 px-2 py-1 text-body-3 text-white hover:bg-pur-3 lg:px-5 lg:py-3 lg:text-title-2'>
+                                                    className='h-max w-max rounded-rad-3 bg-pur-3 px-2 py-1 text-body-3 text-white hover:bg-pur-2 lg:px-5 lg:py-3 lg:text-title-2'>
                                                     Book Now
                                                 </Button>
                                             </div>
@@ -1044,17 +1082,17 @@ export default function SearchFlight() {
                                                                     </h1>
                                                                     {passengerType.dewasa > 0 && (
                                                                         <h1 className='hidden text-body-5 lg:block'>
-                                                                            Dewasa ({passengerType.dewasa}x)
+                                                                            Adult ({passengerType.dewasa}x)
                                                                         </h1>
                                                                     )}
                                                                     {passengerType.anak > 0 && (
                                                                         <h1 className='hidden text-body-5 lg:block'>
-                                                                            Anak ({passengerType.anak}x)
+                                                                            Child ({passengerType.anak}x)
                                                                         </h1>
                                                                     )}
                                                                     {passengerType.bayi > 0 && (
                                                                         <h1 className='hidden text-body-5 lg:block'>
-                                                                            Bayi ({passengerType.bayi}x)
+                                                                            Baby ({passengerType.bayi}x)
                                                                         </h1>
                                                                     )}
                                                                 </div>
@@ -1076,17 +1114,17 @@ export default function SearchFlight() {
                                                                     </h1>
                                                                     {passengerType.dewasa > 0 && (
                                                                         <h1 className='hidden text-body-5 lg:block'>
-                                                                            Dewasa ({passengerType.dewasa}x)
+                                                                            Adult ({passengerType.dewasa}x)
                                                                         </h1>
                                                                     )}
                                                                     {passengerType.anak > 0 && (
                                                                         <h1 className='hidden text-body-5 lg:block'>
-                                                                            Anak ({passengerType.anak}x)
+                                                                            Child ({passengerType.anak}x)
                                                                         </h1>
                                                                     )}
                                                                     {passengerType.bayi > 0 && (
                                                                         <h1 className='hidden text-body-5 lg:block'>
-                                                                            Bayi ({passengerType.bayi}x)
+                                                                            Baby ({passengerType.bayi}x)
                                                                         </h1>
                                                                     )}
                                                                 </div>
@@ -1127,7 +1165,7 @@ export default function SearchFlight() {
                             <FiArrowLeft className='h-[28px] w-[28px]' />{' '}
                             <p className='text-body-5'>
                                 {searchPage.from || homeSearch.from} {' > '} {searchPage.to || homeSearch.to} - {totalPassenger}{' '}
-                                Penumpang - {flighClass}
+                                Passenger - {flighClass}
                             </p>
                         </div>
                         <div className='mt-[50px] flex gap-2 divide-y-0 overflow-x-scroll '>
@@ -1142,7 +1180,7 @@ export default function SearchFlight() {
                                                         : 'text-[#151515]'
                                                 } flex flex-col items-center justify-center rounded-[8px] px-1 py-1 font-poppins`}>
                                                 <h3 className='text-body-6 font-bold'>
-                                                    {val.date.toLocaleDateString('id-ID', { weekday: 'long' })}
+                                                    {val.date.toLocaleDateString('us', { weekday: 'long' })}
                                                 </h3>
                                                 <p
                                                     className={`${
@@ -1161,14 +1199,6 @@ export default function SearchFlight() {
                             )}
                         </div>
                         <div className='mt-5 flex justify-between px-4'>
-                            {/* <div className='flex items-center gap-1 px-3 py-1 border rounded-rad-3 border-net-3'>
-                                <MdAirplanemodeActive /> <p>Your Flight</p>
-                            </div>
-
-                            <div className='flex items-center gap-1 px-3 py-1 border rounded-rad-3 border-net-3'>
-                                <MdTravelExplore />
-                                <p>{isTwoWay ? 'Round Trip' : 'One Trip'}</p>
-                            </div> */}
                             <div className=''>
                                 <Button
                                     onClick={() => handleOpenChooseFilterFlightMobile()}
@@ -1243,7 +1273,7 @@ export default function SearchFlight() {
                                                             <Button
                                                                 onClick={() => handleChoosedFlight(data)}
                                                                 className='w-full rounded-rad-2 bg-pur-3 px-4 py-1 font-medium text-white'>
-                                                                Pilih
+                                                                Choose
                                                             </Button>
                                                         </div>
                                                     </div>
@@ -1277,7 +1307,7 @@ export default function SearchFlight() {
                                 <div
                                     onClick={() => setOpenMobileFlightDetail(!openMobileFlightDetail)}
                                     className='fixed inset-x-0 top-0  flex cursor-pointer items-center gap-6 bg-pur-3  px-[16px] py-[10px] text-white '>
-                                    <FiArrowLeft className='h-[30px] w-[30px]' /> <h1>Rincian Penerbangan</h1>
+                                    <FiArrowLeft className='h-[30px] w-[30px]' /> <h1>Flight Summary</h1>
                                 </div>
 
                                 <div className='mx-4 mt-[64px] flex gap-2 text-head-1 font-bold text-pur-5'>
@@ -1299,7 +1329,7 @@ export default function SearchFlight() {
                                                 </p>
                                                 <p className='text-body-5 font-medium'>{mobileFlightDetailData.airport_from}</p>
                                             </div>
-                                            <p className='text-body-5 font-bold text-pur-3'>Keberangkatan</p>
+                                            <p className='text-body-5 font-bold text-pur-3'>Departure</p>
                                         </div>
 
                                         <div className='w-full border'></div>
@@ -1317,7 +1347,7 @@ export default function SearchFlight() {
                                                     </h2>
                                                 </div>
                                                 <div>
-                                                    <h3 className='text-body-5 font-bold'>Informasi :</h3>
+                                                    <h3 className='text-body-5 font-bold'>Information :</h3>
                                                     <p className='text-body-5 font-normal'>
                                                         {extractWord(mobileFlightDetailData.description)}
                                                     </p>
@@ -1335,7 +1365,7 @@ export default function SearchFlight() {
                                                 <p className='text-body-5'>{reformatDate(mobileFlightDetailData.arrival_date)}</p>
                                                 <p className='text-body-5 font-medium'>{mobileFlightDetailData.airport_name}</p>
                                             </div>
-                                            <p className='text-body-5 font-bold text-pur-3'>Kedatangan</p>
+                                            <p className='text-body-5 font-bold text-pur-3'>Arrival</p>
                                         </div>
                                     </div>
                                 </div>
@@ -1356,7 +1386,7 @@ export default function SearchFlight() {
                                             setOpenMobileFlightDetail(!openMobileFlightDetail);
                                         }}
                                         className={` my-1 w-full rounded-rad-3 bg-pur-3 py-2 text-white`}>
-                                        Pilih
+                                        Choose
                                     </Button>
                                 </div>
                             </div>

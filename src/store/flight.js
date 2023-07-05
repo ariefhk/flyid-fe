@@ -91,7 +91,7 @@ const initialState = {
     fetchAirportStatus: 'idle', //'idle' | 'loading' | 'succeeded' | 'failed'
     fetchAirportError: null,
     fetchFlightStatusTwo: 'idle', //'idle' | 'loading' | 'succeeded' | 'failed'
-    flight_title: 'Keberangkatan',
+    flight_title: 'Departure',
     isTwoWay: false,
     isReadyToOrder: false,
     passengerType: {
@@ -101,7 +101,7 @@ const initialState = {
     },
     filterTicket: {
         id: 1,
-        type: 'Termurah',
+        type: 'Lowest price',
         query: 'tolower',
     },
     totalPassenger: 1,
@@ -190,28 +190,28 @@ const initialState = {
                 {
                     field_category: 'name',
                     field_id: `name1`,
-                    field_label: 'Nama Lengkap',
+                    field_label: 'Full Name',
                     field_value: '',
                     field_type: 'text',
                 },
                 {
                     field_category: 'family_name',
                     field_id: `family_name1`,
-                    field_label: 'Nama Keluarga',
+                    field_label: 'Family Name',
                     field_value: '',
                     field_type: 'text',
                 },
                 {
                     field_category: 'birthday',
                     field_id: `birthday1`,
-                    field_label: 'Tanggal Lahir',
+                    field_label: 'Birthday',
                     field_value: '',
                     field_type: 'date',
                 },
                 {
-                    field_category: 'kewarganegaraan',
-                    field_id: `kewarganegaraan1`,
-                    field_label: 'Kewarganegaraan',
+                    field_category: 'nationality',
+                    field_id: `nationality1`,
+                    field_label: 'Nationality',
                     field_value: '',
                     field_type: 'text',
                 },
@@ -221,20 +221,6 @@ const initialState = {
                     field_label: 'KTP/Paspor',
                     field_value: '',
                     field_type: 'text',
-                },
-                {
-                    field_category: 'negara_penerbit',
-                    field_id: `negara_penerbit1`,
-                    field_label: 'Negara Penerbit',
-                    field_value: '',
-                    field_type: 'text',
-                },
-                {
-                    field_category: 'expired',
-                    field_id: `expired1`,
-                    field_label: 'Berlaku Sampai',
-                    field_value: '',
-                    field_type: 'date',
                 },
             ],
         },
@@ -302,7 +288,7 @@ export const flightSlice = createSlice({
                 const tempHomeSearch = state.homeSearch.from;
                 state.homeSearch.from = state.homeSearch.to;
                 state.homeSearch.to = tempHomeSearch;
-                state.flight_title = 'Keberangkatan';
+                state.flight_title = 'Departure';
                 state.searchPage.from = state.homeSearch.from;
                 state.searchPage.to = state.homeSearch.to;
                 state.searchPage.search_date = state.homeSearch.departure_dateTime;
@@ -316,7 +302,7 @@ export const flightSlice = createSlice({
             const tempHomeSearch = state.homeSearch.from;
             state.homeSearch.from = state.homeSearch.to;
             state.homeSearch.to = tempHomeSearch;
-            state.flight_title = 'Keberangkatan';
+            state.flight_title = 'Departure';
             state.searchPage.from = state.homeSearch.from;
             state.searchPage.to = state.homeSearch.to;
             state.searchPage.search_date = state.homeSearch.departure_dateTime;
@@ -365,7 +351,7 @@ export const flightSlice = createSlice({
                 state.searchPage.to = state.homeSearch.to;
                 state.homeSearch.return_dateTime = '';
                 state.homeSearch.flight_type = 'One Trip';
-                state.flight_title = 'Keberangkatan';
+                state.flight_title = 'Departure';
                 // state.searchPage.isSearchAgain = true;
                 // state.fetchFlightStatusTwo = 'idle';
                 state.isTwoWay = action.payload;
@@ -410,7 +396,7 @@ export const flightSlice = createSlice({
                 state.searchPage.to = state.homeSearch.to;
                 state.homeSearch.return_dateTime = '';
                 state.homeSearch.flight_type = 'One Trip';
-                state.flight_title = 'Keberangkatan';
+                state.flight_title = 'Departure';
                 // state.searchPage.isSearchAgain = true;
                 // state.fetchFlightStatusTwo = 'idle';
                 state.isTwoWay = action.payload;
@@ -452,7 +438,7 @@ export const flightSlice = createSlice({
                 state.searchPage.search_date_return = '';
                 state.homeSearch.return_dateTime = '';
                 state.homeSearch.flight_type = 'One Trip';
-                state.flight_title = 'Keberangkatan';
+                state.flight_title = 'Departure';
                 // state.searchPage.isSearchAgain = true;
                 // state.fetchFlightStatusTwo = 'idle';
                 state.isTwoWay = action.payload;
@@ -495,28 +481,28 @@ export const flightSlice = createSlice({
                         {
                             field_category: 'name',
                             field_id: `name_${genId()}`,
-                            field_label: 'Nama Lengkap',
+                            field_label: 'Full Name',
                             field_value: '',
                             field_type: 'text',
                         },
                         {
                             field_category: 'family_name',
                             field_id: `family_name_${genId()}`,
-                            field_label: 'Nama Keluarga',
+                            field_label: 'Family Name',
                             field_value: '',
                             field_type: 'text',
                         },
                         {
                             field_category: 'birthday',
                             field_id: `birthday_${genId()}`,
-                            field_label: 'Tanggal Lahir',
+                            field_label: 'Birthday',
                             field_value: '',
                             field_type: 'date',
                         },
                         {
-                            field_category: 'kewarganegaraan',
-                            field_id: `kewarganegaraan_${genId()}`,
-                            field_label: 'Kewarganegaraan',
+                            field_category: 'nationality',
+                            field_id: `nationality_${genId()}`,
+                            field_label: 'Nationality',
                             field_value: '',
                             field_type: 'text',
                         },
@@ -526,20 +512,6 @@ export const flightSlice = createSlice({
                             field_label: 'KTP/Paspor',
                             field_value: '',
                             field_type: 'text',
-                        },
-                        {
-                            field_category: 'negara_penerbit',
-                            field_id: `negara_penerbit_${genId()}`,
-                            field_label: 'Negara Penerbit',
-                            field_value: '',
-                            field_type: 'text',
-                        },
-                        {
-                            field_category: 'expired',
-                            field_id: `expired_${genId()}`,
-                            field_label: 'Berlaku Sampai',
-                            field_value: '',
-                            field_type: 'date',
                         },
                     ],
                 },
@@ -575,28 +547,28 @@ export const flightSlice = createSlice({
                         {
                             field_category: 'name',
                             field_id: `name_${genId()}`,
-                            field_label: 'Nama Lengkap',
+                            field_label: 'Full Name',
                             field_value: '',
                             field_type: 'text',
                         },
                         {
                             field_category: 'family_name',
                             field_id: `family_name_${genId()}`,
-                            field_label: 'Nama Keluarga',
+                            field_label: 'Family Name',
                             field_value: '',
                             field_type: 'text',
                         },
                         {
                             field_category: 'birthday',
                             field_id: `birthday_${genId()}`,
-                            field_label: 'Tanggal Lahir',
+                            field_label: 'Birthday',
                             field_value: '',
                             field_type: 'date',
                         },
                         {
-                            field_category: 'kewarganegaraan',
-                            field_id: `kewarganegaraan_${genId()}`,
-                            field_label: 'Kewarganegaraan',
+                            field_category: 'nationality',
+                            field_id: `nationality_${genId()}`,
+                            field_label: 'Nationality',
                             field_value: '',
                             field_type: 'text',
                         },
@@ -606,20 +578,6 @@ export const flightSlice = createSlice({
                             field_label: 'KTP/Paspor',
                             field_value: '',
                             field_type: 'text',
-                        },
-                        {
-                            field_category: 'negara_penerbit',
-                            field_id: `negara_penerbit_${genId()}`,
-                            field_label: 'Negara Penerbit',
-                            field_value: '',
-                            field_type: 'text',
-                        },
-                        {
-                            field_category: 'expired',
-                            field_id: `expired_${genId()}`,
-                            field_label: 'Berlaku Sampai',
-                            field_value: '',
-                            field_type: 'date',
                         },
                     ],
                 },
@@ -655,28 +613,28 @@ export const flightSlice = createSlice({
                         {
                             field_category: 'name',
                             field_id: `name_${genId()}`,
-                            field_label: 'Nama Lengkap',
+                            field_label: 'Full Name',
                             field_value: '',
                             field_type: 'text',
                         },
                         {
                             field_category: 'family_name',
                             field_id: `family_name_${genId()}`,
-                            field_label: 'Nama Keluarga',
+                            field_label: 'Family Name',
                             field_value: '',
                             field_type: 'text',
                         },
                         {
                             field_category: 'birthday',
                             field_id: `birthday_${genId()}`,
-                            field_label: 'Tanggal Lahir',
+                            field_label: 'Birthday',
                             field_value: '',
                             field_type: 'date',
                         },
                         {
-                            field_category: 'kewarganegaraan',
-                            field_id: `kewarganegaraan_${genId()}`,
-                            field_label: 'Kewarganegaraan',
+                            field_category: 'nationality',
+                            field_id: `nationality_${genId()}`,
+                            field_label: 'Nationality',
                             field_value: '',
                             field_type: 'text',
                         },
@@ -686,20 +644,6 @@ export const flightSlice = createSlice({
                             field_label: 'KTP/Paspor',
                             field_value: '',
                             field_type: 'text',
-                        },
-                        {
-                            field_category: 'negara_penerbit',
-                            field_id: `negara_penerbit_${genId()}`,
-                            field_label: 'Negara Penerbit',
-                            field_value: '',
-                            field_type: 'text',
-                        },
-                        {
-                            field_category: 'expired',
-                            field_id: `expired_${genId()}`,
-                            field_label: 'Berlaku Sampai',
-                            field_value: '',
-                            field_type: 'date',
                         },
                     ],
                 },
@@ -778,7 +722,7 @@ export const flightSlice = createSlice({
                 state.choosedFlight.flight_1.duration = action.payload.duration;
                 state.choosedFlight.flight_1.is_choose = true;
 
-                state.flight_title = 'Kepulangan';
+                state.flight_title = 'Arrival';
                 state.searchPage.from = state.homeSearch.to;
                 state.searchPage.to = state.homeSearch.from;
                 state.searchPage.search_date = state.homeSearch.return_dateTime;
@@ -835,7 +779,7 @@ export const flightSlice = createSlice({
 
         setResetChoosedFlight: (state) => {
             if (state.choosedFlight.flight_1.is_choose && state.choosedFlight.flight_2.is_choose && state.isTwoWay) {
-                state.flight_title = 'Keberangkatan';
+                state.flight_title = 'Departure';
                 state.flightDetailId = [];
                 state.choosedFlight.flight_1.is_choose = false;
                 state.choosedFlight.flight_1.flight_id = '';
@@ -878,7 +822,7 @@ export const flightSlice = createSlice({
             }
 
             if (state.choosedFlight.flight_1.is_choose && state.isTwoWay && !state.choosedFlight.flight_2.is_choose) {
-                state.flight_title = 'Keberangkatan';
+                state.flight_title = 'Departure';
                 state.flightDetailId = [];
                 state.choosedFlight.flight_1.is_choose = false;
                 state.choosedFlight.flight_1.flight_id = '';
@@ -907,7 +851,7 @@ export const flightSlice = createSlice({
             }
 
             if (state.choosedFlight.flight_1.is_choose && !state.isTwoWay) {
-                state.flight_title = 'Keberangkatan';
+                state.flight_title = 'Departure';
                 state.flightDetailId = [];
                 state.choosedFlight.flight_1.is_choose = false;
                 state.choosedFlight.flight_1.flight_id = '';
@@ -948,7 +892,7 @@ export const flightSlice = createSlice({
                 state.fetchFlightStatusTwo = 'idle';
                 return;
             }
-            state.flight_title = 'Keberangkatan';
+            state.flight_title = 'Departure';
             state.flightDetailId = [];
             state.choosedFlight.flight_1.is_choose = false;
             state.choosedFlight.flight_1.flight_id = '';
@@ -1061,9 +1005,56 @@ export const flightSlice = createSlice({
         },
         // setResetAll: (state) => {},
         setIsReadyToOrder: (state, action) => {
+            // if (
+            //     !action.payload &&
+            //     state.isTwoWay &&
+            //     state.choosedFlight.flight_1.is_choose &&
+            //     state.choosedFlight.flight_2.is_choose
+            // ) {
+            //     state.fetchDetailFlight = 'sans';
+            //     state.flightDetailId = [];
+            //     state.flight_title = 'Keberangkatan';
+            //     state.choosedFlight.flight_1.is_choose = false;
+            //     // state.choosedFlight.flight_1.flight_id = '';
+            //     state.choosedFlight.flight_1.airline = '';
+            //     state.choosedFlight.flight_1.from = '';
+            //     state.choosedFlight.flight_1.from_airport_name = '';
+            //     state.choosedFlight.flight_1.from_airport_code = '';
+            //     state.choosedFlight.flight_1.to = '';
+            //     state.choosedFlight.flight_1.to_airport_name = '';
+            //     state.choosedFlight.flight_1.to_airport_code = '';
+            //     state.choosedFlight.flight_1.departure_date = '';
+            //     state.choosedFlight.flight_1.departure_time = '';
+            //     state.choosedFlight.flight_1.arrival_date = '';
+            //     state.choosedFlight.flight_1.arrival_time = '';
+            //     state.choosedFlight.flight_1.duration = '';
+
+            //     state.choosedFlight.flight_2.is_choose = false;
+            //     // state.choosedFlight.flight_2.flight_id = '';
+            //     state.choosedFlight.flight_2.airline = '';
+            //     state.choosedFlight.flight_2.from = '';
+            //     state.choosedFlight.flight_2.from_airport_name = '';
+            //     state.choosedFlight.flight_2.from_airport_code = '';
+            //     state.choosedFlight.flight_2.to = '';
+            //     state.choosedFlight.flight_2.to_airport_name = '';
+            //     state.choosedFlight.flight_2.to_airport_code = '';
+            //     state.choosedFlight.flight_2.departure_date = '';
+            //     state.choosedFlight.flight_2.departure_time = '';
+            //     state.choosedFlight.flight_2.arrival_date = '';
+            //     state.choosedFlight.flight_2.arrival_time = '';
+            //     state.choosedFlight.flight_2.duration = '';
+
+            //     state.searchPage.from = state.homeSearch.from;
+            //     state.searchPage.to = state.homeSearch.to;
+            //     state.searchPage.search_date = state.homeSearch.departure_dateTime;
+            //     state.searchPage.search_date_return = state.homeSearch.return_dateTime;
+            //     state.isReadyToOrder = action.payload;
+            //     return;
+            // }
+
             if (!action.payload && state.isTwoWay && state.choosedFlight.flight_1.is_choose) {
                 state.fetchDetailFlight = 'sans';
-                state.flight_title = 'Kepulangan';
+                state.flight_title = 'Arrival';
                 state.flightDetailId = [state.flightDetailId[0]];
                 state.choosedFlight.flight_2.is_choose = false;
                 // state.choosedFlight.flight_2.flight_id = '';
@@ -1092,7 +1083,7 @@ export const flightSlice = createSlice({
             if (!action.payload && state.isTwoWay && !state.choosedFlight.flight_1.is_choose) {
                 state.fetchDetailFlight = 'sans';
                 state.flightDetailId = [];
-                state.flight_title = 'Keberangkatan';
+                state.flight_title = 'Departure';
                 state.choosedFlight.flight_1.is_choose = false;
                 // state.choosedFlight.flight_1.flight_id = '';
                 state.choosedFlight.flight_1.airline = '';
@@ -1135,7 +1126,7 @@ export const flightSlice = createSlice({
             if (!action.payload && !state.isTwoWay) {
                 state.fetchDetailFlight = 'sans';
                 state.flightDetailId = [];
-                state.flight_title = 'Keberangkatan';
+                state.flight_title = 'Departure';
                 state.choosedFlight.flight_1.is_choose = false;
                 // state.choosedFlight.flight_1.flight_id = '';
                 state.choosedFlight.flight_1.airline = '';
@@ -1190,6 +1181,104 @@ export const flightSlice = createSlice({
         setFilterTicket: (state, action) => {
             state.filterTicket = action.payload;
         },
+
+        setResetForBookingOrder: (state) => {
+            if (state.isTwoWay && state.choosedFlight.flight_1.is_choose && state.choosedFlight.flight_2.is_choose) {
+                state.fetchDetailFlight = 'sans';
+                state.flightDetailId = [];
+                state.flight_title = 'Departure';
+                state.choosedFlight.flight_1.is_choose = false;
+                // state.choosedFlight.flight_1.flight_id = '';
+                state.choosedFlight.flight_1.airline = '';
+                state.choosedFlight.flight_1.from = '';
+                state.choosedFlight.flight_1.from_airport_name = '';
+                state.choosedFlight.flight_1.from_airport_code = '';
+                state.choosedFlight.flight_1.to = '';
+                state.choosedFlight.flight_1.to_airport_name = '';
+                state.choosedFlight.flight_1.to_airport_code = '';
+                state.choosedFlight.flight_1.departure_date = '';
+                state.choosedFlight.flight_1.departure_time = '';
+                state.choosedFlight.flight_1.arrival_date = '';
+                state.choosedFlight.flight_1.arrival_time = '';
+                state.choosedFlight.flight_1.duration = '';
+                state.choosedFlight.flight_2.is_choose = false;
+                // state.choosedFlight.flight_2.flight_id = '';
+                state.choosedFlight.flight_2.airline = '';
+                state.choosedFlight.flight_2.from = '';
+                state.choosedFlight.flight_2.from_airport_name = '';
+                state.choosedFlight.flight_2.from_airport_code = '';
+                state.choosedFlight.flight_2.to = '';
+                state.choosedFlight.flight_2.to_airport_name = '';
+                state.choosedFlight.flight_2.to_airport_code = '';
+                state.choosedFlight.flight_2.departure_date = '';
+                state.choosedFlight.flight_2.departure_time = '';
+                state.choosedFlight.flight_2.arrival_date = '';
+                state.choosedFlight.flight_2.arrival_time = '';
+                state.choosedFlight.flight_2.duration = '';
+                state.searchPage.from = state.homeSearch.from;
+                state.searchPage.to = state.homeSearch.to;
+                state.searchPage.search_date = state.homeSearch.departure_dateTime;
+                state.searchPage.search_date_return = state.homeSearch.return_dateTime;
+                state.isReadyToOrder = false;
+                return;
+            }
+
+            // if (state.isTwoWay && state.choosedFlight.flight_1.is_choose) {
+            //     state.fetchDetailFlight = 'sans';
+            //     state.flightDetailId = [];
+            //     state.flight_title = 'Keberangkatan';
+            //     state.choosedFlight.flight_1.is_choose = false;
+            //     // state.choosedFlight.flight_1.flight_id = '';
+            //     state.choosedFlight.flight_1.airline = '';
+            //     state.choosedFlight.flight_1.from = '';
+            //     state.choosedFlight.flight_1.from_airport_name = '';
+            //     state.choosedFlight.flight_1.from_airport_code = '';
+            //     state.choosedFlight.flight_1.to = '';
+            //     state.choosedFlight.flight_1.to_airport_name = '';
+            //     state.choosedFlight.flight_1.to_airport_code = '';
+            //     state.choosedFlight.flight_1.departure_date = '';
+            //     state.choosedFlight.flight_1.departure_time = '';
+            //     state.choosedFlight.flight_1.arrival_date = '';
+            //     state.choosedFlight.flight_1.arrival_time = '';
+            //     state.choosedFlight.flight_1.duration = '';
+
+            //     state.searchPage.from = state.homeSearch.from;
+            //     state.searchPage.to = state.homeSearch.to;
+            //     state.searchPage.search_date = state.homeSearch.departure_dateTime;
+            //     state.searchPage.search_date_return = '';
+            //     // state.searchPage.isSearchAgain = true;
+            //     // state.fetchFlightStatusTwo = 'idle';
+            //     state.isReadyToOrder = false;
+            //     return;
+            // }
+
+            if (!state.isTwoWay && state.choosedFlight.flight_1.is_choose) {
+                state.fetchDetailFlight = 'sans';
+                state.flightDetailId = [];
+                state.flight_title = 'Departure';
+                state.choosedFlight.flight_1.is_choose = false;
+                // state.choosedFlight.flight_1.flight_id = '';
+                state.choosedFlight.flight_1.airline = '';
+                state.choosedFlight.flight_1.from = '';
+                state.choosedFlight.flight_1.from_airport_name = '';
+                state.choosedFlight.flight_1.from_airport_code = '';
+                state.choosedFlight.flight_1.to = '';
+                state.choosedFlight.flight_1.to_airport_name = '';
+                state.choosedFlight.flight_1.to_airport_code = '';
+                state.choosedFlight.flight_1.departure_date = '';
+                state.choosedFlight.flight_1.departure_time = '';
+                state.choosedFlight.flight_1.arrival_date = '';
+                state.choosedFlight.flight_1.arrival_time = '';
+                state.choosedFlight.flight_1.duration = '';
+
+                state.searchPage.from = state.homeSearch.from;
+                state.searchPage.to = state.homeSearch.to;
+                state.searchPage.search_date = state.homeSearch.departure_dateTime;
+                state.searchPage.search_date_return = '';
+                state.isReadyToOrder = false;
+                return;
+            }
+        },
     },
 
     extraReducers: (builder) => {
@@ -1198,7 +1287,7 @@ export const flightSlice = createSlice({
         });
         builder.addCase(fetchAirport.fulfilled, (state, action) => {
             state.fetchAirportStatus = 'succeeded';
-            state.airports = [...state.airports, ...action.payload];
+            state.airports = action.payload;
         });
         builder.addCase(fetchAirport.rejected, (state, action) => {
             state.fetchAirportStatus = 'failed';

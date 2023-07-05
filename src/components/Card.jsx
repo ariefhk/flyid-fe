@@ -30,7 +30,7 @@ function Footer({ handleCardAction, className, children }) {
         <div className={`${className} absolute bottom-3 right-4`}>
             <Button
                 onClick={handleCardAction}
-                className='h-[48px] w-[150px] rounded-rad-3 bg-pur-5 py-3 text-white hover:bg-pur-2 '>
+                className='h-[48px] w-[150px] rounded-rad-3 bg-pur-3 py-3 text-white hover:bg-pur-2 '>
                 {children}
             </Button>
         </div>

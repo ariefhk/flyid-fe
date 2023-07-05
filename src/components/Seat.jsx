@@ -14,11 +14,11 @@ export default function Seat({
         <div className={`w-full rounded-rad-1 border px-4 py-2 font-poppins`}>
             {/* seat head */}
             <div className='my-3 flex items-center justify-between'>
-                <div className='flex flex-col gap-1'>
-                    <h1 className='text-head-1 font-bold'>Pilih Kursi {type}</h1>
+                <div className='flex flex-col lg:gap-1'>
+                    <h1 className='text-body-4  font-bold lg:text-head-1'>Choose Seat {type}</h1>
                     <div className='flex items-center gap-1'>
-                        <h1 className='text-body-6 font-medium'>{flight_airline}</h1>
-                        <h1 className='text-body-4 '>
+                        <h1 className='text-body-2 font-medium lg:text-body-6'>{flight_airline}</h1>
+                        <h1 className='text-body-1 lg:text-body-4 '>
                             ( {flight_from} {'-->'} {flight_to} )
                         </h1>
                     </div>
@@ -26,26 +26,26 @@ export default function Seat({
 
                 <div className='flex gap-3'>
                     <div className='flex flex-col items-center gap-1'>
-                        <div className='flex h-[36px] w-[36px] items-center justify-center rounded-[6px]  bg-pur-3 text-white'>
-                            <p>A1</p>
-                        </div>
-                        <p className='text-body-1 lg:text-body-6'>Terpilih </p>
-                    </div>
-                    <div className='flex flex-col items-center gap-1'>
                         <div className='flex h-[36px] w-[36px] items-center justify-center rounded-[6px]  bg-pur-4 text-white'>
                             <p>A1</p>
                         </div>
-                        <p className='text-body-1 lg:text-body-6'>Tersedia</p>
+                        <p className='text-body-1 lg:text-body-6'>Choosed </p>
+                    </div>
+                    <div className='flex flex-col items-center gap-1'>
+                        <div className='flex h-[36px] w-[36px] items-center justify-center rounded-[6px]  bg-pur-3 text-white'>
+                            <p>A1</p>
+                        </div>
+                        <p className='text-body-1 lg:text-body-6'>Available</p>
                     </div>
                     <div className='flex flex-col items-center gap-1'>
                         <div className='flex h-[36px] w-[36px] items-center justify-center rounded-[6px]  bg-[#d0d0d0] text-white'>
                             <p>A1</p>
                         </div>
-                        <p className='text-body-1 lg:text-body-6'>Tdk Tersedia</p>
+                        <p className='text-body-1 lg:text-body-6'>Unavailable</p>
                     </div>
                 </div>
             </div>
-            <div className='flex justify-center rounded-rad-1 bg-pur-4 py-3 text-white'>
+            <div className='flex justify-center rounded-rad-1 bg-pur-3 py-3 text-white'>
                 <h1>{flight_class} - 37 Seats Available</h1>
             </div>
             {/* seat head */}
@@ -70,8 +70,8 @@ export default function Seat({
                                                         background: !data.available
                                                             ? '#d0d0d0'
                                                             : seat.find((d) => d.code === data.code)
-                                                            ? '#00AD10'
-                                                            : '#003D20',
+                                                            ? '#003D20'
+                                                            : '#00AD10',
                                                     }}
                                                     className={
                                                         'flex h-[36px] w-[36px] items-center justify-center rounded-[6px] bg-[#d0d0d0] text-white'
@@ -102,8 +102,8 @@ export default function Seat({
                                                         background: !data.available
                                                             ? '#d0d0d0'
                                                             : seat.find((d) => d.code === data.code)
-                                                            ? '#00AD10'
-                                                            : '#003D20',
+                                                            ? '#003D20'
+                                                            : '#00AD10',
                                                     }}
                                                     className={
                                                         'flex h-[36px] w-[36px] items-center justify-center rounded-[6px] bg-[#d0d0d0] text-white'
@@ -134,8 +134,8 @@ export default function Seat({
                                                         background: !data.available
                                                             ? '#d0d0d0'
                                                             : seat.find((d) => d.code === data.code)
-                                                            ? '#00AD10'
-                                                            : '#003D20',
+                                                            ? '#003D20'
+                                                            : '#00AD10',
                                                     }}
                                                     className={
                                                         'flex h-[36px] w-[36px] items-center justify-center rounded-[6px] bg-[#d0d0d0] text-white'
@@ -192,8 +192,8 @@ export default function Seat({
                                                         background: !data.available
                                                             ? '#d0d0d0'
                                                             : seat.find((d) => d.code === data.code)
-                                                            ? '#00AD10'
-                                                            : '#003D20',
+                                                            ? '#003D20'
+                                                            : '#00AD10',
                                                     }}
                                                     className={
                                                         'flex h-[36px] w-[36px] items-center justify-center rounded-[6px] bg-[#d0d0d0] text-white'
@@ -223,8 +223,8 @@ export default function Seat({
                                                         background: !data.available
                                                             ? '#d0d0d0'
                                                             : seat.find((d) => d.code === data.code)
-                                                            ? '#00AD10'
-                                                            : '#003D20',
+                                                            ? '#003D20'
+                                                            : '#00AD10',
                                                     }}
                                                     className={
                                                         'flex h-[36px] w-[36px] items-center justify-center rounded-[6px] bg-[#d0d0d0] text-white'
@@ -256,8 +256,8 @@ export default function Seat({
                                                         background: !data.available
                                                             ? '#d0d0d0'
                                                             : seat.find((d) => d.code === data.code)
-                                                            ? '#00AD10'
-                                                            : '#003D20',
+                                                            ? '#003D20'
+                                                            : '#00AD10',
                                                     }}
                                                     className={
                                                         'flex h-[36px] w-[36px] items-center justify-center rounded-[6px] bg-[#d0d0d0] text-white'

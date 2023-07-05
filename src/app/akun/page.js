@@ -55,12 +55,12 @@ export default function Akun() {
     const option = [
         {
             id: 1,
-            menu: 'Pengaturan Akun',
+            menu: 'Account Settings',
             icons: <FiSettings className='h-[18px] w-[18px]  group-hover:text-white' />,
         },
         {
             id: 3,
-            menu: 'Keluar',
+            menu: 'Sign Out',
             icons: <FiLogOut className='h-[18px] w-[18px]   group-hover:text-white' />,
         },
     ];
@@ -81,7 +81,7 @@ export default function Akun() {
 
             if (!userData.name || !userData.phone) {
                 setErrorInput(true);
-                handleVisibleAlert('Harap isi semua data!', 'failed');
+                handleVisibleAlert('Please fill all data!', 'failed');
                 return;
             }
 
@@ -98,7 +98,7 @@ export default function Akun() {
                 }
             );
             if (res.status == 200 || res.data.status == 'OK') {
-                handleVisibleAlert('Berhasil mengubah profil!', 'success');
+                handleVisibleAlert('Succesfully update the profile!', 'success');
                 setIsLoading(true);
                 setFetchData(true);
                 setChangeData(false);
@@ -136,7 +136,7 @@ export default function Akun() {
 
                         console.log('CURRENT USER:', res.data);
                     } catch (error) {
-                        handleVisibleAlert('Sesi Anda telah Berakhir!', 'failed');
+                        handleVisibleAlert('Session Expired!', 'failed');
                         setTimeout(() => {
                             signOut();
                         }, 2500);
@@ -162,12 +162,12 @@ export default function Akun() {
             {/* header */}
             <div className='mt-[80px] hidden w-screen border border-b-net-2 pb-4 lg:block'>
                 <div className='container mx-auto hidden max-w-screen-lg grid-cols-12 gap-3 font-poppins lg:grid'>
-                    <h1 className='col-span-12 mb-[24px] mt-[47px] font-poppins text-head-1 font-bold'>Akun</h1>
+                    <h1 className='col-span-12 mb-[24px] mt-[47px] font-poppins text-head-1 font-bold'>Account</h1>
                     <div
-                        className='col-span-12 flex cursor-pointer items-center gap-4 rounded-rad-3 bg-pur-4 py-[13px] font-poppins text-title-2 font-medium text-white'
+                        className='col-span-12 flex cursor-pointer items-center gap-4 rounded-rad-3 bg-pur-3 py-[13px] font-poppins text-title-2 font-medium text-white'
                         onClick={() => router.push('/')}>
                         <FiArrowLeft className='ml-[21px]  h-6 w-6 ' />
-                        <p>Beranda</p>
+                        <p>Home</p>
                     </div>
                 </div>
             </div>
@@ -184,8 +184,8 @@ export default function Akun() {
                                     //handleSelectedMenu(opt.id);
                                     onClick={() => (opt.id === 3 ? signOut() : handleSelectedMenu(opt.id))}
                                     className={`${
-                                        selectedMenu === opt.id ? 'group bg-pur-4 text-white' : 'group bg-white text-black'
-                                    }  flex cursor-pointer items-center gap-4 rounded-rad-2 border-b-[1px] px-3 py-4 hover:bg-pur-3 `}>
+                                        selectedMenu === opt.id ? 'group bg-pur-2 text-white' : 'group bg-white text-black'
+                                    }  flex cursor-pointer items-center gap-4 rounded-rad-2 border-b-[1px] px-3 py-4 hover:bg-pur-2 `}>
                                     {opt.icons}
                                     <p
                                         className={`${
@@ -205,20 +205,20 @@ export default function Akun() {
                         {selectedMenu === 1 && (
                             <div>
                                 <div className='mb-5 mt-[40px] flex gap-2'>
-                                    <h1 className='text-head-1 font-bold'>Ubah Data Profil </h1>
+                                    <h1 className='text-head-1 font-bold'>Update Profile</h1>
                                     <p className='text-start text-body-3 font-normal text-alert-3'>
-                                        *Anda tidak dapat mengubah email!
+                                        *You {"can't"} update emails!
                                     </p>
                                 </div>
                                 <div className='flex flex-col gap-4'>
-                                    <div className='rounded-t-rad-2 bg-pur-4 px-4 py-2 text-title-2 text-white'>
-                                        <h1>Data Diri</h1>
+                                    <div className='rounded-t-rad-2 bg-pur-3 px-4 py-2 text-title-2 text-white'>
+                                        <h1>Profile Data</h1>
                                     </div>
 
                                     <div className='flex flex-col gap-3'>
                                         <div className='flex flex-col gap-2'>
                                             <Label htmlFor={'name'} className='text-body-6 font-bold text-pur-5'>
-                                                Nama Lengkap
+                                                Full Name
                                             </Label>
                                             <Input
                                                 id={'name'}
@@ -226,7 +226,7 @@ export default function Akun() {
                                                 name={'name'}
                                                 // readOnly
                                                 disabled={!changeData}
-                                                value={isLoading ? 'Sedang menload data...' : userData.name}
+                                                value={isLoading ? 'loading data...' : userData.name}
                                                 className={`${
                                                     errorInput && !userData.name ? 'border-alert-3' : 'border'
                                                 } rounded-rad-1   px-4 py-2`}
@@ -234,7 +234,7 @@ export default function Akun() {
                                         </div>
                                         <div className='flex flex-col gap-2'>
                                             <Label htmlFor={'phone'} className='text-body-6 font-bold text-pur-5'>
-                                                Nomor Telepon
+                                                Phone Number
                                             </Label>
                                             <Input
                                                 id={'phone'}
@@ -242,7 +242,7 @@ export default function Akun() {
                                                 name={'phone'}
                                                 // readOnly
                                                 disabled={!changeData}
-                                                value={isLoading ? 'Sedang menload data...' : userData.phone}
+                                                value={isLoading ? 'loading data...' : userData.phone}
                                                 className={`${
                                                     errorInput && !userData.phone ? 'border-alert-3' : 'border'
                                                 } rounded-rad-1 px-4 py-2`}
@@ -250,13 +250,13 @@ export default function Akun() {
                                         </div>
                                         <div className='flex flex-col gap-2'>
                                             <Label htmlFor={'email'} className='text-body-6 font-bold text-pur-5'>
-                                                Email
+                                                Emails
                                             </Label>
                                             <Input
                                                 id={'email'}
                                                 readOnly
                                                 disabled
-                                                value={isLoading ? 'Sedang menload data...' : userData.email}
+                                                value={isLoading ? 'loading data...' : userData.email}
                                                 className='cursor-not-allowed rounded-rad-1 px-4 py-2'
                                             />
                                         </div>
@@ -265,14 +265,14 @@ export default function Akun() {
                                                 {!changeData ? (
                                                     <Button
                                                         onClick={() => setChangeData(true)}
-                                                        className='rounded-rad-3 bg-pur-5 px-11 py-3 text-white'>
-                                                        Ubah Data
+                                                        className='rounded-rad-3 bg-pur-3 px-11 py-3 text-white'>
+                                                        Update data
                                                     </Button>
                                                 ) : (
                                                     <Button
                                                         onClick={() => updateProfile()}
-                                                        className='rounded-rad-3 bg-pur-3 px-11 py-3 text-white'>
-                                                        Simpan
+                                                        className='rounded-rad-3 bg-pur-2 px-11 py-3 text-white'>
+                                                        Save
                                                     </Button>
                                                 )}
 
@@ -310,7 +310,7 @@ export default function Akun() {
 
             {/* RESPONSIVE MODE */}
             <div className='mx-[24px] mt-[64px]  font-poppins lg:hidden'>
-                <h1 className='text-head-2 font-bold'>Akun</h1>
+                <h1 className='text-head-2 font-bold'>Account</h1>
 
                 <div className='mt-[36px]'>
                     {option &&
@@ -341,13 +341,13 @@ export default function Akun() {
                         <div
                             onClick={() => handleMobileUpdateProfil()}
                             className='fixed inset-x-0 top-0 z-10 flex items-center gap-6 bg-pur-5 px-[16px]  py-2  text-white'>
-                            <FiArrowLeft className='h-[28px] w-[28px]' /> <p>Update Data Profil</p>
+                            <FiArrowLeft className='h-[28px] w-[28px]' /> <p>Update Profile</p>
                         </div>
 
                         <div className='mt-[100px] flex flex-col gap-3'>
                             <div className='flex flex-col gap-2'>
                                 <Label htmlFor={'name'} className='text-body-6 font-bold text-pur-5'>
-                                    Nama Lengkap
+                                    Full Name
                                 </Label>
                                 <Input
                                     id={'name'}
@@ -355,7 +355,7 @@ export default function Akun() {
                                     name={'name'}
                                     // readOnly
                                     disabled={!changeData}
-                                    value={isLoading ? 'Sedang menload data...' : userData.name}
+                                    value={isLoading ? 'loading data...' : userData.name}
                                     className={`${
                                         errorInput && !userData.name ? 'border-alert-3' : 'border'
                                     } rounded-rad-1   px-4 py-2`}
@@ -363,7 +363,7 @@ export default function Akun() {
                             </div>
                             <div className='flex flex-col gap-2'>
                                 <Label htmlFor={'phone'} className='text-body-6 font-bold text-pur-5'>
-                                    Nomor Telepon
+                                    Phone Number
                                 </Label>
                                 <Input
                                     id={'phone'}
@@ -371,7 +371,7 @@ export default function Akun() {
                                     name={'phone'}
                                     // readOnly
                                     disabled={!changeData}
-                                    value={isLoading ? 'Sedang menload data...' : userData.phone}
+                                    value={isLoading ? 'loading data...' : userData.phone}
                                     className={`${
                                         errorInput && !userData.phone ? 'border-alert-3' : 'border'
                                     } rounded-rad-1 px-4 py-2`}
@@ -379,13 +379,13 @@ export default function Akun() {
                             </div>
                             <div className='flex flex-col gap-2'>
                                 <Label htmlFor={'email'} className='text-body-6 font-bold text-pur-5'>
-                                    Email
+                                    Emails
                                 </Label>
                                 <Input
                                     id={'email'}
                                     readOnly
                                     disabled
-                                    value={isLoading ? 'Sedang menload data...' : userData.email}
+                                    value={isLoading ? 'loading data...' : userData.email}
                                     className='cursor-not-allowed rounded-rad-1 px-4 py-2'
                                 />
                             </div>
@@ -394,14 +394,14 @@ export default function Akun() {
                                     {!changeData ? (
                                         <Button
                                             onClick={() => setChangeData(true)}
-                                            className='rounded-rad-3 bg-pur-5 px-11 py-3 text-white'>
-                                            Ubah Data
+                                            className='rounded-rad-3 bg-pur-3 px-11 py-3 text-white'>
+                                            Update data
                                         </Button>
                                     ) : (
                                         <Button
                                             onClick={() => updateProfile()}
-                                            className='rounded-rad-3 bg-pur-3 px-11 py-3 text-white'>
-                                            Simpan
+                                            className='rounded-rad-3 bg-pur-2 px-11 py-3 text-white'>
+                                            Save
                                         </Button>
                                     )}
 
