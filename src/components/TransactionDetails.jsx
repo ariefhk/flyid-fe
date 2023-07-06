@@ -94,7 +94,7 @@ export default function TransactionDetails({ data }) {
                 <div className='flex flex-col gap-4'>
                     {data?.arrival?.transaction_type && (
                         <h1 className='w-max rounded-rad-3 bg-pur-5 px-2 py-1 text-body-6 font-normal text-white lg:rounded-rad-4'>
-                            Arrival - Flight 2
+                            Return - Flight 2
                         </h1>
                     )}
 
@@ -179,7 +179,7 @@ export default function TransactionDetails({ data }) {
                 {data?.price?.arrival && (
                     <div className='flex flex-col gap-1'>
                         <p className='mb-1 w-max rounded-rad-4 bg-pur-5 px-2 py-1 text-body-6 text-white'>
-                            {data?.arrival?.Flight?.Airline?.airline_name}- Arrival
+                            {data?.arrival?.Flight?.Airline?.airline_name}- Return
                         </p>
                         {data?.passenger?.adult > 0 && (
                             <div className='flex items-center justify-between text-body-6'>

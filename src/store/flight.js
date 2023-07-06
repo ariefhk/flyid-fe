@@ -3,6 +3,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { convertToDate, convertToTime } from '@/utils/converDateTime';
 import axios from 'axios';
+import { fixedHour } from '@/utils/fixedHour';
 
 const URL = 'https://kel1airplaneapi-production.up.railway.app/api/v1/airport';
 // const SEARCH_URL = 'https://kel1airplaneapi-production.up.railway.app/api/v1/flight/searchflight';
@@ -51,8 +52,17 @@ export const fetchFlight = createAsyncThunk(
             };
 
             const response = await axios.post(SEARCH_URL, objectTemplate);
-            // console.log('FLIGHT DATAS', response);
-            return response.data.data.flight;
+
+            return response.data.data.flight.filter((flight) => {
+                let dates = new Date(`${flight?.departure_date}`);
+                let year = dates.getFullYear();
+                let month = dates.getMonth() + 1;
+                let date = dates.getDate();
+                let format = `${year}-${month < 10 ? `0${month}` : month}-${date < 10 ? `0${date}` : date}`;
+                let hourss = `${fixedHour(flight?.departure_time)}`;
+                let dateTime = `${format} ${hourss}`;
+                return new Date(dateTime).getTime() > new Date().getTime();
+            });
         } catch (error) {
             console.log('ERRROR FLIGHT', error.message);
             // return error.message;
@@ -209,11 +219,70 @@ const initialState = {
                     field_type: 'date',
                 },
                 {
-                    field_category: 'nationality',
+                    field_category: `nationality`,
                     field_id: `nationality1`,
                     field_label: 'Nationality',
-                    field_value: '',
-                    field_type: 'text',
+                    field_value: 'Indonesia',
+                    field_options: [
+                        {
+                            option_label: 'Indonesia',
+                        },
+                        {
+                            option_label: 'Singapore',
+                        },
+                        {
+                            option_label: 'Malaysia',
+                        },
+                        {
+                            option_label: 'China',
+                        },
+                        {
+                            option_label: 'South Korea',
+                        },
+                        {
+                            option_label: 'Brunei',
+                        },
+                        {
+                            option_label: 'Cambodia',
+                        },
+                        {
+                            option_label: 'Laos',
+                        },
+                        {
+                            option_label: 'Myanmar',
+                        },
+                        {
+                            option_label: 'Philippines',
+                        },
+                        {
+                            option_label: 'Vietnam',
+                        },
+                        {
+                            option_label: 'India',
+                        },
+                        {
+                            option_label: 'Australia',
+                        },
+                        {
+                            option_label: 'United States',
+                        },
+                        {
+                            option_label: 'Japan',
+                        },
+                        {
+                            option_label: 'United Kingdom',
+                        },
+                        {
+                            option_label: 'Germany',
+                        },
+                        {
+                            option_label: 'Canada',
+                        },
+                        {
+                            option_label: 'Brazil',
+                        },
+                    ],
+                    field_type: 'select',
                 },
                 {
                     field_category: 'ktp_paspor',
@@ -500,11 +569,70 @@ export const flightSlice = createSlice({
                             field_type: 'date',
                         },
                         {
-                            field_category: 'nationality',
+                            field_category: `nationality`,
                             field_id: `nationality_${genId()}`,
                             field_label: 'Nationality',
-                            field_value: '',
-                            field_type: 'text',
+                            field_value: 'Indonesia',
+                            field_options: [
+                                {
+                                    option_label: 'Indonesia',
+                                },
+                                {
+                                    option_label: 'Singapore',
+                                },
+                                {
+                                    option_label: 'Malaysia',
+                                },
+                                {
+                                    option_label: 'China',
+                                },
+                                {
+                                    option_label: 'South Korea',
+                                },
+                                {
+                                    option_label: 'Brunei',
+                                },
+                                {
+                                    option_label: 'Cambodia',
+                                },
+                                {
+                                    option_label: 'Laos',
+                                },
+                                {
+                                    option_label: 'Myanmar',
+                                },
+                                {
+                                    option_label: 'Philippines',
+                                },
+                                {
+                                    option_label: 'Vietnam',
+                                },
+                                {
+                                    option_label: 'India',
+                                },
+                                {
+                                    option_label: 'Australia',
+                                },
+                                {
+                                    option_label: 'United States',
+                                },
+                                {
+                                    option_label: 'Japan',
+                                },
+                                {
+                                    option_label: 'United Kingdom',
+                                },
+                                {
+                                    option_label: 'Germany',
+                                },
+                                {
+                                    option_label: 'Canada',
+                                },
+                                {
+                                    option_label: 'Brazil',
+                                },
+                            ],
+                            field_type: 'select',
                         },
                         {
                             field_category: 'ktp_paspor',
@@ -566,11 +694,70 @@ export const flightSlice = createSlice({
                             field_type: 'date',
                         },
                         {
-                            field_category: 'nationality',
+                            field_category: `nationality`,
                             field_id: `nationality_${genId()}`,
                             field_label: 'Nationality',
-                            field_value: '',
-                            field_type: 'text',
+                            field_value: 'Indonesia',
+                            field_options: [
+                                {
+                                    option_label: 'Indonesia',
+                                },
+                                {
+                                    option_label: 'Singapore',
+                                },
+                                {
+                                    option_label: 'Malaysia',
+                                },
+                                {
+                                    option_label: 'China',
+                                },
+                                {
+                                    option_label: 'South Korea',
+                                },
+                                {
+                                    option_label: 'Brunei',
+                                },
+                                {
+                                    option_label: 'Cambodia',
+                                },
+                                {
+                                    option_label: 'Laos',
+                                },
+                                {
+                                    option_label: 'Myanmar',
+                                },
+                                {
+                                    option_label: 'Philippines',
+                                },
+                                {
+                                    option_label: 'Vietnam',
+                                },
+                                {
+                                    option_label: 'India',
+                                },
+                                {
+                                    option_label: 'Australia',
+                                },
+                                {
+                                    option_label: 'United States',
+                                },
+                                {
+                                    option_label: 'Japan',
+                                },
+                                {
+                                    option_label: 'United Kingdom',
+                                },
+                                {
+                                    option_label: 'Germany',
+                                },
+                                {
+                                    option_label: 'Canada',
+                                },
+                                {
+                                    option_label: 'Brazil',
+                                },
+                            ],
+                            field_type: 'select',
                         },
                         {
                             field_category: 'ktp_paspor',
@@ -632,11 +819,70 @@ export const flightSlice = createSlice({
                             field_type: 'date',
                         },
                         {
-                            field_category: 'nationality',
+                            field_category: `nationality`,
                             field_id: `nationality_${genId()}`,
                             field_label: 'Nationality',
-                            field_value: '',
-                            field_type: 'text',
+                            field_value: 'Indonesia',
+                            field_options: [
+                                {
+                                    option_label: 'Indonesia',
+                                },
+                                {
+                                    option_label: 'Singapore',
+                                },
+                                {
+                                    option_label: 'Malaysia',
+                                },
+                                {
+                                    option_label: 'China',
+                                },
+                                {
+                                    option_label: 'South Korea',
+                                },
+                                {
+                                    option_label: 'Brunei',
+                                },
+                                {
+                                    option_label: 'Cambodia',
+                                },
+                                {
+                                    option_label: 'Laos',
+                                },
+                                {
+                                    option_label: 'Myanmar',
+                                },
+                                {
+                                    option_label: 'Philippines',
+                                },
+                                {
+                                    option_label: 'Vietnam',
+                                },
+                                {
+                                    option_label: 'India',
+                                },
+                                {
+                                    option_label: 'Australia',
+                                },
+                                {
+                                    option_label: 'United States',
+                                },
+                                {
+                                    option_label: 'Japan',
+                                },
+                                {
+                                    option_label: 'United Kingdom',
+                                },
+                                {
+                                    option_label: 'Germany',
+                                },
+                                {
+                                    option_label: 'Canada',
+                                },
+                                {
+                                    option_label: 'Brazil',
+                                },
+                            ],
+                            field_type: 'select',
                         },
                         {
                             field_category: 'ktp_paspor',
@@ -719,7 +965,7 @@ export const flightSlice = createSlice({
                 state.choosedFlight.flight_1.duration = action.payload.duration;
                 state.choosedFlight.flight_1.is_choose = true;
 
-                state.flight_title = 'Arrival';
+                state.flight_title = 'Return';
                 state.searchPage.from = state.homeSearch.to;
                 state.searchPage.to = state.homeSearch.from;
                 state.searchPage.search_date = state.homeSearch.return_dateTime;
@@ -1051,7 +1297,7 @@ export const flightSlice = createSlice({
 
             if (!action.payload && state.isTwoWay && state.choosedFlight.flight_1.is_choose) {
                 state.fetchDetailFlight = 'sans';
-                state.flight_title = 'Arrival';
+                state.flight_title = 'Return';
                 state.flightDetailId = [state.flightDetailId[0]];
                 state.choosedFlight.flight_2.is_choose = false;
                 // state.choosedFlight.flight_2.flight_id = '';
@@ -1294,6 +1540,7 @@ export const flightSlice = createSlice({
         });
         builder.addCase(fetchFlight.fulfilled, (state, action) => {
             state.fetchFlightStatusTwo = 'succeeded';
+
             state.flightDatas = action.payload;
         });
         builder.addCase(fetchFlight.rejected, (state, action) => {

@@ -99,7 +99,7 @@ export default function MobileFlightDetails({
             {data?.pulang?.departure_date && (
                 <div className='mb-2 mt-4'>
                     <h1 className='w-max rounded-rad-3 bg-pur-5 px-2 py-1   text-body-6 font-normal text-white lg:rounded-rad-4'>
-                        Arrival - Flight 2
+                        Return - Flight 2
                     </h1>
                 </div>
             )}
@@ -187,7 +187,7 @@ export default function MobileFlightDetails({
                     <div className='flex flex-col gap-1'>
                         {data?.pulang?.departure_date && (
                             <p className='mb-1 w-max rounded-rad-4 bg-pur-5 px-2 py-1 text-body-6 text-white'>
-                                {data?.pulang?.Airline?.airline_name} - Arrival
+                                {data?.pulang?.Airline?.airline_name} - Return
                             </p>
                         )}
                         {passengerType.dewasa > 0 && (

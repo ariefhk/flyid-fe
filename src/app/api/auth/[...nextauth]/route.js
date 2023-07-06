@@ -38,8 +38,8 @@ const handler = NextAuth({
                     );
                     return res.data.data;
                 } catch (error) {
-                    // throw new Error(error.response.data.message);
-                    return null;
+                    throw new Error(error.response.data.message);
+                    // return null;
                 }
             },
         }),

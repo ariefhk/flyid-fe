@@ -118,8 +118,8 @@ export default function OTPTest() {
             <section className='hidden h-full w-full bg-white lg:block'>
                 <Navbar isCredential={false} isSearchMode={false} />
 
-                <div className='mt-[80px]'>
-                    <button onClick={() => router.push('/register')}>
+                <div className='mt-[120px]'>
+                    {/* <button onClick={() => router.push('/register')}>
                         <Image
                             className='ml-[341px] mt-[45px]'
                             src={`/images/backh.svg`}
@@ -128,7 +128,7 @@ export default function OTPTest() {
                             height={24}
                             quality={100}
                         />
-                    </button>
+                    </button> */}
                     <div className='relative mt-[5px] flex justify-center overflow-hidden font-poppins'>
                         <div className='relative mx-auto  w-[568px]  pt-[1px] '>
                             <div className='mx-auto flex w-full flex-col pt-[2px]  '>
@@ -233,7 +233,7 @@ export default function OTPTest() {
                                                     <button
                                                         type='submit'
                                                         className='flex h-[48px] w-full flex-row items-center justify-center rounded-[16px] border bg-pur-3 text-center text-[14px] font-semibold text-white shadow-sm hover:bg-pur-2'>
-                                                        Save
+                                                        Verify
                                                     </button>
                                                 </div>
                                             </div>
@@ -258,9 +258,9 @@ export default function OTPTest() {
                 <div className='grid h-full w-full grid-cols-12 '>
                     <div className='col-span-12 flex flex-col gap-16 '>
                         <div className=' ml-[24px] mt-[64px]'>
-                            <button onClick={() => router.push('/register')}>
+                            {/* <button onClick={() => router.push('/register')}>
                                 <Image src={`/images/backh.svg`} alt='' width={24} height={24} quality={100} />
-                            </button>
+                            </button> */}
                             <h1 className='mt-[48px]  text-head-2 font-bold'>Enter OTP</h1>
                         </div>
 
@@ -357,7 +357,7 @@ export default function OTPTest() {
                                 <button
                                     type='submit'
                                     className='w-[328px] rounded-[16px] border bg-pur-3 py-3  text-[14px] font-semibold text-white shadow-low hover:bg-pur-2'>
-                                    Save
+                                    Verify
                                 </button>
                             </div>
                         </form>

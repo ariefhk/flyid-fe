@@ -113,7 +113,7 @@ export default function TransactionHistoryDetails({ historyItem, handleUpdatePay
                         } mb-2 mt-4 w-full border text-net-3`}></div>
                     {historyItem?.transaction?.Flights[1] && (
                         <div className='mt-3'>
-                            <h1 className='mb-2 w-max rounded-rad-2 bg-pur-4 px-4 py-2 text-body-6 text-white'>Arrival</h1>
+                            <h1 className='mb-2 w-max rounded-rad-2 bg-pur-4 px-4 py-2 text-body-6 text-white'>Return</h1>
                             <div className='flex justify-between'>
                                 <div>
                                     <h1 className='text-title-2 font-bold'>
@@ -279,7 +279,7 @@ export default function TransactionHistoryDetails({ historyItem, handleUpdatePay
                     <Button
                         onClick={() => handleSendTicket(historyItem?.transaction?.Flights[0]?.Transaction_Flight?.transaction_id)}
                         className='mt-8 w-full rounded-rad-4 bg-pur-3 py-4 text-head-1 font-medium text-white hover:bg-pur-2 '>
-                        Print Ticket
+                        Generate E-Ticket
                     </Button>
                 )}
             </div>

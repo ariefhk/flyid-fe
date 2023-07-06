@@ -106,7 +106,7 @@ export default function PaymentSuccess() {
                             <Button
                                 onClick={() => handleSendTicket()}
                                 className='rounded-rad-3 bg-pur-3 py-3 text-white hover:bg-pur-2'>
-                                Print Ticket
+                                Generate E-Ticket
                             </Button>
                             <Button
                                 onClick={() => router.push('/')}

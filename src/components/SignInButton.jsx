@@ -81,7 +81,7 @@ export default function SignInButton() {
             <Button
                 className='flex items-center justify-center gap-3 rounded-rad-3 bg-pur-3 px-4 py-[14px] text-white'
                 onClick={() => signIn()}>
-                <FiLogIn /> Masuk
+                <FiLogIn /> Sign In
             </Button>
         </div>
     );

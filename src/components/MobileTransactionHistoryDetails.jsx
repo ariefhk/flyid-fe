@@ -104,7 +104,9 @@ export default function MobileTransactionHistoryDetails({ handleOpen, historyIte
                                     <p className='text-title-1 font-bold'>
                                         {fixedHour(historyItem?.transaction?.Flights[0]?.arrival_time)}
                                     </p>
-                                    <p className='text-body-5'>{reformatDate(historyItem?.transaction?.Flights[0]?.arrival_date)}</p>
+                                    <p className='text-body-5'>
+                                        {reformatDate(historyItem?.transaction?.Flights[0]?.arrival_date)}
+                                    </p>
                                     <p className='text-body-5 font-medium'>
                                         {historyItem?.transaction?.Flights[0]?.Airport_to?.airport_name}
                                     </p>
@@ -120,7 +122,7 @@ export default function MobileTransactionHistoryDetails({ handleOpen, historyIte
                     {/* Detail Transaction 1 */}
                     {historyItem?.transaction?.Flights[1] && (
                         <div className='flex flex-col gap-2'>
-                            <p className='w-max rounded-rad-4 bg-pur-5 px-2 py-1 text-body-6 text-white'>Arrival - Flight 2</p>
+                            <p className='w-max rounded-rad-4 bg-pur-5 px-2 py-1 text-body-6 text-white'>Return - Flight 2</p>
 
                             <div className='flex justify-between'>
                                 <div>
@@ -168,7 +170,9 @@ export default function MobileTransactionHistoryDetails({ handleOpen, historyIte
                                     <p className='text-title-1 font-bold'>
                                         {fixedHour(historyItem?.transaction?.Flights[1]?.arrival_time)}
                                     </p>
-                                    <p className='text-body-5'>{reformatDate(historyItem?.transaction?.Flights[1]?.arrival_date)}</p>
+                                    <p className='text-body-5'>
+                                        {reformatDate(historyItem?.transaction?.Flights[1]?.arrival_date)}
+                                    </p>
                                     <p className='text-body-5 font-medium'>
                                         {historyItem?.transaction?.Flights[1]?.Airport_to?.airport_name}
                                     </p>
@@ -218,7 +222,7 @@ export default function MobileTransactionHistoryDetails({ handleOpen, historyIte
                     {historyItem?.transaction?.Flights[1] && (
                         <div>
                             <p className='w-max rounded-rad-4 bg-pur-5 px-2 py-1 text-body-6 text-white'>
-                                {historyItem?.transaction?.Flights[1]?.Airline?.airline_name} - Arrival
+                                {historyItem?.transaction?.Flights[1]?.Airline?.airline_name} - Return
                             </p>
                             {historyItem?.type_passenger?.adult > 0 && (
                                 <div className='flex items-center justify-between'>
@@ -272,7 +276,7 @@ export default function MobileTransactionHistoryDetails({ handleOpen, historyIte
                         <Button
                             onClick={handleActionPaid}
                             className='my-1 w-full rounded-rad-3 bg-pur-3 py-2 font-medium text-white hover:bg-pur-2 '>
-                            Print Ticket
+                            Generate E-Ticket
                         </Button>
                     )}
                 </div>

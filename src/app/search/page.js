@@ -130,10 +130,6 @@ export default function SearchFlight() {
     };
 
     const handleActionHomeSearch = () => {
-        if (homeSearch.from.toLowerCase() === homeSearch.to.toLowerCase()) {
-            handleVisibleAlert('Location cant be same!', 'failed');
-            return;
-        }
         if (homeSearch.flight_type.toLowerCase() === 'round trip' && !homeSearch.return_dateTime) {
             handleVisibleAlert('Please insert return date!', 'failed');
             return;
@@ -141,6 +137,15 @@ export default function SearchFlight() {
 
         if (!homeSearch.from || !homeSearch.to) {
             handleVisibleAlert('Please fill all locations!', 'failed');
+            return;
+        }
+
+        if (
+            homeSearch.to.toLowerCase() &&
+            homeSearch.from.toLowerCase() &&
+            homeSearch.from.toLowerCase() === homeSearch.to.toLowerCase()
+        ) {
+            handleVisibleAlert('Location cant be same!', 'failed');
             return;
         }
         dispatch(setSearchPageIsSearchAgain(true));
