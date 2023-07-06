@@ -74,9 +74,9 @@ export default function Notifikasi() {
             });
             setFetchNotif(true);
             dispatch(setStatusNotif(true));
-            console.log('UPDATE NOTIF:', res.data);
+            // console.log('UPDATE NOTIF:', res.data);
         } catch (error) {
-            console.log('ERROR UPDATE NOTIF:', error);
+            // console.log('ERROR UPDATE NOTIF:', error);
         }
     };
 
@@ -99,7 +99,7 @@ export default function Notifikasi() {
                             phone: res.data.data.phone,
                         });
 
-                        console.log('CURRENT USER:', res.data);
+                        // console.log('CURRENT USER:', res.data);
                     } catch (error) {
                         handleVisibleAlert('Session Expired!', 'failed');
                         setTimeout(() => {
@@ -129,7 +129,7 @@ export default function Notifikasi() {
                         res.data.data.sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt));
                         setNotifications(res.data.data);
                     } catch (error) {
-                        console.log('ERROR GET Notif:', error);
+                        // console.log('ERROR GET Notif:', error);
                     } finally {
                         setIsLoading(false);
                     }
@@ -140,9 +140,9 @@ export default function Notifikasi() {
         }
     }, [fetchNotif, token]);
 
-    console.log('====================================');
-    console.log(notifications);
-    console.log('====================================');
+    // console.log('====================================');
+    // console.log(notifications);
+    // console.log('====================================');
 
     if (isLoading) {
         return (

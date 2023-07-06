@@ -104,7 +104,7 @@ export default function Akun() {
                 setChangeData(false);
             }
         } catch (error) {
-            console.log('ERR PROFILE', error);
+            // console.log('ERR PROFILE', error);
         }
     };
 
@@ -134,7 +134,7 @@ export default function Akun() {
                             phone: res.data.data.phone,
                         });
 
-                        console.log('CURRENT USER:', res.data);
+                        // console.log('CURRENT USER:', res.data);
                     } catch (error) {
                         handleVisibleAlert('Session Expired!', 'failed');
                         setTimeout(() => {

@@ -194,102 +194,11 @@ export default function Order() {
 
         handleVisibleAlert('Passenger data has been successfully saved!', 'success');
         setFormData(templateObj);
-        console.log('====================================');
-        console.log('FORM VALUE :', templateObj);
-        console.log('====================================');
+        // console.log('====================================');
+        // console.log('FORM VALUE :', templateObj);
+        // console.log('====================================');
         setIsSuccessForm(true);
     };
-
-    // const handleMobileFormStatus = () => {
-    //     if (seatDepart.length !== elements.length && isTwoWay) {
-    //         handleVisibleAlert('Please select a seat fit to number of passengers', 'failed');
-    //         return;
-    //     }
-    //     if (seatReturn.length !== elements.length && isTwoWay) {
-    //         handleVisibleAlert('Please select a seat fit to number of passengers', 'failed');
-    //         return;
-    //     }
-    //     if (seatDepart.length !== elements.length) {
-    //         handleVisibleAlert('Please select a seat fit to number of passengers', 'failed');
-    //         return;
-    //     }
-
-    //     if (flights) {
-    //         if (flights.length === 2) {
-    //             if (flights[0].flight_type !== 'Departure' || !flights[0].flight_id) {
-    //                 handleVisibleAlert('Departure Flight are not complete yet!', 'failed');
-    //                 return;
-    //             }
-    //             if (flights[1].flight_type !== 'Arrival' || !flights[0].flight_id) {
-    //                 handleVisibleAlert('Arrival Flight are not complete yet!', 'failed');
-    //                 return;
-    //             }
-    //         }
-    //         if (flights[0].flight_type !== 'Departure' || !flights[0].flight_id) {
-    //             handleVisibleAlert('Departure Flight are not complete yet!', 'failed');
-    //             return;
-    //         }
-    //     }
-
-    //     if (!detailFlight.totalPrice) {
-    //         handleVisibleAlert('Amount is not set!', 'failed');
-    //         return;
-    //     }
-
-    //     const inputPassengerCheck = elements.every((elementForm) => {
-    //         return elementForm.fields.every((formInput, index) => {
-    //             if (
-    //                 (formInput['field_label'] === 'Nama Lengkap' && !formInput['field_value']) ||
-    //                 (formInput['field_label'] === 'Tanggal Lahir' && !formInput['field_value']) ||
-    //                 (formInput['field_label'] === 'Kewarganegaraan' && !formInput['field_value']) ||
-    //                 (formInput['field_label'] === 'KTP/Paspor' && !formInput['field_value']) ||
-    //                 (formInput['field_label'] === 'Negara Penerbit' && !formInput['field_value'])
-    //             ) {
-    //                 handleVisibleAlert('Passenger data must not be empty!', 'failed');
-    //                 setFormInputError(true);
-    //                 return false;
-    //             }
-
-    //             setFormInputError(false);
-    //             return true;
-    //         });
-    //     });
-
-    //     if (!inputPassengerCheck) {
-    //         setFormStatus(false);
-    //         return;
-    //     }
-    //     setFormStatus(true);
-
-    //     const passengerDataShape = elements.map((element, indexForm) => {
-    //         let elementType = element.type;
-    //         let idx = indexForm;
-
-    //         return {
-    //             type: elementType,
-    //             title: element.fields.find((test) => test.field_category === `title`).field_value,
-    //             name: element.fields.find((test) => test.field_category === `name`).field_value,
-    //             family_name: element.fields.find((test) => test.field_category === `family_name`).field_value,
-    //             birthday: convertToDate(new Date(element.fields.find((test) => test.field_category === `birthday`).field_value)),
-    //             nationality: element.fields.find((test) => test.field_category === `kewarganegaraan`).field_value,
-    //             nik: element.fields.find((test) => test.field_category === `ktp_paspor`).field_value,
-    //             issued_country: element.fields.find((test) => test.field_category === `negara_penerbit`).field_value,
-    //             expired: convertToDate(new Date(element.fields.find((test) => test.field_category === `expired`).field_value)),
-    //             seatDeparture: seatDepart[idx].code,
-    //             seatReturn: isTwoWay ? seatReturn[idx].code : '',
-    //         };
-    //     });
-
-    //     const templateObj = {
-    //         flights,
-    //         amount: detailFlight.totalPrice,
-    //         passenger: passengerDataShape,
-    //     };
-
-    //     handleVisibleAlert('Passenger data has been successfully saved!', 'success');
-    //     setFormData(templateObj);
-    //     setIsSuccessForm(true);
-    // };
 
     const handleVisibleAlert = (text, alertType) => {
         setAlertText(text);
@@ -382,11 +291,11 @@ export default function Order() {
                 });
                 if (res.status === 201 || res.data.status === 'Ok') {
                     router.replace(`/order/payment/${res?.data?.data?.transaction?.id}`);
-                    console.log(res.data);
+                    // console.log(res.data);
                 }
             }
         } catch (error) {
-            console.log('ERROR', error);
+            // console.log('ERROR', error);
         }
     };
 
@@ -416,7 +325,7 @@ export default function Order() {
                             phone: res.data.data.phone,
                         });
 
-                        console.log('CURRENT USER:', res.data);
+                        // console.log('CURRENT USER:', res.data);
                     } catch (error) {
                         handleVisibleAlert('Session Expired!', 'failed');
                         setTimeout(() => {
@@ -467,12 +376,12 @@ export default function Order() {
         /* eslint-disable react-hooks/exhaustive-deps */
     }, [statusDetaiFlight, dispatch, fetchDetailFlight]);
 
-    console.log('====================================');
-    console.log('DETAIL FLIGHT', detailFlight);
-    console.log('====================================');
-    console.log('====================================');
-    console.log('FORM DATA', formData);
-    console.log('====================================');
+    // console.log('====================================');
+    // console.log('DETAIL FLIGHT', detailFlight);
+    // console.log('====================================');
+    // console.log('====================================');
+    // console.log('FORM DATA', formData);
+    // console.log('====================================');
 
     return (
         <div className='overflow-x-hidden'>
@@ -565,7 +474,7 @@ export default function Order() {
                                 flightSeat={flightSeatReturn}
                                 handleSeat={handleSeatReturn}
                                 seat={seatReturn}
-                                type={isTwoWay && 'Arrival'}
+                                type={isTwoWay && 'Return'}
                                 flight_class={detailFlight?.pulang?.flight_class}
                                 flight_airline={detailFlight?.pulang?.Airline?.airline_name}
                                 flight_from={detailFlight?.pulang?.from}
@@ -706,7 +615,7 @@ export default function Order() {
                         flightSeat={flightSeatReturn}
                         handleSeat={handleSeatReturn}
                         seat={seatReturn}
-                        type={isTwoWay && 'Arrival'}
+                        type={isTwoWay && 'Return'}
                         flight_class={detailFlight?.pulang?.flight_class}
                         flight_airline={detailFlight?.pulang?.Airline?.airline_name}
                         flight_from={detailFlight?.pulang?.from}

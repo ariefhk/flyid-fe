@@ -89,9 +89,9 @@ export default function Home() {
     /*=== effects ===*/
     //----
 
-    console.log('====================================');
-    console.log('HOME SEARCH DATA', homeSearch);
-    console.log('====================================');
+    // console.log('====================================');
+    // console.log('HOME SEARCH DATA', homeSearch);
+    // console.log('====================================');
 
     return (
         <div className='overflow-x-hidden'>

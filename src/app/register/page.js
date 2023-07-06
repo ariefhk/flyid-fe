@@ -95,7 +95,7 @@ export default function Register() {
                 router.push(`otp?user=${id}&email=${emails}`);
             }
         } catch (error) {
-            console.log(error.message);
+            // console.log(error.message);
         }
     };
 

@@ -119,7 +119,7 @@ export default function History() {
     const handleHistoryDetail = (history) => {
         setHistoryItem(history);
         setOpenMobileHistoryDetail(true);
-        console.log('History Detail : ', history);
+        // console.log('History Detail : ', history);
     };
 
     const handleUpdatePayment = async (transaction) => {
@@ -176,7 +176,7 @@ export default function History() {
                             phone: res.data.data.phone,
                         });
 
-                        console.log('CURRENT USER:', res.data);
+                        // console.log('CURRENT USER:', res.data);
                     } catch (error) {
                         handleVisibleAlert('Session Expired!', 'failed');
                         setTimeout(() => {
@@ -214,7 +214,7 @@ export default function History() {
                         setHistoryData(groupingByDatesDatas);
                         setHistoryFilter(groupingByDatesDatas);
                     } catch (error) {
-                        console.log(error);
+                        // console.log(error);
                     } finally {
                         setIsLoading(false);
                     }
@@ -227,9 +227,9 @@ export default function History() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchStatus, token]);
 
-    console.log('DEBUG==================================');
-    console.log('HISTORY FILTER', historyFilter);
-    console.log('DEBUG==================================');
+    // console.log('DEBUG==================================');
+    // console.log('HISTORY FILTER', historyFilter);
+    // console.log('DEBUG==================================');
 
     // console.log('DATA HISTORy', historyData);
     if (isLoading) {

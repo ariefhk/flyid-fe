@@ -156,18 +156,18 @@ export default function SearchFlight() {
     };
 
     const handleChooseFilter = (query, type) => {
-        console.log('====================================');
-        console.log('QUERY', query);
-        console.log('====================================');
+        // console.log('====================================');
+        // console.log('QUERY', query);
+        // console.log('====================================');
         // setFilterFlightName(type);
         setFilterFlight(query);
         dispatch(setFetchFlightAgain());
     };
 
     const handleOpenMobileFlightDetail = (data) => {
-        console.log('====================================');
-        console.log('POP UP DATAS,', data);
-        console.log('====================================');
+        // console.log('====================================');
+        // console.log('POP UP DATAS,', data);
+        // console.log('====================================');
         setMobileFlightDetailData(data);
         setOpenMobileFlightDetail(!openMobileFlightDetail);
     };
@@ -228,7 +228,7 @@ export default function SearchFlight() {
                 anak: passengerType.anak,
                 bayi: passengerType.bayi,
             };
-            console.log('BEFORE ADDING THE DATA', detailFlight);
+            // console.log('BEFORE ADDING THE DATA', detailFlight);
             dispatch(
                 fetchDetailFlight({
                     flight_id: detailFligt.flight_id,
@@ -254,13 +254,13 @@ export default function SearchFlight() {
     }, [searchAgain, dispatch, setSearchPageIsSearchAgain, setFetchFlightAgain]);
 
     /*=== DEBUG STATE ===*/
-    console.log('============== DEBUG MODE ===============');
-    console.log('DATA HOME', homeSearch);
-    console.log('DATA SEARCH', searchPage);
-    console.log('IS TWO WAY', isTwoWay);
-    console.log('FLIGHT ID', flightIDs);
+    // console.log('============== DEBUG MODE ===============');
+    // console.log('DATA HOME', homeSearch);
+    // console.log('DATA SEARCH', searchPage);
+    // console.log('IS TWO WAY', isTwoWay);
+    // console.log('FLIGHT ID', flightIDs);
 
-    console.log('============== DEBUG MODE ===============');
+    // console.log('============== DEBUG MODE ===============');
 
     switch (statusFetchFlight) {
         case 'failed':

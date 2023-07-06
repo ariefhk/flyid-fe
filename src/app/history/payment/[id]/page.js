@@ -534,12 +534,12 @@ export default function HistoryPaymentId() {
                         },
                     }
                 );
-                console.log('PESAN UPDATE_PAYMENT:', res);
+                // console.log('PESAN UPDATE_PAYMENT:', res);
 
                 router.replace(`/history/payment/${id}/payment-success`);
             }
         } catch (error) {
-            console.log(error.message);
+            // console.log(error.message);
         }
     };
 
@@ -562,7 +562,7 @@ export default function HistoryPaymentId() {
                             phone: res.data.data.phone,
                         });
 
-                        console.log('CURRENT USER:', res.data);
+                        // console.log('CURRENT USER:', res.data);
                     } catch (error) {
                         handleVisibleAlert('Session Expired!', 'failed');
                         setTimeout(() => {
@@ -605,7 +605,7 @@ export default function HistoryPaymentId() {
                             handleVisibleAlert(`Please complete your order!`, 'failed');
                         }
                     } catch (error) {
-                        console.log('ERROR detail transasction', error);
+                        // console.log('ERROR detail transasction', error);
                     } finally {
                         setIsLoading(false);
                     }

@@ -524,12 +524,12 @@ export default function OrderPaymentId() {
                         },
                     }
                 );
-                console.log('PESAN UPDATE_PAYMENT:', res);
+                // console.log('PESAN UPDATE_PAYMENT:', res);
 
                 router.replace(`/order/payment/${id}/payment-success`);
             }
         } catch (error) {
-            console.log(error.message);
+            // console.log(error.message);
         }
     };
 
@@ -552,7 +552,7 @@ export default function OrderPaymentId() {
                             phone: res.data.data.phone,
                         });
 
-                        console.log('CURRENT USER:', res.data);
+                        // console.log('CURRENT USER:', res.data);
                     } catch (error) {
                         handleVisibleAlert('Session Expired!', 'failed');
                         setTimeout(() => {
@@ -592,7 +592,7 @@ export default function OrderPaymentId() {
                             handleVisibleAlert(`Please complete your order!`, 'failed');
                         }
                     } catch (error) {
-                        console.log('ERROR detail transasction', error);
+                        // console.log('ERROR detail transasction', error);
                     } finally {
                         setIsLoading(false);
                     }
@@ -604,12 +604,12 @@ export default function OrderPaymentId() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchDataHistory, session, token, id]);
 
-    console.log('====================================');
+    // console.log('====================================');
     // console.log('TESTTTTTTTT', transactionHistory);
     // console.log('Payment input', formGopayInputStatus);
     // console.log('gopay input', gopayInput);
 
-    console.log('====================================');
+    // console.log('====================================');
 
     if (isLoading) {
         return (
