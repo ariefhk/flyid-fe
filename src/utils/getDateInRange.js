@@ -7,25 +7,36 @@ export const getDateInRange = (dateInput, returnInput = null) => {
         const d1 = new Date(returnInput);
         d1.setHours(0, 0, 0, 0);
         let d3 = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate() + 1);
-        let dUp;
+        // let dUp;
 
-        if (new Date().getDate() === new Date(dateInput).getDate()) {
-            dUp = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate() + 1);
-        } else {
-            dUp = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate());
-        }
+        // if (new Date().getDate() === new Date(dateInput).getDate()) {
+        //     dUp = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate() + 1);
+        // } else {
+        //     dUp = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate());
+        // }
 
         const date = new Date(testDate3.getTime());
         let angka = 1;
         const dates = [];
 
-        while (date <= dUp) {
-            dates.push({
-                id: angka + dates.length,
-                date: new Date(date),
-                active: false,
-            });
-            date.setDate(date.getDate() + 1);
+        if (new Date().getDate() === new Date(dateInput).getDate()) {
+            while (date <= d3) {
+                dates.push({
+                    id: angka + dates.length,
+                    date: new Date(date),
+                    active: false,
+                });
+                date.setDate(date.getDate() + 1);
+            }
+        } else {
+            while (date < d3) {
+                dates.push({
+                    id: angka + dates.length,
+                    date: new Date(date),
+                    active: false,
+                });
+                date.setDate(date.getDate() + 1);
+            }
         }
 
         return dates;
