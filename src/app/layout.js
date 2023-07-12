@@ -1,10 +1,11 @@
-import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css';
-import 'react-calendar/dist/Calendar.css';
-import './globals.css';
-
 import { Poppins, Inter } from 'next/font/google';
 import { Providers } from '@/components/Providers';
 import { SessionProviders } from '@/components/SessionProviders';
+
+
+import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import './globals.css';
 
 const poppins = Poppins({
     subsets: ['latin'],
